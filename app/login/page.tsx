@@ -6,7 +6,10 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { signIn } from '@/lib/auth';
+import { AuthError } from 'next-auth';
 
 export default function LoginPage() {
   return (
@@ -20,15 +23,25 @@ export default function LoginPage() {
         </CardHeader>
         <CardFooter>
           <form
-            action={async () => {
+            action={async (formData) => {
               'use server';
-              await signIn('github', {
-                redirectTo: '/'
-              });
+              try {
+                await signIn('credentials', formData);
+              } catch (error) {
+                if (error instanceof AuthError) throw error;
+              }
             }}
             className="w-full"
           >
-            <Button className="w-full">Sign in with GitHub</Button>
+            <Label>
+              Username
+              <Input name="username" type="text" />
+            </Label>
+            <Label>
+              Password
+              <Input name="password" type="password" />
+            </Label>
+            <Button>Sign In</Button>
           </form>
         </CardFooter>
       </Card>
