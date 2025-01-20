@@ -1,6 +1,4 @@
-import {fuckGet, fuckPost} from "@/lib/utils";
-import {revalidatePath} from "next/cache";
-import {redirect} from "next/navigation";
+import {fuckPost} from "@/lib/utils";
 
 export type State = {
   errors?: {
@@ -17,7 +15,5 @@ export async function login(formData: FormData) {
     password: formData.get("password"),
   };
   const response = await fuckPost("/api/login", body);
-  const json = await response.json();
-  // revalidatePath('/');
-  redirect('/');
+  return await response.json();
 }

@@ -11,11 +11,14 @@ import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
 import Link from "next/link";
 import {login} from "@/lib/actions";
+import {Toaster} from "@/components/ui/toaster";
+import {useToast} from "@/hooks/use-toast";
 
 export function LoginForm({
                             className,
                             ...props
                           }: React.ComponentPropsWithoutRef<"div">) {
+  const {toast} = useToast()
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -26,7 +29,19 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={login}>
+          <form action={async (formData) => {
+            const json = await login(formData);
+            if (json.code !== 0) {
+              toast({
+                title: "登录失败",
+                description: json.message,
+              })
+            } else {
+              toast({
+                title: "登录成功",
+              })
+            }
+          }}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Username</Label>
@@ -53,9 +68,12 @@ export function LoginForm({
               <Button type="submit" className="w-full">
                 Login
               </Button>
-              {/*<Button variant="outline" className="w-full">*/}
-              {/*  Login with Google*/}
-              {/*</Button>*/}
+              {/*<Button variant="outline" className="w-full">*/
+              }
+              {/*  Login with Google*/
+              }
+              {/*</Button>*/
+              }
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
