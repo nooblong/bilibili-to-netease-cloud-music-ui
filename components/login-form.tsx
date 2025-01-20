@@ -40,6 +40,8 @@ export function LoginForm({
               toast({
                 title: "登录成功",
               })
+              localStorage.setItem("username", json.data.username)
+              localStorage.setItem("token", json.data.token)
             }
           }}>
             <div className="flex flex-col gap-6">
@@ -68,12 +70,6 @@ export function LoginForm({
               <Button type="submit" className="w-full">
                 Login
               </Button>
-              {/*<Button variant="outline" className="w-full">*/
-              }
-              {/*  Login with Google*/
-              }
-              {/*</Button>*/
-              }
             </div>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{" "}
