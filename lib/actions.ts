@@ -1,5 +1,3 @@
-import {fuckPost} from "@/lib/utils";
-
 export type State = {
   errors?: {
     code?: number;
@@ -9,27 +7,44 @@ export type State = {
   message?: string | null;
 };
 
-export async function login(formData: FormData) {
+export type UploadDetail = {
+  errors?: {
+    code?: number;
+    message?: string;
+    data?: any;
+  };
+  message?: string | null;
+};
+
+export async function login(url: string, {arg}: { arg: { formData: FormData, token: string } }) {
   const body = {
-    username: formData.get("username"),
-    password: formData.get("password"),
+    username: arg.formData.get("username"),
+    password: arg.formData.get("password"),
   };
-  const response = await fuckPost("/api/login", body);
-  const json = await response.json();
-  return {
-    ...json,
-    username: formData.get("username"),
-  };
+  return post(url, body, arg.token);
 }
 
-export async function signup(formData: FormData) {
+export async function signup(url: string, {arg}: { arg: { formData: FormData, token: string } }) {
   const body = {
-    username: formData.get("username"),
-    password: formData.get("password"),
+    username: arg.formData.get("username"),
+    password: arg.formData.get("password"),
   };
-  const response = await fuckPost("/api/register", body);
-  const json = await response.json();
-  return {
-    ...json,
-  };
+  return post(url, body, arg.token);
 }
+
+const get = (url: string, token: string) => fetch(url, {
+  method: 'GET',
+  headers: {
+    'content-type': 'application/json',
+    'access-token': token
+  },
+}).then(res => res.json())
+
+const post = (url: string, body: any, token: string) => fetch(url, {
+  method: 'POST',
+  headers: {
+    'content-type': 'application/json',
+    'access-token': token,
+  },
+  body: JSON.stringify(body)
+}).then(res => res.json())

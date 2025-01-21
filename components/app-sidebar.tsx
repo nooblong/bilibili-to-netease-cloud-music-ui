@@ -1,5 +1,4 @@
 import * as React from "react"
-import {GalleryVerticalEnd} from "lucide-react"
 
 import {
   Sidebar,
@@ -9,13 +8,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
 import {NavUser} from "@/app/nav-user";
-import {DropdownMenuLabel} from "@/components/ui/dropdown-menu";
 import {useEffect, useState} from "react";
 import Link from "next/link";
 import {redirect} from "next/navigation";
@@ -78,14 +73,10 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div
-                  className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <GalleryVerticalEnd className="size-4"/>
-                </div>
+              <a href="https://github.com/nooblong/bilibili-to-netease-cloud-music">
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-semibold">Documentation</span>
-                  <span className="">v1.0.0</span>
+                  <span className="font-semibold"></span>
+                  <span className="">Github</span>
                 </div>
               </a>
             </SidebarMenuButton>

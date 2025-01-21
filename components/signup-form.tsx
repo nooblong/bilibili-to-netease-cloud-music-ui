@@ -12,11 +12,30 @@ import {Label} from "@/components/ui/label"
 import {redirect} from "next/navigation";
 import {toast} from "@/hooks/use-toast";
 import {signup} from "@/lib/actions";
+import useSWRMutation from "swr/mutation";
 
 export function SignupForm({
                              className,
                              ...props
                            }: React.ComponentPropsWithoutRef<"div">) {
+  const {trigger} = useSWRMutation('/api/register', signup)
+
+  async function doSignUp(formData: FormData) {
+    const data = await trigger({formData: formData, token: ""})
+    if (data.code !== 0) {
+      toast({
+        title: "注册失败",
+        description: data.message,
+      })
+    } else {
+      toast({
+        title: "注册成功",
+      })
+      setTimeout(() => {
+        redirect("/")
+      }, 1000)
+    }
+  }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -27,22 +46,7 @@ export function SignupForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={async (formData) => {
-            const json = await signup(formData);
-            if (json.code !== 0) {
-              toast({
-                title: "注册失败",
-                description: json.message,
-              })
-            } else {
-              toast({
-                title: "注册成功",
-              })
-              setTimeout(() => {
-                redirect("/")
-              }, 1000)
-            }
-          }}>
+          <form action={doSignUp}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Username</Label>

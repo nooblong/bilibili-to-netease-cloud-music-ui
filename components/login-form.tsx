@@ -10,14 +10,37 @@ import {
 import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
 import Link from "next/link";
-import {login} from "@/lib/actions";
 import {toast} from "@/hooks/use-toast";
 import {redirect} from "next/navigation";
+import useSWRMutation from "swr/mutation";
+import {login} from "@/lib/actions";
+import {any} from "zod";
 
 export function LoginForm({
                             className,
                             ...props
                           }: React.ComponentPropsWithoutRef<"div">) {
+  const {trigger} = useSWRMutation('/api/login', login)
+
+  async function doLogin(formData: FormData) {
+    const data = await trigger({formData: formData, token: ""})
+    if (data.code !== 0) {
+      toast({
+        title: "登录失败",
+        description: data.message,
+      })
+    } else {
+      toast({
+        title: "登录成功",
+      })
+      localStorage.setItem("username", data.username)
+      localStorage.setItem("token", data.data)
+      setTimeout(() => {
+        redirect("/")
+      }, 1000)
+    }
+  }
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -28,24 +51,7 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={async (formData) => {
-            const json = await login(formData);
-            if (json.code !== 0) {
-              toast({
-                title: "登录失败",
-                description: json.message,
-              })
-            } else {
-              toast({
-                title: "登录成功",
-              })
-              localStorage.setItem("username", json.username)
-              localStorage.setItem("token", json.data)
-              setTimeout(() => {
-                redirect("/")
-              }, 1000)
-            }
-          }}>
+          <form action={doLogin}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email">Username</Label>
