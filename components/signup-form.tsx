@@ -48,6 +48,7 @@ export function SignupForm({
                 <Label htmlFor="email">Username</Label>
                 <Input
                   id="username"
+                  name="username"
                   type="text"
                   placeholder="username"
                   required
@@ -57,7 +58,7 @@ export function SignupForm({
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                 </div>
-                <Input id="password" type="password" required/>
+                <Input id="password" type="password" name="password" required/>
               </div>
               <Button type="submit" className="w-full">
                 Signup
