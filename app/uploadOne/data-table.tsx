@@ -48,7 +48,6 @@ export function DataTable<TData, TValue>({
       }
     },
     onPaginationChange: (updaterOrValue: Updater<PaginationState>) => {
-      // 使用函数式更新
       setPageInfo((oldPageInfo) => {
         const newState = typeof updaterOrValue === 'function'
           ? (updaterOrValue as (input: PaginationState) => PaginationState)(oldPageInfo)
