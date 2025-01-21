@@ -1,5 +1,5 @@
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import {cn} from "@/lib/utils"
+import {Button} from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -7,13 +7,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import {Input} from "@/components/ui/input"
+import {Label} from "@/components/ui/label"
+import {redirect} from "next/navigation";
+import {toast} from "@/hooks/use-toast";
+import {signup} from "@/lib/actions";
 
 export function SignupForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+                             className,
+                             ...props
+                           }: React.ComponentPropsWithoutRef<"div">) {
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -24,10 +27,25 @@ export function SignupForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form action={async (formData) => {
+            const json = await signup(formData);
+            if (json.code !== 0) {
+              toast({
+                title: "注册失败",
+                description: json.message,
+              })
+            } else {
+              toast({
+                title: "注册成功",
+              })
+              setTimeout(() => {
+                redirect("/")
+              }, 1000)
+            }
+          }}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">Username</Label>
                 <Input
                   id="username"
                   type="text"
@@ -39,7 +57,7 @@ export function SignupForm({
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
                 </div>
-                <Input id="password" type="password" required />
+                <Input id="password" type="password" required/>
               </div>
               <Button type="submit" className="w-full">
                 Signup

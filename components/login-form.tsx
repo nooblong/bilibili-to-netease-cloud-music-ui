@@ -11,14 +11,13 @@ import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
 import Link from "next/link";
 import {login} from "@/lib/actions";
-import {Toaster} from "@/components/ui/toaster";
-import {useToast} from "@/hooks/use-toast";
+import {toast} from "@/hooks/use-toast";
+import {redirect} from "next/navigation";
 
 export function LoginForm({
                             className,
                             ...props
                           }: React.ComponentPropsWithoutRef<"div">) {
-  const {toast} = useToast()
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
@@ -40,8 +39,11 @@ export function LoginForm({
               toast({
                 title: "登录成功",
               })
-              localStorage.setItem("username", json.data.username)
-              localStorage.setItem("token", json.data.token)
+              localStorage.setItem("username", json.username)
+              localStorage.setItem("token", json.data)
+              setTimeout(() => {
+                redirect("/")
+              }, 1000)
             }
           }}>
             <div className="flex flex-col gap-6">

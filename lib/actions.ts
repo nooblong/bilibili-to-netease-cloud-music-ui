@@ -15,5 +15,21 @@ export async function login(formData: FormData) {
     password: formData.get("password"),
   };
   const response = await fuckPost("/api/login", body);
-  return await response.json();
+  const json = await response.json();
+  return {
+    ...json,
+    username: formData.get("username"),
+  };
+}
+
+export async function signup(formData: FormData) {
+  const body = {
+    username: formData.get("username"),
+    password: formData.get("password"),
+  };
+  const response = await fuckPost("/api/register", body);
+  const json = await response.json();
+  return {
+    ...json,
+  };
 }
