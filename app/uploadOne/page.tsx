@@ -1,23 +1,20 @@
 'use client'
 
-import {Payment, columns} from "./columns"
+import {columns} from "./columns"
 import {DataTable} from "./data-table"
-import {fuckGet} from "@/lib/utils";
-import {useEffect} from "react";
+import useSWR from "swr";
+import {fetcher} from "@/lib/actions";
 
-async function getData(): Promise<Payment[]> {
-  // Fetch data from your API here.
-  const response = await fuckGet("/api/uploadDetail/list");
-  return await response.json();
-}
 
-export default async function DemoPage() {
+export default function DemoPage() {
 
-  const data = await getData();
-
+  const {data, error, isLoading} = useSWR('/api/uploadDetail/list?pageNo=1&pageSize=10', fetcher)
+  if (error) return <div>Failed to load</div>
+  if (!data) return <div>Loading...</div>
+  console.log(data)
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={[]}/>
+      <DataTable columns={columns} data={data.data.records}/>
     </div>
   )
 }

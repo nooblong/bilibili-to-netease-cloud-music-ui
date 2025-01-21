@@ -32,6 +32,16 @@ export async function signup(url: string, {arg}: { arg: { formData: FormData, to
   return post(url, body, arg.token);
 }
 
+export const fetcher = (...args) => fetch(...args).then(res => res.json())
+
+export async function simplePost(url: string, {arg}: { arg: { formData: FormData, token: string } }) {
+  return post(url, Object.fromEntries(arg.formData.entries()), arg.token);
+}
+
+export async function simpleGet(url: string, {arg}: { arg: { token: string } }) {
+  return get(url, arg.token);
+}
+
 const get = (url: string, token: string) => fetch(url, {
   method: 'GET',
   headers: {
