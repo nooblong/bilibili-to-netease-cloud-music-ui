@@ -5,7 +5,7 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-  getPaginationRowModel, PaginationState, Updater, OnChangeFn
+  getPaginationRowModel, PaginationState, Updater
 } from "@tanstack/react-table"
 
 import {Button} from "@/components/ui/button"
@@ -18,14 +18,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {functionalUpdate, PageInfo} from "@/lib/utils";
-import {Dispatch, SetStateAction} from "react";
+import {PageInfo} from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   pageInfo: PageInfo
-  setPageInfo: (pageInfo: PageInfo) => void
+  setPageInfo: (pageInfo: (oldPageInfo: PageInfo) => PageInfo) => void
 }
 
 export function DataTable<TData, TValue>({
@@ -51,7 +50,9 @@ export function DataTable<TData, TValue>({
     onPaginationChange: (updaterOrValue: Updater<PaginationState>) => {
       // 使用函数式更新
       setPageInfo((oldPageInfo) => {
-        const newState = functionalUpdate(updaterOrValue, oldPageInfo);
+        const newState = typeof updaterOrValue === 'function'
+          ? (updaterOrValue as (input: PaginationState) => PaginationState)(oldPageInfo)
+          : updaterOrValue
         return {
           ...oldPageInfo,
           pageIndex: newState.pageIndex,
@@ -60,12 +61,6 @@ export function DataTable<TData, TValue>({
       })
     }
   })
-
-  function functionalUpdate<T>(updater: Updater<T>, input: T): T {
-    return typeof updater === 'function'
-      ? (updater as (input: T) => T)(input)
-      : updater
-  }
 
   return (
     <div>
