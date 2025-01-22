@@ -21,7 +21,12 @@ export async function login(url: string, {arg}: { arg: { formData: FormData, tok
     username: arg.formData.get("username"),
     password: arg.formData.get("password"),
   };
-  return post(url, body, arg.token);
+  return post(url, body, arg.token).then(response => {
+    return {
+      ...response,
+      username: arg.formData.get("username")
+    };
+  });
 }
 
 export async function signup(url: string, {arg}: { arg: { formData: FormData, token: string } }) {
