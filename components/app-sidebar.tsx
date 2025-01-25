@@ -1,5 +1,3 @@
-'use client'
-
 import * as React from "react"
 
 import {
@@ -13,9 +11,8 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import {NavUser} from "@/app/nav-user";
-import {useEffect, useState} from "react";
 import Link from "next/link";
-import {redirect} from "next/navigation";
+import {cookies} from "next/headers";
 
 // This is sample data.
 const data = {
@@ -43,31 +40,9 @@ const data = {
   ],
 }
 
-type User = {
-  name: string,
-  email: string,
-  avatar: string
-}
-
-export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
-  const [isLogin, setIsLogin] = useState(false);
-  const [user, setUser] = useState<User>({avatar: "", email: "", name: ""});
-  useEffect(() => {
-    setIsLogin(localStorage.getItem("username") !== null);
-    setUser({
-      name: localStorage.getItem("username") ? localStorage.getItem("username")! : "",
-      email: "",
-      avatar: ""
-    })
-  }, []);
-
-  const logout = () => {
-    localStorage.removeItem("username");
-    localStorage.removeItem("token");
-    setIsLogin(false)
-    setUser({avatar: "", email: "", name: ""})
-    redirect("/")
-  }
+export async function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
+  const cookieStore = await cookies();
+  const username = cookieStore.get("username");
 
   return (
     <Sidebar {...props}>
@@ -112,7 +87,12 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        {isLogin ? <NavUser user={user} logout={logout}/> :
+        {username?.value ? <NavUser user={{name: username.value}} logout={async () => {
+            'use server'
+            const cookieStore = await cookies();
+            cookieStore.delete("username")
+            cookieStore.delete("token")
+          }}/> :
           <Link href={"/login"}>
             <div className="flex items-center gap-2 px-1 py-1.5 text-sm">
               <span className="truncate font-semibold text-">请登录</span>

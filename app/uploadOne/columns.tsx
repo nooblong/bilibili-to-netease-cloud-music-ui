@@ -1,8 +1,8 @@
 "use client"
 
 import {ColumnDef} from "@tanstack/react-table"
-import { MoreHorizontal } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import {ArrowUpDown, MoreHorizontal} from "lucide-react"
+import {Button} from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,7 +50,17 @@ export const columns: ColumnDef<UploadDetail>[] = [
   },
   {
     accessorKey: "createTime",
-    header: "Create Time",
+    header: ({column}) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          createTime
+          <ArrowUpDown className="ml-2 h-4 w-4"/>
+        </Button>
+      )
+    }
   },
   {
     accessorKey: "voiceListName",
@@ -72,7 +82,7 @@ export const columns: ColumnDef<UploadDetail>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => {
+    cell: ({row}) => {
       const payment = row.original
 
       return (
@@ -80,7 +90,7 @@ export const columns: ColumnDef<UploadDetail>[] = [
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
               <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
+              <MoreHorizontal className="h-4 w-4"/>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -90,7 +100,7 @@ export const columns: ColumnDef<UploadDetail>[] = [
             >
               Copy payment ID
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator/>
             <DropdownMenuItem>View customer</DropdownMenuItem>
             <DropdownMenuItem>View payment details</DropdownMenuItem>
           </DropdownMenuContent>

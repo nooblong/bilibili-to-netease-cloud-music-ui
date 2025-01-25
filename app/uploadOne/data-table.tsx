@@ -5,7 +5,7 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-  getPaginationRowModel, PaginationState, Updater
+  getPaginationRowModel, PaginationState, Updater, SortingState, getSortedRowModel
 } from "@tanstack/react-table"
 
 import {Button} from "@/components/ui/button"
@@ -18,46 +18,48 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {PageInfo} from "@/lib/utils";
+import {useState} from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  pageInfo: PageInfo
-  setPageInfo: (pageInfo: (oldPageInfo: PageInfo) => PageInfo) => void
 }
 
 export function DataTable<TData, TValue>({
                                            columns,
                                            data,
-                                           pageInfo,
-                                           setPageInfo
                                          }: DataTableProps<TData, TValue>
 ) {
+
+  const [sorting, setSorting] = useState<SortingState>([])
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     manualPagination: true,
-    rowCount: pageInfo.count,
+    rowCount: 10,
     state: {
       pagination: {
-        pageIndex: pageInfo.pageIndex,
-        pageSize: pageInfo.pageSize
-      }
+        pageIndex: 1,
+        pageSize: 10
+      },
+      sorting
     },
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
     onPaginationChange: (updaterOrValue: Updater<PaginationState>) => {
-      setPageInfo((oldPageInfo) => {
-        const newState = typeof updaterOrValue === 'function'
-          ? (updaterOrValue as (input: PaginationState) => PaginationState)(oldPageInfo)
-          : updaterOrValue
-        return {
-          ...oldPageInfo,
-          pageIndex: newState.pageIndex,
-          pageSize: newState.pageSize,
-        };
-      })
+      // setPageInfo((oldPageInfo) => {
+      //   const newState = typeof updaterOrValue === 'function'
+      //     ? (updaterOrValue as (input: PaginationState) => PaginationState)(oldPageInfo)
+      //     : updaterOrValue
+      //   return {
+      //     ...oldPageInfo,
+      //     pageIndex: newState.pageIndex,
+      //     pageSize: newState.pageSize,
+      //   };
+      // })
     }
   })
 

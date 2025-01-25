@@ -1,3 +1,5 @@
+'use client'
+
 import {cn} from "@/lib/utils"
 import {Button} from "@/components/ui/button"
 import {
@@ -10,34 +12,27 @@ import {
 import {Input} from "@/components/ui/input"
 import {Label} from "@/components/ui/label"
 import Link from "next/link";
-import {toast} from "@/hooks/use-toast";
-import {redirect} from "next/navigation";
-import useSWRMutation from "swr/mutation";
-import {login} from "@/lib/actions";
-import {any} from "zod";
+import {useRouter} from "next/navigation";
 
 export function LoginForm({
                             className,
                             ...props
                           }: React.ComponentPropsWithoutRef<"div">) {
-  const {trigger} = useSWRMutation('/api/login', login)
-
+  const router = useRouter()
   async function doLogin(formData: FormData) {
-    const data = await trigger({formData: formData, token: ""})
-    if (data.code !== 0) {
-      toast({
-        title: "登录失败",
-        description: data.message,
-      })
+    const username = formData.get('username')
+    const password = formData.get('password')
+
+    const response = await fetch('/api/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username, password}),
+    })
+
+    if (response.ok) {
+      router.push("/");
     } else {
-      toast({
-        title: "登录成功",
-      })
-      localStorage.setItem("username", data.username)
-      localStorage.setItem("token", data.data)
-      setTimeout(() => {
-        redirect("/")
-      }, 1000)
+      // Handle errors
     }
   }
 

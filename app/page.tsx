@@ -1,5 +1,3 @@
-'use client'
-
 import {AppSidebar} from "@/components/app-sidebar"
 import {
   Breadcrumb,
@@ -15,21 +13,26 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import useSWR from "swr";
-import {simpleGet} from "@/lib/actions";
-import useSWRMutation from "swr/mutation";
-import {useEffect} from "react";
+import {UploadDetail} from "@/app/uploadOne/columns";
+import {api} from "@/lib/utils";
+import {cookies} from "next/headers";
 
-export default function Page() {
-  const {
-    data,
-    error,
-  } = useSWR(`/api/uploadDetail/listVoicelist?username=${localStorage.getItem("username")}`, (url) => {
-    return simpleGet(url, {arg: {token: ""}})
-  });
+async function getData(): Promise<UploadDetail[]> {
+  const cookieStore = await cookies()
+  const token = cookieStore.get("token")
+  const username = cookieStore.get("username")
+  const json = await fetch(api + `/uploadDetail/listVoicelist?username=${username?.value}`, {
+    method: "GET",
+    headers: {
+      "token": token
+    }
+  }).then(res => res.json())
+  return json.data
+}
 
-  if (!data) return <div>Loading...</div>
-  if (error) return <div>Failed to load</div>
+export default async function Page() {
+  const data = await getData()
+
 
   return (
     <SidebarProvider>
@@ -57,24 +60,7 @@ export default function Page() {
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <div className="grid auto-rows-min gap-4 grid-cols-2 lg:grid-cols-3 ">
-            {data.data.map((item: any) => {
-              return (
-                <div key={item.id} className="flex aspect-video rounded-xl bg-muted/50  items-center">
-                  <div className="flex-1 p-4 aspect-[1/1] w-1/3">
-                    <img src={item.voicelistImage} alt=""
-                         className="rounded"></img>
-                  </div>
-                  <div className="flex-1 p-4 w-2/3">
-                    <h3 className="text-xl font-semibold mb-2">{item.voicelistName}</h3>
-                    <p className="text-sm">
-                      正文
-                    </p>
-                  </div>
-                </div>
-              )
-            })
-            }
-            {data.data.map((item: any) => {
+            {data.map((item: any) => {
               return (
                 <div key={item.id} className="flex aspect-video rounded-xl bg-muted/50  items-center">
                   <div className="flex-1 p-4 aspect-[1/1] w-1/3">
