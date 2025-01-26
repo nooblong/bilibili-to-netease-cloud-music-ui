@@ -22,10 +22,6 @@ const data = {
       url: "/",
     },
     {
-      title: "单曲上传",
-      url: "/uploadOne",
-    },
-    {
       title: "订阅",
       url: "/subscribe",
     },

@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/sidebar"
 import {api} from "@/lib/utils";
 import {cookies} from "next/headers";
+import Link from "next/link";
 
 async function getData(): Promise<any> {
   const cookieStore = await cookies()
@@ -61,18 +62,20 @@ export default async function Page() {
           <div className="grid auto-rows-min gap-4 grid-cols-2 lg:grid-cols-3 ">
             {data.map((item) => {
               return (
-                <div key={item.id} className="flex aspect-video rounded-xl bg-muted/50  items-center">
-                  <div className="flex-1 p-4 aspect-[1/1] w-1/3">
-                    <img src={item.voicelistImage} alt=""
-                         className="rounded"></img>
+                <Link key={item.id} href={`/uploadOne/${item.voicelistId}`}>
+                  <div key={item.id} className="flex aspect-video rounded-xl bg-muted/50  items-center">
+                    <div className="flex-1 p-4 aspect-[1/1] w-1/3">
+                      <img src={item.voicelistImage} alt=""
+                           className="rounded"></img>
+                    </div>
+                    <div className="flex-1 p-4 w-2/3">
+                      <h3 className="text-xl font-semibold mb-2">{item.voicelistName}</h3>
+                      <p className="text-sm">
+
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex-1 p-4 w-2/3">
-                    <h3 className="text-xl font-semibold mb-2">{item.voicelistName}</h3>
-                    <p className="text-sm">
-                      正文
-                    </p>
-                  </div>
-                </div>
+                </Link>
               )
             })
             }

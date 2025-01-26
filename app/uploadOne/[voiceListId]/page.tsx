@@ -1,5 +1,5 @@
 import {DataTable} from "./data-table"
-import {columns} from "@/app/uploadOne/columns";
+import {columns} from "@/app/uploadOne/[voiceListId]/columns";
 import {AppSidebar} from "@/components/app-sidebar";
 import {SidebarInset, SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar";
 import {Separator} from "@/components/ui/separator";
@@ -12,26 +12,23 @@ import {
 } from "@/components/ui/breadcrumb";
 import {api} from "@/lib/utils";
 
-async function getData(pageNo: number, pageSize: number, title: string, status: string): Promise<any> {
+async function getData(pageNo: number, pageSize: number, title: string, status: string, voiceListId: string): Promise<any> {
   'use server'
-  const json = await fetch(api + `/uploadDetail/list?pageNo=${pageNo}&pageSize=${pageSize}&title=${title}&status=${status}`)
+  const json = await fetch(api + `/uploadDetail/list?pageNo=${pageNo}&pageSize=${pageSize}
+  &title=${title}&status=${status}&voiceListId=${voiceListId}`)
     .then(response => response.json());
   return json.data
 }
 
-export default async function UploadOnePage(props: {
-  searchParams?: Promise<{
-    pageNo?: string;
-    pageSize?: string;
-    title?: string;
-    status?: string;
-  }>;
-}) {
+export default async function UploadOnePage(props: any): Promise<any> {
   const searchParams = await props.searchParams;
+  const params = await props.params;
+  console.log(params.voiceListId)
   const data = await getData((Number(searchParams?.pageNo) || 1),
     Number(searchParams?.pageSize) || 10,
     (searchParams?.title || ""),
-    (searchParams?.status || ""));
+    (searchParams?.status || ""),
+    params.voiceListId);
   return (
     <SidebarProvider>
       <AppSidebar/>
