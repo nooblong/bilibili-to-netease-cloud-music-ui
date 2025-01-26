@@ -12,15 +12,25 @@ import {
 } from "@/components/ui/breadcrumb";
 import {api} from "@/lib/utils";
 
-async function getData(): Promise<UploadDetail[]> {
-  // Fetch data from your API here.
-  const json = await fetch(api + "/uploadDetail/list?pageNo=1&pageSize=10")
+async function getData(pageNo: number, pageSize: number, title: string): Promise<UploadDetail[]> {
+  'use server'
+  const json = await fetch(api + `/uploadDetail/list?pageNo=${pageNo}&pageSize=${pageSize}&title=${title}`)
     .then(response => response.json());
-  return json.data.records
+  console.log("title:", title)
+  return json.data
 }
 
-export default async function UploadOnePage() {
-  const data = await getData()
+export default async function UploadOnePage(props: {
+  searchParams?: Promise<{
+    pageNo?: string;
+    pageSize?: string;
+    title?: string;
+  }>;
+}) {
+  const searchParams = await props.searchParams;
+  const data = await getData((Number(searchParams?.pageNo) || 1),
+    Number(searchParams?.pageSize) || 10,
+    (searchParams?.title || ""));
   return (
     <SidebarProvider>
       <AppSidebar/>
@@ -46,7 +56,9 @@ export default async function UploadOnePage() {
           </div>
         </header>
         <div className="container mx-auto py-10">
-          <DataTable columns={columns} data={data}/>
+          <DataTable columns={columns} data={data.records} total={data.total}
+                     pageNo={Number(searchParams?.pageNo) || 1}
+                     pageSize={Number(searchParams?.pageSize) || 10}/>
         </div>
       </SidebarInset>
     </SidebarProvider>

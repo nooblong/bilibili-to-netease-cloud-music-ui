@@ -5,7 +5,7 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-  getPaginationRowModel, PaginationState, Updater, SortingState, getSortedRowModel
+  getPaginationRowModel, SortingState, getSortedRowModel, ColumnFiltersState, getFilteredRowModel
 } from "@tanstack/react-table"
 
 import {Button} from "@/components/ui/button"
@@ -19,52 +19,70 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import {useState} from "react";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {Input} from "@/components/ui/input";
+import * as sea from "node:sea";
+import {AlertTitle} from "@/components/ui/alert";
+import {Badge} from "@/components/ui/badge";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  data: TData[],
+  total: number,
+  pageNo: number,
+  pageSize: number
 }
 
 export function DataTable<TData, TValue>({
                                            columns,
                                            data,
+                                           total,
+                                           pageNo,
+                                           pageSize
                                          }: DataTableProps<TData, TValue>
 ) {
 
   const [sorting, setSorting] = useState<SortingState>([])
-
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const search = Object.fromEntries(searchParams)
+  const pathname = usePathname();
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     manualPagination: true,
-    rowCount: 10,
+    getFilteredRowModel: getFilteredRowModel(),
+    rowCount: total,
     state: {
       pagination: {
-        pageIndex: 1,
-        pageSize: 10
+        pageIndex: pageNo - 1,
+        pageSize: pageSize
       },
-      sorting
+      sorting,
     },
     onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
-    onPaginationChange: (updaterOrValue: Updater<PaginationState>) => {
-      // setPageInfo((oldPageInfo) => {
-      //   const newState = typeof updaterOrValue === 'function'
-      //     ? (updaterOrValue as (input: PaginationState) => PaginationState)(oldPageInfo)
-      //     : updaterOrValue
-      //   return {
-      //     ...oldPageInfo,
-      //     pageIndex: newState.pageIndex,
-      //     pageSize: newState.pageSize,
-      //   };
-      // })
-    }
+    getSortedRowModel: getSortedRowModel()
   })
 
   return (
     <div>
+      <div className="flex items-center py-4">
+        <Input
+          defaultValue={search.title || ""}
+          placeholder="Filter Title..."
+          onChange={(event) => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set("title", event.target.value);
+            params.set("pageNo", "1");
+            params.set("pageSize", "10");
+            router.push(`?${params.toString()}`)
+          }}
+          className="max-w-sm"
+        />
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -110,10 +128,31 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
+        <Select onValueChange={(event) => {
+          const params = new URLSearchParams(searchParams.toString());
+          params.set("pageSize", event);
+          router.push(`?${params.toString()}`)
+        }}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="10" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="10">10</SelectItem>
+            <SelectItem value="50">50</SelectItem>
+            <SelectItem value="100">100</SelectItem>
+          </SelectContent>
+        </Select>
+        <Button disabled size="sm" variant="default" className="">pageNo:{pageNo}</Button>
+        <Button disabled size="sm" variant="default" className="">pageSize:{pageSize}</Button>
+        <Button disabled size="sm" variant="default" className="">total:{total}</Button>
         <Button
           variant="outline"
           size="sm"
-          onClick={() => table.previousPage()}
+          onClick={() => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set("pageNo", String((Number(search.pageNo) || 1) - 1));
+            router.push(`?${params.toString()}`)
+          }}
           disabled={!table.getCanPreviousPage()}
         >
           Previous
@@ -121,7 +160,11 @@ export function DataTable<TData, TValue>({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => table.nextPage()}
+          onClick={() => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set("pageNo", String((Number(search.pageNo) || 1) + 1));
+            router.push(`?${params.toString()}`)
+          }}
           disabled={!table.getCanNextPage()}
         >
           Next
