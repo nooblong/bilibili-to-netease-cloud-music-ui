@@ -18,6 +18,7 @@ import {useRef, useState} from "react";
 import {useRouter, useSearchParams} from "next/navigation";
 import {Input} from "@/components/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
+import {useDebouncedCallback} from "use-debounce";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -38,6 +39,13 @@ export function DataTable<TData, TValue>({
 
   const [sorting, setSorting] = useState<SortingState>([])
   const [filter, setFilter] = useState<string>("title")
+  const debounced = useDebouncedCallback((event) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set(filter, event.target.value);
+    params.set("pageNo", "1");
+    params.set("pageSize", "10");
+    router.push(`?${params.toString()}`)
+  }, 1000)
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -70,11 +78,7 @@ export function DataTable<TData, TValue>({
             defaultValue={search.title || ""}
             placeholder="Filter..."
             onChange={(event) => {
-              const params = new URLSearchParams(searchParams.toString());
-              params.set(filter, event.target.value);
-              params.set("pageNo", "1");
-              params.set("pageSize", "10");
-              router.push(`?${params.toString()}`)
+              debounced(event)
             }}
             className="max-w-sm"
           />
@@ -84,7 +88,9 @@ export function DataTable<TData, TValue>({
             setFilter(event)
             const params = new URLSearchParams(searchParams.toString());
             params.set(filter, "");
-            inputRef.current.value = ""
+            if (inputRef !== null && inputRef.current != null) {
+              inputRef.current.value = ""
+            }
             router.push(`?${params.toString()}`)
           }}>
             <SelectTrigger className="w-[180px]">

@@ -13,11 +13,10 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import {UploadDetail} from "@/app/uploadOne/columns";
 import {api} from "@/lib/utils";
 import {cookies} from "next/headers";
 
-async function getData(): Promise<UploadDetail[]> {
+async function getData(): Promise<any> {
   const cookieStore = await cookies()
   const token = cookieStore.get("token")
   const username = cookieStore.get("username")
@@ -60,7 +59,7 @@ export default async function Page() {
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <div className="grid auto-rows-min gap-4 grid-cols-2 lg:grid-cols-3 ">
-            {data.map((item: any) => {
+            {data.map((item) => {
               return (
                 <div key={item.id} className="flex aspect-video rounded-xl bg-muted/50  items-center">
                   <div className="flex-1 p-4 aspect-[1/1] w-1/3">

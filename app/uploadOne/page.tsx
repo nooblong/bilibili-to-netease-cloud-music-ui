@@ -1,5 +1,5 @@
 import {DataTable} from "./data-table"
-import {columns, UploadDetail} from "@/app/uploadOne/columns";
+import {columns} from "@/app/uploadOne/columns";
 import {AppSidebar} from "@/components/app-sidebar";
 import {SidebarInset, SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar";
 import {Separator} from "@/components/ui/separator";
@@ -12,11 +12,10 @@ import {
 } from "@/components/ui/breadcrumb";
 import {api} from "@/lib/utils";
 
-async function getData(pageNo: number, pageSize: number, title: string, status: string): Promise<UploadDetail[]> {
+async function getData(pageNo: number, pageSize: number, title: string, status: string): Promise<any> {
   'use server'
   const json = await fetch(api + `/uploadDetail/list?pageNo=${pageNo}&pageSize=${pageSize}&title=${title}&status=${status}`)
     .then(response => response.json());
-  console.log("title:", title)
   return json.data
 }
 
