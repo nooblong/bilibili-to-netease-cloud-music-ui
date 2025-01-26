@@ -12,9 +12,9 @@ import {
 } from "@/components/ui/breadcrumb";
 import {api} from "@/lib/utils";
 
-async function getData(pageNo: number, pageSize: number, title: string): Promise<UploadDetail[]> {
+async function getData(pageNo: number, pageSize: number, title: string, status: string): Promise<UploadDetail[]> {
   'use server'
-  const json = await fetch(api + `/uploadDetail/list?pageNo=${pageNo}&pageSize=${pageSize}&title=${title}`)
+  const json = await fetch(api + `/uploadDetail/list?pageNo=${pageNo}&pageSize=${pageSize}&title=${title}&status=${status}`)
     .then(response => response.json());
   console.log("title:", title)
   return json.data
@@ -25,12 +25,14 @@ export default async function UploadOnePage(props: {
     pageNo?: string;
     pageSize?: string;
     title?: string;
+    status?: string;
   }>;
 }) {
   const searchParams = await props.searchParams;
   const data = await getData((Number(searchParams?.pageNo) || 1),
     Number(searchParams?.pageSize) || 10,
-    (searchParams?.title || ""));
+    (searchParams?.title || ""),
+    (searchParams?.status || ""));
   return (
     <SidebarProvider>
       <AppSidebar/>

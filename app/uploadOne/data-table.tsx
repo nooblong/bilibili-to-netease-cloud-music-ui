@@ -4,26 +4,19 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  getPaginationRowModel, SortingState, getSortedRowModel, ColumnFiltersState, getFilteredRowModel
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable
 } from "@tanstack/react-table"
 
 import {Button} from "@/components/ui/button"
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {useState} from "react";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table"
+import {useRef, useState} from "react";
+import {useRouter, useSearchParams} from "next/navigation";
 import {Input} from "@/components/ui/input";
-import * as sea from "node:sea";
-import {AlertTitle} from "@/components/ui/alert";
-import {Badge} from "@/components/ui/badge";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 
 interface DataTableProps<TData, TValue> {
@@ -44,10 +37,11 @@ export function DataTable<TData, TValue>({
 ) {
 
   const [sorting, setSorting] = useState<SortingState>([])
+  const [filter, setFilter] = useState<string>("title")
+  const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
   const search = Object.fromEntries(searchParams)
-  const pathname = usePathname();
   const table = useReactTable({
     data,
     columns,
@@ -69,19 +63,39 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
-        <Input
-          defaultValue={search.title || ""}
-          placeholder="Filter Title..."
-          onChange={(event) => {
+      <div className="flex items-center py-4 ">
+        <div>
+          <Input
+            ref={inputRef}
+            defaultValue={search.title || ""}
+            placeholder="Filter..."
+            onChange={(event) => {
+              const params = new URLSearchParams(searchParams.toString());
+              params.set(filter, event.target.value);
+              params.set("pageNo", "1");
+              params.set("pageSize", "10");
+              router.push(`?${params.toString()}`)
+            }}
+            className="max-w-sm"
+          />
+        </div>
+        <div>
+          <Select onValueChange={(event) => {
+            setFilter(event)
             const params = new URLSearchParams(searchParams.toString());
-            params.set("title", event.target.value);
-            params.set("pageNo", "1");
-            params.set("pageSize", "10");
+            params.set(filter, "");
+            inputRef.current.value = ""
             router.push(`?${params.toString()}`)
-          }}
-          className="max-w-sm"
-        />
+          }}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Title"/>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="title">Title</SelectItem>
+              <SelectItem value="status">Status</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -134,7 +148,7 @@ export function DataTable<TData, TValue>({
           router.push(`?${params.toString()}`)
         }}>
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="10" />
+            <SelectValue placeholder="10"/>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="10">10</SelectItem>
