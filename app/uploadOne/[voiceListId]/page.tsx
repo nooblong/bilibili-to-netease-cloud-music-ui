@@ -23,7 +23,6 @@ async function getData(pageNo: number, pageSize: number, title: string, status: 
 export default async function UploadOnePage(props: any): Promise<any> {
   const searchParams = await props.searchParams;
   const params = await props.params;
-  console.log(params.voiceListId)
   const data = await getData((Number(searchParams?.pageNo) || 1),
     Number(searchParams?.pageSize) || 10,
     (searchParams?.title || ""),
@@ -41,13 +40,13 @@ export default async function UploadOnePage(props: any): Promise<any> {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    /
+                  <BreadcrumbLink href="/">
+                    我的播客
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block"/>
                 <BreadcrumbItem>
-                  <BreadcrumbPage>单曲上传</BreadcrumbPage>
+                  <BreadcrumbPage>{params.voiceListId}</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
