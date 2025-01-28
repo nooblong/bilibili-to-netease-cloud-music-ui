@@ -5,4 +5,4 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const api = "http://127.0.0.1:25565"
+export const api = "http://nooblong1.mycloudnas.com:8080"

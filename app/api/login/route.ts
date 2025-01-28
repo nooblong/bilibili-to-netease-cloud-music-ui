@@ -1,9 +1,10 @@
 import {cookies} from "next/headers";
+import {api} from "@/lib/utils";
 
 export async function POST(req: Request) {
   const json = await req.json();
   console.log("json", json);
-  const response = await fetch('http://localhost:25565/login', {
+  const response = await fetch(api + '/login', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(json),
