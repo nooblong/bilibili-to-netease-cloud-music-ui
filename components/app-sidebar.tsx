@@ -83,6 +83,7 @@ export async function AppSidebar({...props}: React.ComponentProps<typeof Sidebar
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
+        {/*@ts-ignore*/}
         {username?.value ? <NavUser user={{name: username.value}} logout={async () => {
             'use server'
             const cookieStore = await cookies();
