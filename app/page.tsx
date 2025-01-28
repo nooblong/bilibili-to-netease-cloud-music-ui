@@ -24,7 +24,7 @@ async function getData(): Promise<any> {
   const json = await fetch(api + `/uploadDetail/listVoicelist?username=${username?.value}`, {
     method: "GET",
     headers: {
-      "token": token
+      "token": token?.value
     }
   }).then(res => res.json())
   return json.data
