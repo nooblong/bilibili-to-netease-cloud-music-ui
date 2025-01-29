@@ -22,10 +22,6 @@ const data = {
       url: "/",
     },
     {
-      title: "订阅",
-      url: "/subscribe",
-    },
-    {
       title: "登录网易云",
       url: "/loginNetMusic",
     },
