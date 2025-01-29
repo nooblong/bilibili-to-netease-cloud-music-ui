@@ -21,8 +21,8 @@ async function getData(): Promise<any> {
   const cookieStore = await cookies()
   const token = cookieStore.get("token")
   const username = cookieStore.get("username")
-  // const json = await fetch(api + `/uploadDetail/listVoicelist?username=${username?.value}`, {
-  const json = await fetch("https://1bc53407a65d4ef492b871e2f9f8fb88.api.mockbin.io/", {
+  const json = await fetch(api + `/uploadDetail/listVoicelist?username=${username?.value}`, {
+  // const json = await fetch("https://1bc53407a65d4ef492b871e2f9f8fb88.api.mockbin.io/", {
     method: "GET",
     headers: {
       "token": token ? token.value : ""
