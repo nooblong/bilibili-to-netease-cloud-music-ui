@@ -94,6 +94,14 @@ export function AddOne({onSubmitAction}: {
               uploadName: head + i.name + tail
             })
           })
+          if (cids.length == 0) {
+            toPost.push({
+              ...data,
+              cid: data.cid,
+              uploadName: data.uploadName,
+            })
+          }
+          console.log("fuck toPost")
           console.log(toPost)
           // @ts-ignore
           form.setValue("uploadDetails", toPost)
@@ -118,9 +126,11 @@ export function AddOne({onSubmitAction}: {
           />
           <Button onClick={async (event) => {
             event.preventDefault()
+            const bvid = form.getValues("bvid");
+            const res = await fetch(`/api/common/bilibili/getVideoInfo?bvid=${bvid}`).then((res) => res.json());
             form.reset()
-            const res = await fetch(`/api/common/bilibili/getVideoInfo?bvid=${form.getValues("bvid")}`).then((res) => res.json());
             setVideoInfo(res.data);
+            form.setValue("bvid", bvid)
             form.setValue("uploadName", res.data.title)
           }}>解析</Button>
 
