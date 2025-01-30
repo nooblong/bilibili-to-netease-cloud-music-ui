@@ -152,9 +152,8 @@ export function AddOne({onSubmitAction}: {
               name="cid"
               render={({field}) => (
                 <FormItem>
-                  <FormLabel>{field.name}</FormLabel>
-
-                  <Button onClick={(event) => {
+                  <FormLabel>多选分p-{field.name}</FormLabel>
+                  <Button className="ml-5" onClick={(event) => {
                     event.preventDefault()
                     const toSet: CidName[] = videoInfo.pages.map(i => {
                       return {
@@ -176,7 +175,6 @@ export function AddOne({onSubmitAction}: {
                                                    ? [...cids, {cid: item.cid, name: item.part}]
                                                    : cids.filter(cidName => cidName.cid !== item.cid);
                                                  setCids(newSelected);
-                                                 console.log(newSelected)
                                                }}
                         />
                         </div>
