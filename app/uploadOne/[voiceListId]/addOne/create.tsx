@@ -42,18 +42,18 @@ const formSchema = z.object({
   cid: z.string().min(1, "cid不能为空").optional(),
   voiceListId: z.string().min(1, "voiceListId不能为空"),
   useDefaultImg: z.coerce.number().min(0).max(1),
-  voiceOffset: z.coerce.number().min(0),
-  voiceBeginSec: z.coerce.number().min(0),
-  voiceEndSec: z.coerce.number().min(0),
+  offset: z.coerce.number().min(0),
+  beginSec: z.coerce.number().min(0),
+  endSec: z.coerce.number().min(0),
   privacy: z.coerce.number().min(0).max(1),
   crack: z.coerce.number().min(0).max(1),
   uploadDetails: z.any(),
   cids: z.any(),
 }).refine(data =>
-    !(data.voiceBeginSec && data.voiceEndSec) || data.voiceEndSec >= data.voiceBeginSec,
+    !(data.beginSec && data.endSec) || data.endSec >= data.beginSec,
   {
     message: "结束时间必须大于等于开始时间",
-    path: ["voiceEndSec"]
+    path: ["endSec"]
   }
 );
 
@@ -73,9 +73,9 @@ export function AddOne({onSubmitAction}: {
       useDefaultImg: 1,
       privacy: 0,
       crack: 0,
-      voiceOffset: 0,
-      voiceBeginSec: 0,
-      voiceEndSec: 0,
+      offset: 0,
+      beginSec: 0,
+      endSec: 0,
       uploadName: "uploadName",
     },
   });
@@ -222,7 +222,7 @@ export function AddOne({onSubmitAction}: {
 
           <FormField
             control={form.control}
-            name="voiceOffset"
+            name="offset"
             render={({field}) => (
               <FormItem>
                 <FormLabel>音量增加（db）</FormLabel>
@@ -232,18 +232,16 @@ export function AddOne({onSubmitAction}: {
                     step="0.1"
                     placeholder="音量增加（db）"
                     {...field}
-                    value={field.value ?? ""}
+                    value={field.value ?? 0}
                   />
                 </FormControl>
                 <FormMessage/>
               </FormItem>
             )}
           />
-
-          {/* 时间范围 */}
           <FormField
             control={form.control}
-            name="voiceBeginSec"
+            name="beginSec"
             render={({field}) => (
               <FormItem>
                 <FormLabel>开始时间（秒）</FormLabel>
@@ -253,7 +251,7 @@ export function AddOne({onSubmitAction}: {
                     step="0.1"
                     placeholder="开始时间（秒）"
                     {...field}
-                    value={field.value ?? ""}
+                    value={field.value ?? 0}
                   />
                 </FormControl>
                 <FormMessage/>
@@ -263,7 +261,7 @@ export function AddOne({onSubmitAction}: {
 
           <FormField
             control={form.control}
-            name="voiceEndSec"
+            name="endSec"
             render={({field}) => (
               <FormItem>
                 <FormLabel>结束时间（秒）</FormLabel>
@@ -273,7 +271,7 @@ export function AddOne({onSubmitAction}: {
                     step="0.1"
                     placeholder="结束时间（秒）"
                     {...field}
-                    value={field.value ?? ""}
+                    value={field.value ?? 0}
                   />
                 </FormControl>
                 <FormMessage/>
