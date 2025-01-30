@@ -9,6 +9,26 @@ import {
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import {AddOne} from "@/app/uploadOne/[voiceListId]/addOne/create";
+import {api} from "@/lib/utils";
+import {cookies} from "next/headers";
+import {redirect} from "next/navigation";
+
+async function submit(body: any): Promise<any> {
+  'use server'
+  console.log(body)
+  const json = await fetch(api + `/uploadDetail/add`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Token": (await cookies()).get("token")?.value
+    },
+    body: JSON.stringify(body)
+  })
+    .then(response => response.json());
+  console.log(json)
+  redirect(`/`)
+  return json.data
+}
 
 export default async function addOnePage(props: any): Promise<any> {
   const params = await props.params;
@@ -41,7 +61,7 @@ export default async function addOnePage(props: any): Promise<any> {
             </Breadcrumb>
           </div>
         </header>
-        <AddOne/>
+        <AddOne onSubmit={submit}/>
       </SidebarInset>
     </SidebarProvider>
   )

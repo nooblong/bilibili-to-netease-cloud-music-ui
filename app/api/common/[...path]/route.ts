@@ -1,8 +1,9 @@
 import {NextRequest, NextResponse} from 'next/server';
 import {api} from "@/lib/utils";
 
-export async function GET(req: NextRequest, context: { params: { path: string[] } }) {
-  const backendPath = context.params.path.join('/');
+export async function GET(req: NextRequest, context: { params: Promise<{ path: string[] }> }) {
+  const params1 = await context.params;
+  const backendPath = params1.path.join('/');
   const searchParams = req.nextUrl.searchParams;
   const headers = Object.fromEntries(req.headers.entries());
   const backendResponse = await fetch(`${api}/${backendPath}?${searchParams}`, {

@@ -16,33 +16,34 @@ import {
 } from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {useState} from "react";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue
-} from "@/components/ui/select";
+import {useParams} from "next/navigation";
 
 export type AddQueueRequest = {
   bvid: string;
-  cid: string[];
-  uploadName: string;
+  cid?: CidName[];
+  uploadName?: string;
+  uploadNameTail?: string;
+  uploadNameHead?: string;
   voiceListId?: number;
-  useDefaultImg: boolean;
+  useDefaultImg?: boolean;
   voiceOffset?: number;
   voiceBeginSec?: number;
   voiceEndSec?: number;
-  privacy: boolean;
-  crack: boolean;
+  privacy?: boolean;
+  crack?: boolean;
 };
+
+export type CidName = {
+  cid: string,
+  name: string
+}
 
 const formSchema = z.object({
   bvid: z.string().min(1, "BVID不能为空"),
-  cid: z.array().optional(),
-  uploadName: z.string().min(1, "上传名称不能为空"),
+  cid: z.array(z.any()).optional(),
+  uploadName: z.string().optional(),
+  uploadNameTail: z.string().optional(),
+  uploadNameHead: z.string().optional(),
   voiceListId: z.coerce.string().min(1, "播客id不能为空"),
   useDefaultImg: z.boolean().default(false),
   voiceOffset: z.coerce.number().min(0).optional(),
@@ -58,29 +59,38 @@ const formSchema = z.object({
   }
 );
 
-interface AddQueueFormProps {
+export function AddOne({onSubmit, loading}: {
   onSubmit: (values: AddQueueRequest) => void;
   loading?: boolean;
-}
-
-export function AddOne({onSubmit, loading}: AddQueueFormProps) {
+}) {
+  const params = useParams();
+  const [videoInfo, setVideoInfo] = useState<any>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      voiceListId: String(params.voiceListId),
       bvid: "BV1vQ4y1Y7h2",
       cid: [],
       useDefaultImg: false,
       privacy: false,
       crack: false,
+      uploadName: "",
+      uploadNameHead: "",
+      uploadNameTail: ""
     },
   });
-
-  const [videoInfo, setVideoInfo] = useState<any>(null);
-
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={(event) => {
+          event.preventDefault();
+          let res = form.getValues("cid");
+          res.forEach(i => {
+            i.name = form.watch("uploadNameHead") + i.name + form.watch("uploadNameTail")
+          })
+          form.setValue("cid", res)
+          form.handleSubmit(onSubmit)(event)
+        }}
         className="space-y-4 p-4 border rounded-lg"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -98,15 +108,19 @@ export function AddOne({onSubmit, loading}: AddQueueFormProps) {
               </FormItem>
             )}
           />
-          <Button onClick={async () => {
+          <Button onClick={async (event) => {
+            event.preventDefault()
             console.log(form.getValues("bvid"))
             const res = await fetch(`/api/common/bilibili/getVideoInfo?bvid=${form.getValues("bvid")}`).then((res) => res.json());
             console.log(res)
             setVideoInfo(res.data);
+            form.reset()
+            form.setValue("uploadName", res.data.title)
           }}>解析</Button>
           {
-            videoInfo && <div>
-              {videoInfo.title}
+            videoInfo &&
+              <div>
+                {videoInfo.title}
               </div>
           }
           {
@@ -116,38 +130,48 @@ export function AddOne({onSubmit, loading}: AddQueueFormProps) {
             )} alt=""/>
           }
 
-          <FormField
-            control={form.control}
-            name="cid"
-            render={({field}) => (
-              <FormItem>
-                <FormLabel>CID</FormLabel>
-                <>
+          <div hidden={videoInfo && videoInfo.pages.length <= 1}>
+            <FormField
+              control={form.control}
+              name="cid"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel>CID</FormLabel>
+                  <Button onClick={(event) => {
+                    event.preventDefault()
+                    form.setValue("cid", videoInfo.pages.map(i => {
+                      return {
+                        cid: i.cid,
+                        name: i.part
+                      }
+                    }));
+                  }}>全选</Button>
                   {videoInfo && videoInfo.pages.map((item) => {
                     return (
                       <FormControl key={item.cid}>
                         <div>
                           {item.part}<Checkbox key={item.cid}
-                          checked={form.watch("cid").includes(item.cid)}
-                          onCheckedChange={(checked) => {
-                            const currentSelected = form.getValues("cid");
-                            console.log(checked)
-                            const newSelected = checked
-                              ? [...currentSelected, item.cid]
-                              : currentSelected.filter(id => id !== item.cdi);
-                            form.setValue("cid", newSelected);
-                          }}
-                        />
+                                               checked={form.watch("cid").some(i => i.cid === item.cid)}
+                                               onCheckedChange={(checked) => {
+                                                 const currentSelected = form.getValues("cid");
+                                                 console.log(checked)
+                                                 const newSelected = checked
+                                                   ? [...currentSelected, {cid: item.cid, name: item.part}]
+                                                   : currentSelected.filter(cidName => cidName.cid !== item.cid);
+                                                 form.setValue("cid", newSelected);
+                                                 console.log(form.getValues("cid"))
+                                               }}
+                        />{form.watch("cid").filter(cidName => cidName.cid === item.cid)[0] &&
+                          form.watch("cid").filter(cidName => cidName.cid === item.cid)[0].name}
                         </div>
                       </FormControl>
                     )
                   })}
-                </>
-                <FormMessage/>
-              </FormItem>
-            )}
-          />
-
+                  <FormMessage/>
+                </FormItem>
+              )}
+            />
+          </div>
           <FormField
             control={form.control}
             name="uploadName"
@@ -155,12 +179,42 @@ export function AddOne({onSubmit, loading}: AddQueueFormProps) {
               <FormItem>
                 <FormLabel>上传名称</FormLabel>
                 <FormControl>
-                  <Input placeholder="输入上传名称" {...field} />
+                  <Input placeholder="输入上传名称" {...field} disabled={videoInfo && videoInfo.pages.length > 1}/>
                 </FormControl>
                 <FormMessage/>
               </FormItem>
             )}
           />
+          <div hidden={videoInfo && videoInfo.pages.length <= 1}>
+            多p视频上传名称为【上传名称前+分p名+上传名称后】
+            <FormField
+              control={form.control}
+              name="uploadNameHead"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel>上传名称（前面）</FormLabel>
+                  <FormControl>
+                    <Input disabled={videoInfo && videoInfo.pages.length <= 1}
+                           placeholder="输入上传名称（前面）" {...field} />
+                  </FormControl>
+                  <FormMessage/>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="uploadNameTail"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel>上传名称（末尾）</FormLabel>
+                  <FormControl>
+                    <Input disabled={videoInfo && videoInfo.pages.length <= 1}
+                           placeholder="输入上传名称（末尾）" {...field} />
+                  </FormControl>
+                  <FormMessage/>
+                </FormItem>
+              )}
+            /></div>
 
           {/* 可选数字字段 */}
           <FormField
@@ -168,7 +222,7 @@ export function AddOne({onSubmit, loading}: AddQueueFormProps) {
             name="voiceListId"
             render={({field}) => (
               <FormItem>
-                <FormLabel>语音列表ID</FormLabel>
+                <FormLabel>网易播客id</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -187,7 +241,7 @@ export function AddOne({onSubmit, loading}: AddQueueFormProps) {
             name="voiceOffset"
             render={({field}) => (
               <FormItem>
-                <FormLabel>语音偏移（秒）</FormLabel>
+                <FormLabel>音量增加（db）</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -256,7 +310,7 @@ export function AddOne({onSubmit, loading}: AddQueueFormProps) {
                       onCheckedChange={field.onChange}
                     />
                   </FormControl>
-                  <FormLabel>使用默认图片</FormLabel>
+                  <FormLabel>使用播客封面作为封面</FormLabel>
                 </FormItem>
               )}
             />
@@ -272,7 +326,7 @@ export function AddOne({onSubmit, loading}: AddQueueFormProps) {
                       onCheckedChange={field.onChange}
                     />
                   </FormControl>
-                  <FormLabel>隐私模式</FormLabel>
+                  <FormLabel>隐私声音</FormLabel>
                 </FormItem>
               )}
             />
@@ -288,7 +342,7 @@ export function AddOne({onSubmit, loading}: AddQueueFormProps) {
                       onCheckedChange={field.onChange}
                     />
                   </FormControl>
-                  <FormLabel>破解模式</FormLabel>
+                  <FormLabel>超能力</FormLabel>
                 </FormItem>
               )}
             />
@@ -300,5 +354,6 @@ export function AddOne({onSubmit, loading}: AddQueueFormProps) {
         </Button>
       </form>
     </Form>
-  );
+  )
+    ;
 }
