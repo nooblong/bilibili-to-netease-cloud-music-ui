@@ -11,26 +11,25 @@ import {
 import {AddOne} from "@/app/uploadOne/[voiceListId]/addOne/create";
 import {api} from "@/lib/utils";
 import {cookies} from "next/headers";
-import {redirect} from "next/navigation";
 
-async function submit(body: any): Promise<any> {
+async function submit(val: any) {
   'use server'
-  console.log(body)
+  console.log("fuck val")
+  console.log(val)
   const json = await fetch(api + `/uploadDetail/add`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Access-Token": (await cookies()).get("token")?.value
+      "Access-Token": (await cookies()).get("token")?.value ?? ""
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(val)
   })
     .then(response => response.json());
   console.log(json)
-  redirect(`/`)
   return json.data
 }
 
-export default async function addOnePage(props: any): Promise<any> {
+export default async function addOnePage(props: any){
   const params = await props.params;
   return (
     <SidebarProvider>
@@ -61,7 +60,7 @@ export default async function addOnePage(props: any): Promise<any> {
             </Breadcrumb>
           </div>
         </header>
-        <AddOne onSubmit={submit}/>
+        <AddOne onSubmitAction={submit}/>
       </SidebarInset>
     </SidebarProvider>
   )

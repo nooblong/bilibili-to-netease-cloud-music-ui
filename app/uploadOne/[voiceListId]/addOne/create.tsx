@@ -18,39 +18,37 @@ import {Input} from "@/components/ui/input";
 import {useState} from "react";
 import {useParams} from "next/navigation";
 
-export type AddQueueRequest = {
-  bvid: string;
-  cid?: CidName[];
-  uploadName?: string;
-  uploadNameTail?: string;
-  uploadNameHead?: string;
-  voiceListId?: number;
-  useDefaultImg?: boolean;
-  voiceOffset?: number;
-  voiceBeginSec?: number;
-  voiceEndSec?: number;
-  privacy?: boolean;
-  crack?: boolean;
-};
+type UploadDetail = {
+  bvid: string,
+  uploadName: string,
+  cid: string,
+  voiceListId: string,
+  useDefaultImg: number,
+  voiceOffset: number,
+  voiceBeginSec: number,
+  voiceEndSec: number,
+  privacy: number,
+  crack: number,
+}
 
-export type CidName = {
+type CidName = {
   cid: string,
   name: string
 }
 
 const formSchema = z.object({
-  bvid: z.string().min(1, "BVID不能为空"),
-  cid: z.array(z.any()).optional(),
-  uploadName: z.string().optional(),
-  uploadNameTail: z.string().optional(),
-  uploadNameHead: z.string().optional(),
-  voiceListId: z.coerce.string().min(1, "播客id不能为空"),
-  useDefaultImg: z.boolean().default(false),
-  voiceOffset: z.coerce.number().min(0).optional(),
-  voiceBeginSec: z.coerce.number().min(0).optional(),
-  voiceEndSec: z.coerce.number().min(0).optional(),
-  privacy: z.boolean().default(false),
-  crack: z.boolean().default(false),
+  bvid: z.string().min(1, "bvid不能为空"),
+  uploadName: z.string().min(1, "uploadName不能为空"),
+  cid: z.string().min(1, "cid不能为空").optional(),
+  voiceListId: z.string().min(1, "voiceListId不能为空"),
+  useDefaultImg: z.coerce.number().min(0).max(1),
+  voiceOffset: z.coerce.number().min(0),
+  voiceBeginSec: z.coerce.number().min(0),
+  voiceEndSec: z.coerce.number().min(0),
+  privacy: z.coerce.number().min(0).max(1),
+  crack: z.coerce.number().min(0).max(1),
+  uploadDetails: z.any(),
+  cids: z.any(),
 }).refine(data =>
     !(data.voiceBeginSec && data.voiceEndSec) || data.voiceEndSec >= data.voiceBeginSec,
   {
@@ -59,24 +57,26 @@ const formSchema = z.object({
   }
 );
 
-export function AddOne({onSubmit, loading}: {
-  onSubmit: (values: AddQueueRequest) => void;
-  loading?: boolean;
+export function AddOne({onSubmitAction}: {
+  onSubmitAction: (values: UploadDetail[]) => void;
 }) {
   const params = useParams();
   const [videoInfo, setVideoInfo] = useState<any>(null);
+  const [cids, setCids] = useState<CidName[]>([]);
+  const [head, setHead] = useState<string>("");
+  const [tail, setTail] = useState<string>("");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       voiceListId: String(params.voiceListId),
       bvid: "BV1vQ4y1Y7h2",
-      cid: [],
-      useDefaultImg: false,
-      privacy: false,
-      crack: false,
-      uploadName: "",
-      uploadNameHead: "",
-      uploadNameTail: ""
+      useDefaultImg: 1,
+      privacy: 0,
+      crack: 0,
+      voiceOffset: 0,
+      voiceBeginSec: 0,
+      voiceEndSec: 0,
+      uploadName: "uploadName",
     },
   });
   return (
@@ -84,17 +84,25 @@ export function AddOne({onSubmit, loading}: {
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          let res = form.getValues("cid");
-          res.forEach(i => {
-            i.name = form.watch("uploadNameHead") + i.name + form.watch("uploadNameTail")
+          const data = form.getValues();
+          console.log(data)
+          const toPost: any[] = [];
+          cids.forEach(i => {
+            toPost.push({
+              ...data,
+              cid: i.cid,
+              uploadName: head + i.name + tail
+            })
           })
-          form.setValue("cid", res)
-          form.handleSubmit(onSubmit)(event)
+          console.log(toPost)
+          // @ts-ignore
+          form.setValue("uploadDetails", toPost)
+          // @ts-ignore
+          form.handleSubmit(onSubmitAction)(event)
         }}
         className="space-y-4 p-4 border rounded-lg"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* 必填字段 */}
           <FormField
             control={form.control}
             name="bvid"
@@ -110,59 +118,67 @@ export function AddOne({onSubmit, loading}: {
           />
           <Button onClick={async (event) => {
             event.preventDefault()
-            console.log(form.getValues("bvid"))
-            const res = await fetch(`/api/common/bilibili/getVideoInfo?bvid=${form.getValues("bvid")}`).then((res) => res.json());
-            console.log(res)
-            setVideoInfo(res.data);
             form.reset()
+            const res = await fetch(`/api/common/bilibili/getVideoInfo?bvid=${form.getValues("bvid")}`).then((res) => res.json());
+            setVideoInfo(res.data);
             form.setValue("uploadName", res.data.title)
           }}>解析</Button>
-          {
-            videoInfo &&
-              <div>
-                {videoInfo.title}
-              </div>
-          }
-          {
-            videoInfo && videoInfo.image && <img src={videoInfo.image.replace(
-              /^(http)s*(:\/\/)/,
-              "https://images.weserv.nl/?url="
-            )} alt=""/>
-          }
+
+          {videoInfo && <div>{videoInfo.title}</div>}
+          {videoInfo && videoInfo.image && <img src={videoInfo.image.replace(
+            /^(http)s*(:\/\/)/,
+            "https://images.weserv.nl/?url="
+          )} alt=""/>}
 
           <div hidden={videoInfo && videoInfo.pages.length <= 1}>
+            <Input
+              type="text"
+              placeholder="上传名称（前）"
+              value={head}
+              onChange={(event) => {
+                setHead(event.currentTarget.value);
+              }}
+            />
+            <Input
+              type="text"
+              placeholder="上传名称（后）"
+              value={tail}
+              onChange={(event) => {
+                setTail(event.currentTarget.value);
+              }}
+            />
             <FormField
               control={form.control}
               name="cid"
               render={({field}) => (
                 <FormItem>
-                  <FormLabel>CID</FormLabel>
+                  <FormLabel>{field.name}</FormLabel>
+
                   <Button onClick={(event) => {
                     event.preventDefault()
-                    form.setValue("cid", videoInfo.pages.map(i => {
+                    const toSet: CidName[] = videoInfo.pages.map(i => {
                       return {
                         cid: i.cid,
                         name: i.part
                       }
-                    }));
+                    })
+                    setCids(toSet);
                   }}>全选</Button>
+
                   {videoInfo && videoInfo.pages.map((item) => {
                     return (
                       <FormControl key={item.cid}>
                         <div>
-                          {item.part}<Checkbox key={item.cid}
-                                               checked={form.watch("cid").some(i => i.cid === item.cid)}
+                          {head + item.part + tail}<Checkbox key={item.cid}
+                                               checked={cids.some(i => i.cid === item.cid)}
                                                onCheckedChange={(checked) => {
-                                                 const currentSelected = form.getValues("cid");
-                                                 console.log(checked)
                                                  const newSelected = checked
-                                                   ? [...currentSelected, {cid: item.cid, name: item.part}]
-                                                   : currentSelected.filter(cidName => cidName.cid !== item.cid);
-                                                 form.setValue("cid", newSelected);
-                                                 console.log(form.getValues("cid"))
+                                                   ? [...cids, {cid: item.cid, name: item.part}]
+                                                   : cids.filter(cidName => cidName.cid !== item.cid);
+                                                 setCids(newSelected);
+                                                 console.log(newSelected)
                                                }}
-                        />{form.watch("cid").filter(cidName => cidName.cid === item.cid)[0] &&
-                          form.watch("cid").filter(cidName => cidName.cid === item.cid)[0].name}
+                        />
                         </div>
                       </FormControl>
                     )
@@ -185,38 +201,6 @@ export function AddOne({onSubmit, loading}: {
               </FormItem>
             )}
           />
-          <div hidden={videoInfo && videoInfo.pages.length <= 1}>
-            多p视频上传名称为【上传名称前+分p名+上传名称后】
-            <FormField
-              control={form.control}
-              name="uploadNameHead"
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>上传名称（前面）</FormLabel>
-                  <FormControl>
-                    <Input disabled={videoInfo && videoInfo.pages.length <= 1}
-                           placeholder="输入上传名称（前面）" {...field} />
-                  </FormControl>
-                  <FormMessage/>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="uploadNameTail"
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>上传名称（末尾）</FormLabel>
-                  <FormControl>
-                    <Input disabled={videoInfo && videoInfo.pages.length <= 1}
-                           placeholder="输入上传名称（末尾）" {...field} />
-                  </FormControl>
-                  <FormMessage/>
-                </FormItem>
-              )}
-            /></div>
-
-          {/* 可选数字字段 */}
           <FormField
             control={form.control}
             name="voiceListId"
@@ -226,7 +210,7 @@ export function AddOne({onSubmit, loading}: {
                 <FormControl>
                   <Input
                     type="number"
-                    placeholder="输入语音列表ID"
+                    placeholder="网易播客id"
                     {...field}
                     value={field.value ?? ""}
                   />
@@ -246,7 +230,7 @@ export function AddOne({onSubmit, loading}: {
                   <Input
                     type="number"
                     step="0.1"
-                    placeholder="输入偏移时间"
+                    placeholder="音量增加（db）"
                     {...field}
                     value={field.value ?? ""}
                   />
@@ -267,7 +251,7 @@ export function AddOne({onSubmit, loading}: {
                   <Input
                     type="number"
                     step="0.1"
-                    placeholder="输入开始时间"
+                    placeholder="开始时间（秒）"
                     {...field}
                     value={field.value ?? ""}
                   />
@@ -287,7 +271,7 @@ export function AddOne({onSubmit, loading}: {
                   <Input
                     type="number"
                     step="0.1"
-                    placeholder="输入结束时间"
+                    placeholder="结束时间（秒）"
                     {...field}
                     value={field.value ?? ""}
                   />
@@ -296,8 +280,6 @@ export function AddOne({onSubmit, loading}: {
               </FormItem>
             )}
           />
-
-          {/* 复选框组 */}
           <div className="space-y-2">
             <FormField
               control={form.control}
@@ -306,8 +288,10 @@ export function AddOne({onSubmit, loading}: {
                 <FormItem className="flex items-center space-x-2">
                   <FormControl>
                     <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
+                      checked={field.value === 1}
+                      onCheckedChange={() => {
+                        form.setValue("useDefaultImg", form.watch("useDefaultImg") === 1 ? 0 : 1)
+                      }}
                     />
                   </FormControl>
                   <FormLabel>使用播客封面作为封面</FormLabel>
@@ -322,11 +306,13 @@ export function AddOne({onSubmit, loading}: {
                 <FormItem className="flex items-center space-x-2">
                   <FormControl>
                     <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
+                      checked={field.value === 1}
+                      onCheckedChange={() => {
+                        form.setValue("privacy", form.watch("privacy") === 1 ? 0 : 1)
+                      }}
                     />
                   </FormControl>
-                  <FormLabel>隐私声音</FormLabel>
+                  <FormLabel>不公开声音</FormLabel>
                 </FormItem>
               )}
             />
@@ -338,8 +324,10 @@ export function AddOne({onSubmit, loading}: {
                 <FormItem className="flex items-center space-x-2">
                   <FormControl>
                     <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
+                      checked={field.value === 1}
+                      onCheckedChange={() => {
+                        form.setValue("crack", form.watch("crack") === 1 ? 0 : 1)
+                      }}
                     />
                   </FormControl>
                   <FormLabel>超能力</FormLabel>
@@ -349,8 +337,8 @@ export function AddOne({onSubmit, loading}: {
           </div>
         </div>
 
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "提交中..." : "提交队列"}
+        <Button type="submit" className="w-full">
+          提交
         </Button>
       </form>
     </Form>
