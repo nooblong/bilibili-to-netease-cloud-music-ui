@@ -13,6 +13,8 @@ import {
 import {api} from "@/lib/utils";
 import {SubscribeDataTable} from "@/app/uploadOne/[voiceListId]/subscribe-data-table";
 import {cookies} from "next/headers";
+import {Button} from "@/components/ui/button";
+import Link from "next/link";
 
 async function getUploadDetail(pageNo: number, pageSize: number, title: string, status: string, voiceListId: string): Promise<any> {
   'use server'
@@ -43,7 +45,6 @@ export default async function UploadOnePage(props: any): Promise<any> {
     (username || ""),
     (searchParams?.status || ""),
     params.voiceListId);
-  console.log(subscribe)
   return (
     <SidebarProvider>
       <AppSidebar/>
@@ -68,6 +69,9 @@ export default async function UploadOnePage(props: any): Promise<any> {
             </Breadcrumb>
           </div>
         </header>
+        <Link href={`/uploadOne/${params.voiceListId}/addOne`} className="">
+          <Button>单曲上传</Button>
+        </Link>
         <div className="container mx-auto py-10">
           up:
           <SubscribeDataTable columns={columnsSubscribe} data={subscribe} total={subscribe.length}/>

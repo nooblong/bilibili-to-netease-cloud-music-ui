@@ -1,3 +1,7 @@
-export default async function Page() {
-  return <>test!!!!!!!!!!!!!</>
+export default function Page() {
+  return (
+    <div>
+      ok
+    </div>
+  );
 }
