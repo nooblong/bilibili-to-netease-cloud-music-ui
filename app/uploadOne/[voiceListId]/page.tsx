@@ -69,8 +69,11 @@ export default async function UploadOnePage(props: any): Promise<any> {
             </Breadcrumb>
           </div>
         </header>
-        <Link href={`/uploadOne/${params.voiceListId}/addOne`} className="">
+        <Link href={`/uploadOne/${params.voiceListId}/addOne`}>
           <Button>单曲上传</Button>
+        </Link>
+        <Link href={`/uploadOne/${params.voiceListId}/addSubscribe`}>
+          <Button>创建订阅</Button>
         </Link>
         <div className="container mx-auto py-10">
           up:

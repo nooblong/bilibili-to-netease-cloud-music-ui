@@ -25,6 +25,19 @@ export type UploadDetail = {
   uploadStatus: string
 }
 
+export type UploadDetailAdd = {
+  bvid: string,
+  uploadName: string,
+  cid: string,
+  voiceListId: string,
+  useDefaultImg: number,
+  voiceOffset: number,
+  voiceBeginSec: number,
+  voiceEndSec: number,
+  privacy: number,
+  crack: number,
+}
+
 export type Subscribe = {
   id: string;
   regName: string;

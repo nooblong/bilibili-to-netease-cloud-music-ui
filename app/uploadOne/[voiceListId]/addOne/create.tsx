@@ -17,19 +17,8 @@ import {
 import {Input} from "@/components/ui/input";
 import {useState} from "react";
 import {useParams} from "next/navigation";
+import {UploadDetailAdd} from "@/app/uploadOne/[voiceListId]/columnsUploadDetail";
 
-type UploadDetail = {
-  bvid: string,
-  uploadName: string,
-  cid: string,
-  voiceListId: string,
-  useDefaultImg: number,
-  voiceOffset: number,
-  voiceBeginSec: number,
-  voiceEndSec: number,
-  privacy: number,
-  crack: number,
-}
 
 type CidName = {
   cid: string,
@@ -58,7 +47,7 @@ const formSchema = z.object({
 );
 
 export function AddOne({onSubmitAction}: {
-  onSubmitAction: (values: UploadDetail[]) => void;
+  onSubmitAction: (values: UploadDetailAdd[]) => void;
 }) {
   const params = useParams();
   const [videoInfo, setVideoInfo] = useState<any>(null);
@@ -179,13 +168,13 @@ export function AddOne({onSubmitAction}: {
                       <FormControl key={item.cid}>
                         <div>
                           {head + item.part + tail}<Checkbox key={item.cid}
-                                               checked={cids.some(i => i.cid === item.cid)}
-                                               onCheckedChange={(checked) => {
-                                                 const newSelected = checked
-                                                   ? [...cids, {cid: item.cid, name: item.part}]
-                                                   : cids.filter(cidName => cidName.cid !== item.cid);
-                                                 setCids(newSelected);
-                                               }}
+                                                             checked={cids.some(i => i.cid === item.cid)}
+                                                             onCheckedChange={(checked) => {
+                                                               const newSelected = checked
+                                                                 ? [...cids, {cid: item.cid, name: item.part}]
+                                                                 : cids.filter(cidName => cidName.cid !== item.cid);
+                                                               setCids(newSelected);
+                                                             }}
                         />
                         </div>
                       </FormControl>
