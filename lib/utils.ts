@@ -18,4 +18,4 @@ export const formatDate = (date: Date): string => {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
-export const api = "http://127.0.0.1:25566"
+export const api = "http://nooblong1.mycloudnas.com:8080"
