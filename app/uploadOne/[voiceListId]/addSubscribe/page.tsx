@@ -16,7 +16,7 @@ async function submit(val: any) {
   'use server'
   console.log("fuck val")
   console.log(val)
-  const json = await fetch(api + `/uploadDetail/add`, {
+  const json = await fetch(api + `/subscribe/add`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

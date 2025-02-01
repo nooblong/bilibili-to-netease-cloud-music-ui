@@ -32,7 +32,7 @@ import {
 const formSchema = z.object({
   voiceListId: z.string().min(1, "voiceListId不能为空"),
   upId: z.string().min(1, "upId不能为空"),
-  channelIds: z.array(z.string()).optional(),
+  channelIdsList: z.array(z.any()).optional(),
   type: z.string().min(1, "type不能为空"),
   processTime: z.string().min(1, "processTime不能为空"),
   fromTime: z.string().min(1, "fromTime不能为空"),
@@ -82,16 +82,22 @@ export function AddSubscribe({onSubmitAction}: {
       checkPart: 0,
       regName: "{title}",
       filterChannel: 0,
-      channelIds: [],
+      channelIdsList: [],
     },
   });
-  const channelIdsWatch = form.watch("channelIds") || []
+  const channelIdsWatch = form.watch("channelIdsList") || []
   const [filterChannel, setFilterChannel] = useState(false);
   return (
     <Form {...form}>
       <form
         onSubmit={(event) => {
           event.preventDefault();
+          // const val = form.getValues("channelIds")
+          // const newVal: string[] = []
+          // val.forEach((i) => {
+          //   newVal.push(String(i));
+          // })
+          // form.setValue("channelIdsList", newVal)
           // @ts-ignore
           form.handleSubmit(onSubmitAction)(event)
         }}
@@ -142,7 +148,7 @@ export function AddSubscribe({onSubmitAction}: {
           <div hidden={!filterChannel}>
             <FormField
               control={form.control}
-              name="channelIds"
+              name="channelIdsList"
               render={({field}) => (
                 <FormItem>
                   <FormLabel>选择合集</FormLabel>

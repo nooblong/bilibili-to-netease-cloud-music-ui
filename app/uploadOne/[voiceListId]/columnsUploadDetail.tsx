@@ -45,7 +45,7 @@ export type Subscribe = {
   voiceListId: string;
   upId: string;
   upName: string;
-  channelIds: string[];
+  channelIdsList: number[];
   type: string;
   processTime: string;
   updateTime: string;
