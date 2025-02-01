@@ -285,7 +285,7 @@ export function AddOne({onSubmitAction}: {
                     <Checkbox
                       checked={field.value === 1}
                       onCheckedChange={() => {
-                        form.setValue("useDefaultImg", form.watch("useDefaultImg") === 1 ? 0 : 1)
+                        form.setValue(field.name, field.value === 1 ? 0 : 1)
                       }}
                     />
                   </FormControl>
@@ -303,7 +303,7 @@ export function AddOne({onSubmitAction}: {
                     <Checkbox
                       checked={field.value === 1}
                       onCheckedChange={() => {
-                        form.setValue("privacy", form.watch("privacy") === 1 ? 0 : 1)
+                        form.setValue(field.name, field.value === 1 ? 0 : 1)
                       }}
                     />
                   </FormControl>
@@ -321,7 +321,7 @@ export function AddOne({onSubmitAction}: {
                     <Checkbox
                       checked={field.value === 1}
                       onCheckedChange={() => {
-                        form.setValue("crack", form.watch("crack") === 1 ? 0 : 1)
+                        form.setValue(field.name, field.value === 1 ? 0 : 1)
                       }}
                     />
                   </FormControl>
