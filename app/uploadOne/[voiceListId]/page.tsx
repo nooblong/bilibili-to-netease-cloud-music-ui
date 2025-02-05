@@ -10,11 +10,12 @@ import {
   BreadcrumbList, BreadcrumbPage,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
-import {api} from "@/lib/utils";
+import {api, replaceImageUrl} from "@/lib/utils";
 import {SubscribeDataTable} from "@/app/uploadOne/[voiceListId]/subscribe-data-table";
 import {cookies} from "next/headers";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
+import {Avatar, AvatarImage} from "@/components/ui/avatar";
 
 async function getUploadDetail(pageNo: number, pageSize: number, title: string, status: string, voiceListId: string): Promise<any> {
   'use server'
@@ -27,6 +28,18 @@ async function getUploadDetail(pageNo: number, pageSize: number, title: string, 
 async function getSubscribe(username: string, status: string, voiceListId: string): Promise<any> {
   'use server'
   const json = await fetch(api + `/subscribe/list?username=${username}&status=${status}&voiceListId=${voiceListId}`)
+    .then(response => response.json());
+  return json.data
+}
+
+async function deleteSubscribe(formData: FormData): Promise<any> {
+  'use server'
+  console.log(formData.get("id"))
+  const json = await fetch(api + `/subscribe/delete?id=${formData.get("id")}`, {
+    headers: {
+      "Access-Token": (await cookies()).get("token")?.value ?? ""
+    }
+  })
     .then(response => response.json());
   return json.data
 }
@@ -69,15 +82,36 @@ export default async function UploadOnePage(props: any): Promise<any> {
             </Breadcrumb>
           </div>
         </header>
-        <Link href={`/uploadOne/${params.voiceListId}/addOne`}>
-          <Button>单曲上传</Button>
-        </Link>
-        <Link href={`/uploadOne/${params.voiceListId}/addSubscribe`}>
-          <Button>创建订阅</Button>
-        </Link>
+        <div className="flex gap-2">
+          <Link href={`/uploadOne/${params.voiceListId}/addOne`}>
+            <Button>单曲上传</Button>
+          </Link>
+          <Link href={`/uploadOne/${params.voiceListId}/addSubscribe`}>
+            <Button>创建订阅</Button>
+          </Link>
+        </div>
         <div className="container mx-auto py-10">
-          up:
-          <SubscribeDataTable columns={columnsSubscribe} data={subscribe} total={subscribe.length}/>
+          {
+            subscribe.map(item => {
+              return (
+                <div key={item.id} className="flex gap-2">
+                  <Avatar>
+                    <AvatarImage
+                      src={replaceImageUrl(item.upImage)}/>
+                  </Avatar>
+                  {item.upName}
+                  <Link href={`/uploadOne/${params.voiceListId}/editSubscribe/${item.id}`}>
+                    <Button>edit</Button>
+                  </Link>
+                  <form action={deleteSubscribe}>
+                    <input type="hidden" name="id" value={item.id}/>
+                    <Button type="submit">delete</Button>
+                  </form>
+                </div>
+              )
+            })
+          }
+          {/*<SubscribeDataTable columns={columnsSubscribe} data={subscribe} total={subscribe.length}/>*/}
         </div>
         <div className="container mx-auto py-10">
           total:

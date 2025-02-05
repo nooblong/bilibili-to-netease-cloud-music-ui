@@ -18,6 +18,7 @@ import {Input} from "@/components/ui/input";
 import {useState} from "react";
 import {useParams} from "next/navigation";
 import {UploadDetailAdd} from "@/app/uploadOne/[voiceListId]/columnsUploadDetail";
+import {replaceImageUrl} from "@/lib/utils";
 
 
 type CidName = {
@@ -124,10 +125,7 @@ export function AddOne({onSubmitAction}: {
           }}>解析</Button>
 
           {videoInfo && <div>{videoInfo.title}</div>}
-          {videoInfo && videoInfo.image && <img src={videoInfo.image.replace(
-            /^(http)s*(:\/\/)/,
-            "https://images.weserv.nl/?url="
-          )} alt=""/>}
+          {videoInfo && videoInfo.image && <img src={replaceImageUrl(videoInfo.image)} alt=""/>}
 
           <div hidden={videoInfo && videoInfo.pages.length <= 1}>
             <Input

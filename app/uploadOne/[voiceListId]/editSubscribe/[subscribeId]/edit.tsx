@@ -30,22 +30,22 @@ import {
 } from "@/components/ui/select";
 
 const formSchema = z.object({
-  voiceListId: z.string().min(1, "voiceListId不能为空"),
-  upId: z.string().min(1, "upId不能为空"),
+  voiceListId: z.string().optional(),
+  upId: z.string().optional(),
   channelIdsList: z.array(z.any()).optional(),
-  type: z.string().min(1, "type不能为空"),
-  processTime: z.string().min(1, "processTime不能为空"),
-  fromTime: z.string().min(1, "fromTime不能为空"),
-  toTime: z.string().min(1, "toTime不能为空"),
+  type: z.string().optional(),
+  processTime: z.string().optional(),
+  fromTime: z.string().optional(),
+  toTime: z.string().optional(),
   keyWord: z.string().optional(),
   limitSec: z.coerce.number().min(0).optional(),
-  videoOrder: z.string().min(1),
+  videoOrder: z.string().min(1).optional(),
   remark: z.string().optional(),
-  enable: z.coerce.number().min(0).max(1),
-  crack: z.coerce.number().min(0).max(1),
-  useVideoCover: z.coerce.number().min(0).max(1),
-  checkPart: z.coerce.number().min(0),
-  regName: z.string().min(1),
+  enable: z.coerce.number().min(0).max(1).optional(),
+  crack: z.coerce.number().min(0).max(1).optional(),
+  useVideoCover: z.coerce.number().min(0).max(1).optional(),
+  checkPart: z.coerce.number().min(0).optional(),
+  regName: z.string().min(1).optional(),
   filterChannel: z.coerce.number().optional(),
   subscribeRegs: z.array(
     z.object({
@@ -55,11 +55,13 @@ const formSchema = z.object({
       pos: z.coerce.number().optional(),
     })
   ).optional(),
+  id: z.number().min(0)
 });
 
 
-export function AddSubscribe({onSubmitAction}: {
-  onSubmitAction: (values: Subscribe[]) => void;
+export function EditSubscribe({onSubmitAction, baseData}: {
+  onSubmitAction: (values: Subscribe[]) => void,
+  baseData: Subscribe
 }) {
   const params = useParams();
   const [upInfo, setUpInfo] = useState<any>(null);
@@ -67,37 +69,35 @@ export function AddSubscribe({onSubmitAction}: {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      remark: "",
-      voiceListId: String(params.voiceListId),
-      upId: "148524702",
-      type: "UP",
-      processTime: formatDate(new Date()),
-      fromTime: "2010-01-01 00:00:00",
-      toTime: "2050-01-01 00:00:00",
-      limitSec: 300,
-      videoOrder: "PUB_NEW_FIRST_THEN_OLD",
-      enable: 1,
-      crack: 0,
-      useVideoCover: 1,
-      checkPart: 0,
-      regName: "{title}",
-      filterChannel: 0,
-      channelIdsList: [],
+      remark: baseData.remark,
+      voiceListId: String(baseData.voiceListId),
+      upId: baseData.upId,
+      type: baseData.type,
+      processTime: baseData.processTime,
+      fromTime: baseData.fromTime,
+      toTime: baseData.toTime,
+      limitSec: baseData.limitSec,
+      videoOrder: baseData.videoOrder,
+      enable: baseData.enable,
+      crack: baseData.crack,
+      useVideoCover: baseData.useVideoCover,
+      checkPart: baseData.checkPart,
+      regName: baseData.regName,
+      filterChannel: baseData.channelIds.length > 0 ? 1 : 0,
+      channelIdsList: baseData.channelIds.split(","),
     },
   });
-  const channelIdsWatch = form.watch("channelIdsList") || []
-  const [filterChannel, setFilterChannel] = useState(false);
   return (
     <Form {...form}>
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          // const val = form.getValues("channelIds")
-          // const newVal: string[] = []
-          // val.forEach((i) => {
-          //   newVal.push(String(i));
-          // })
-          // form.setValue("channelIdsList", newVal)
+          form.setValue("id", baseData.id)
+          form.unregister("remark");
+          form.unregister("voiceListId");
+          form.unregister("upId");
+          form.unregister("type");
+          form.unregister("videoOrder");
           // @ts-ignore
           form.handleSubmit(onSubmitAction)(event)
         }}
@@ -105,6 +105,7 @@ export function AddSubscribe({onSubmitAction}: {
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
+            disabled={true}
             control={form.control}
             name="upId"
             render={({field}) => (
@@ -117,76 +118,10 @@ export function AddSubscribe({onSubmitAction}: {
               </FormItem>
             )}
           />
-          <Button className="" onClick={async (event) => {
-            event.preventDefault()
-            const upId = form.getValues("upId");
-            const res = await fetch(`/api/common/bilibili/getUserInfo?uid=${upId}`).then((res) => res.json());
-            const upChannels = await fetch(`/api/common/bilibili/getUpChannels?upId=${upId}`).then((res) => res.json());
-            form.reset()
-            form.setValue("upId", upId)
-            setUpInfo(res.data.data);
-            setChannelInfo(upChannels.data.data);
-            console.log(res.data.data)
-            console.log(upChannels.data.data)
-          }}>解析</Button>
-
-          {upInfo && <div>{upInfo.name}</div>}
-          {upInfo && upInfo.face && <img src={replaceImageUrl(upInfo.face)} alt=""/>}
-
-          <div hidden={!(channelInfo && channelInfo.length > 0)}>
-            <Checkbox
-              checked={filterChannel}
-              onCheckedChange={() => {
-                setFilterChannel(!filterChannel);
-              }}
-            />过滤合集
-          </div>
-
-          <div hidden={!filterChannel}>
-            <FormField
-              control={form.control}
-              name="channelIdsList"
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>选择合集</FormLabel>
-                  {channelInfo && channelInfo.map((item) => {
-                    return (
-                      <FormControl key={item.id_}>
-                        <div>
-                          {item.meta.name}<Checkbox key={item.id_}
-                                                    checked={channelIdsWatch.includes(item.id_)}
-                                                    onCheckedChange={(checked) => {
-                                                      const newSelected = checked
-                                                        ? [...channelIdsWatch, item.id_]
-                                                        : channelIdsWatch.filter(channelId => channelId !== item.id_);
-                                                      form.setValue(field.name, newSelected);
-                                                    }}
-                        />
-                        </div>
-                      </FormControl>
-                    )
-                  })}
-                  <FormMessage/>
-                </FormItem>
-              )}
-            />
-          </div>
-          {/*<FormField*/}
-          {/*  control={form.control}*/}
-          {/*  name="remark"*/}
-          {/*  render={({field}) => (*/}
-          {/*    <FormItem>*/}
-          {/*      <FormLabel>备注</FormLabel>*/}
-          {/*      <FormControl>*/}
-          {/*        <Input placeholder="输入备注" {...field}/>*/}
-          {/*      </FormControl>*/}
-          {/*      <FormMessage/>*/}
-          {/*    </FormItem>*/}
-          {/*  )}*/}
-          {/*/>*/}
           <FormField
             control={form.control}
             name="voiceListId"
+            disabled={true}
             render={({field}) => (
               <FormItem>
                 <FormLabel>网易播客id</FormLabel>
@@ -222,15 +157,15 @@ export function AddSubscribe({onSubmitAction}: {
               <FormItem>
                 <FormLabel>上传顺序</FormLabel>
                 <FormControl>
-                  <Select defaultValue={field.value}>
+                  <Select disabled={true} defaultValue={field.value}>
                     <SelectTrigger>
                       <SelectValue placeholder="上传顺序"/>
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>上传顺序</SelectLabel>
-                        <SelectItem value="PUB_NEW_FIRST_THEN_OLD">先上传新的</SelectItem>
-                        <SelectItem value="PUB_OLD_FIRST_THEN_NEW">先上传旧的</SelectItem>
+                        <SelectItem value="PUB_NEW_FIRST_THEN_OLD">第一次先上传新的</SelectItem>
+                        <SelectItem value="PUB_OLD_FIRST_THEN_NEW">第一次先上传旧的</SelectItem>
                       </SelectGroup>
                     </SelectContent>
                   </Select>

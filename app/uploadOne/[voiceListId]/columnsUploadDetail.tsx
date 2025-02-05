@@ -39,13 +39,14 @@ export type UploadDetailAdd = {
 }
 
 export type Subscribe = {
-  id: string;
+  id: number;
   regName: string;
   userId: string;
   voiceListId: string;
   upId: string;
   upName: string;
   channelIdsList: number[];
+  channelIds: string;
   type: string;
   processTime: string;
   updateTime: string;
@@ -266,7 +267,7 @@ export const columnsSubscribe: ColumnDef<Subscribe>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(subscribe.id)}>
+            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(String(subscribe.id))}>
               Copy Subscribe ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />

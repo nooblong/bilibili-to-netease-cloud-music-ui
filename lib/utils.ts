@@ -18,4 +18,14 @@ export const formatDate = (date: Date): string => {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
+export const replaceImageUrl = (url: string): string => {
+  if (url === null || url === undefined || url === "") {
+    return "https://github.com/shadcn.png"
+  }
+  return url.replace(
+    /^(http)s*(:\/\/)/,
+    "https://images.weserv.nl/?url="
+  );
+}
+
 export const api = "http://127.0.0.1:25566"
