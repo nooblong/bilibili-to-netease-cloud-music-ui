@@ -11,6 +11,7 @@ import {
 import {api} from "@/lib/utils";
 import {cookies} from "next/headers";
 import {AddSubscribe} from "@/app/uploadOne/[voiceListId]/addSubscribe/create";
+import {redirect} from "next/navigation";
 
 async function submit(val: any) {
   'use server'
@@ -26,6 +27,11 @@ async function submit(val: any) {
   })
     .then(response => response.json());
   console.log(json)
+  if (json.code === 0) {
+    redirect(`/uploadOne/${val.voiceListId}`)
+  } else {
+    redirect(`/customError?msg=${encodeURIComponent(JSON.stringify(json))}`);
+  }
   return json.data
 }
 

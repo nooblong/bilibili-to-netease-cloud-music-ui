@@ -16,6 +16,7 @@ import {cookies} from "next/headers";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
 import {Avatar, AvatarImage} from "@/components/ui/avatar";
+import {revalidatePath} from "next/cache";
 
 async function getUploadDetail(pageNo: number, pageSize: number, title: string, status: string, voiceListId: string): Promise<any> {
   'use server'
@@ -41,6 +42,7 @@ async function deleteSubscribe(formData: FormData): Promise<any> {
     }
   })
     .then(response => response.json());
+  revalidatePath("")
   return json.data
 }
 
