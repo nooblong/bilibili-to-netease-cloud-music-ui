@@ -301,6 +301,23 @@ export function EditSubscribe({onSubmitAction, baseData}: {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="enable"
+              render={({field}) => (
+                <FormItem className="flex items-center space-x-2">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value === 1}
+                      onCheckedChange={() => {
+                        form.setValue(field.name, field.value === 1 ? 0 : 1)
+                      }}
+                    />
+                  </FormControl>
+                  <FormLabel>启用</FormLabel>
+                </FormItem>
+              )}
+            />
           </div>
         </div>
 
