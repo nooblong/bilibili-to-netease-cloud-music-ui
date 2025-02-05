@@ -94,7 +94,7 @@ export default async function UploadOnePage(props: any): Promise<any> {
         </div>
         <div className="container mx-auto py-10">
           {
-            subscribe.map(item => {
+            subscribe && subscribe.map(item => {
               return (
                 <div key={item.id} className="flex gap-2">
                   <Avatar>
