@@ -8,7 +8,7 @@ import {
   BreadcrumbList, BreadcrumbPage,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
-import {api} from "@/lib/utils";
+import {api, handleRes} from "@/lib/utils";
 import {cookies} from "next/headers";
 import {EditSubscribe} from "@/app/uploadOne/[voiceListId]/editSubscribe/[subscribeId]/edit";
 
@@ -26,6 +26,7 @@ async function submit(val: any) {
   })
     .then(response => response.json());
   console.log(json)
+  handleRes(json, `/uploadOne/${val.voiceListId}`)
   return json.data
 }
 

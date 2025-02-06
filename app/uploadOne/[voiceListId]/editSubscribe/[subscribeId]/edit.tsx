@@ -15,10 +15,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
-import {useState} from "react";
 import {useParams} from "next/navigation";
 import {Subscribe} from "@/app/uploadOne/[voiceListId]/columnsUploadDetail";
-import {formatDate, replaceImageUrl} from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -64,8 +62,6 @@ export function EditSubscribe({onSubmitAction, baseData}: {
   baseData: Subscribe
 }) {
   const params = useParams();
-  const [upInfo, setUpInfo] = useState<any>(null);
-  const [channelInfo, setChannelInfo] = useState<any[]>([]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -94,7 +90,6 @@ export function EditSubscribe({onSubmitAction, baseData}: {
           event.preventDefault();
           form.setValue("id", baseData.id)
           form.unregister("remark");
-          form.unregister("voiceListId");
           form.unregister("upId");
           form.unregister("type");
           form.unregister("videoOrder");
@@ -104,6 +99,10 @@ export function EditSubscribe({onSubmitAction, baseData}: {
         className="space-y-4 p-4 border rounded-lg"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="col-span-2">
+            订阅的合集id
+            <Input disabled defaultValue={baseData.channelIds} placeholder="订阅的合集id"/>
+          </div>
           <FormField
             disabled={true}
             control={form.control}

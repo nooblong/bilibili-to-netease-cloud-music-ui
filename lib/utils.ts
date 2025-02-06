@@ -1,5 +1,6 @@
 import {type ClassValue, clsx} from "clsx"
 import {twMerge} from "tailwind-merge"
+import {redirect} from "next/navigation";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -26,6 +27,14 @@ export const replaceImageUrl = (url: string): string => {
     /^(http)s*(:\/\/)/,
     "https://images.weserv.nl/?url="
   );
+}
+
+export const handleRes = (json: any, redirectUrl: string) => {
+  if (json.code === 0) {
+    redirect(redirectUrl)
+  } else {
+    redirect(`/customError?msg=${encodeURIComponent(JSON.stringify(json))}`);
+  }
 }
 
 export const api = "http://127.0.0.1:25566"

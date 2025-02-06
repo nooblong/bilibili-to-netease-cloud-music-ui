@@ -8,7 +8,7 @@ import {
   BreadcrumbList, BreadcrumbPage,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
-import {api} from "@/lib/utils";
+import {api, handleRes} from "@/lib/utils";
 import {cookies} from "next/headers";
 import {AddSubscribe} from "@/app/uploadOne/[voiceListId]/addSubscribe/create";
 import {redirect} from "next/navigation";
@@ -27,11 +27,7 @@ async function submit(val: any) {
   })
     .then(response => response.json());
   console.log(json)
-  if (json.code === 0) {
-    redirect(`/uploadOne/${val.voiceListId}`)
-  } else {
-    redirect(`/customError?msg=${encodeURIComponent(JSON.stringify(json))}`);
-  }
+  handleRes(json, `/uploadOne/${val.voiceListId}`)
   return json.data
 }
 
