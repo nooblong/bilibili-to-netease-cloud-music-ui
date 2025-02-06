@@ -18,6 +18,10 @@ import {cookies} from "next/headers";
 const data = {
   navMain: [
     {
+      title: "仪表盘",
+      url: "/dashboard"
+    },
+    {
       title: "播客列表",
       url: "/",
     },
