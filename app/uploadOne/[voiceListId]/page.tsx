@@ -89,7 +89,10 @@ export default async function UploadOnePage(props: any): Promise<any> {
             <Button>单曲上传</Button>
           </Link>
           <Link href={`/uploadOne/${params.voiceListId}/addSubscribe`}>
-            <Button>创建订阅</Button>
+            <Button>订阅up主</Button>
+          </Link>
+          <Link href={`/uploadOne/${params.voiceListId}/addFavorite`}>
+            <Button>订阅收藏夹</Button>
           </Link>
         </div>
         <div className="container mx-auto py-10">

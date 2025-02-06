@@ -10,8 +10,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import {api, handleRes} from "@/lib/utils";
 import {cookies} from "next/headers";
-import {AddSubscribe} from "@/app/uploadOne/[voiceListId]/addSubscribe/create";
-import {redirect} from "next/navigation";
+import {AddFavorite} from "@/app/uploadOne/[voiceListId]/addFavorite/create";
 
 async function submit(val: any) {
   'use server'
@@ -31,7 +30,7 @@ async function submit(val: any) {
   return json.data
 }
 
-export default async function addSubscribe(props: any){
+export default async function addFavorite(props: any){
   const params = await props.params;
   return (
     <SidebarProvider>
@@ -56,13 +55,13 @@ export default async function addSubscribe(props: any){
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block"/>
                 <BreadcrumbItem>
-                  <BreadcrumbPage>订阅up主</BreadcrumbPage>
+                  <BreadcrumbPage>订阅收藏夹</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
         </header>
-        <AddSubscribe onSubmitAction={submit}/>
+        <AddFavorite onSubmitAction={submit}/>
       </SidebarInset>
     </SidebarProvider>
   )
