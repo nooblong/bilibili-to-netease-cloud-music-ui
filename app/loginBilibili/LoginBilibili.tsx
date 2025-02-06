@@ -16,18 +16,19 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {useForm} from "react-hook-form";
 import Image from "next/image";
+import {replaceImageUrl} from "@/lib/utils";
 
 
-export default function LoginNetMusic() {
+export default function LoginBilibili() {
   return (
     <div>
       <Toaster/>
-      <LoginNetMusicQr/>
+      <LoginBilibiliQr/>
     </div>
   )
 }
 
-const LoginNetMusicQr = () => {
+const LoginBilibiliQr = () => {
 
   const [img, setImg] = useState<string>("");
   const [userInfo, setUserInfo] = useState<any>(null);
@@ -40,21 +41,31 @@ const LoginNetMusicQr = () => {
       return;
     }
     const id = setInterval(async () => {
-      fetch(`/api/common/direct/login/qr/check?key=${key}&timestamp=${Date.now()}`, {
+      fetch(`/api/common/bilibili/checkQrBili?key=${key}&timestamp=${Date.now()}`, {
         headers: {
           "Access-Token": Cookies.get("token") ?? ""
         }
       }).then(res => res.json())
         .then((json: any) => {
-          toast({description: "" + json.message});
-          if (json.code === 800) {
+          console.log(json)
+          toast({description: "" + json.data.data.message});
+          if (json.data.data.code === 86038) {
             toast({
-              description: "二维码已过期,请重新获取",
+              description: "" + json.data.data.message,
               variant: "destructive"
             });
             clearInterval(timer);
-          }
-          if (json.code === 803) {
+          } else if (json.data.data.code === 86101) {
+            toast({
+              description: "" + json.data.data.message,
+              variant: "destructive"
+            })
+          } else if (json.data.data.code === 86090) {
+            toast({
+              description: "" + json.data.data.message,
+              variant: "destructive"
+            })
+          } else {
             clearInterval(timer);
             toast({
               description: "登录成功",
@@ -69,14 +80,15 @@ const LoginNetMusicQr = () => {
   }, [checking, key]);
 
   useEffect(() => {
-    fetch("/api/common/netmusic/loginStatus", {
+    fetch("/api/common/bilibili/getSelfInfo", {
       headers: {
         "Access-Token": Cookies.get("token") ?? ""
       }
     }).then((data: any) => data.json())
       .then(json => {
+        console.log(json)
         if (json.code === 0) {
-          setUserInfo(json);
+          setUserInfo(json.data.data);
         }
       });
   }, []);
@@ -84,13 +96,13 @@ const LoginNetMusicQr = () => {
   return (
     <div className="flex flex-col items-center p-6 space-y-6 min-h-screen">
       <div className="">
-        {userInfo && userInfo.data && userInfo.data.profile && <Avatar className="w-24 h-24">
+        {userInfo && <Avatar className="w-24 h-24">
             <AvatarImage
-                src={userInfo.data.profile.avatarUrl}/>
+                src={replaceImageUrl(userInfo.face)}/>
         </Avatar>}
         <br/>
-        {userInfo && userInfo.data && userInfo.data.profile &&
-            <div className="text-xl rounded">{userInfo.data.profile.nickname}</div>}
+        {userInfo &&
+            <div className="text-xl rounded">{userInfo.name}</div>}
       </div>
       <Dialog onOpenChange={(open: boolean) => {
         setChecking(open);
@@ -130,7 +142,7 @@ function login(
   setChecking: any,
   setKey: any,
 ) {
-  fetch("/api/common/netmusic/getQrCode", {
+  fetch("/api/common/bilibili/getQrBili", {
     headers: {
       "Access-Token": Cookies.get("token") ?? ""
     }
@@ -161,39 +173,43 @@ function MusicForm() {
     <div className="max-w-md mx-auto p-4 rounded shadow w-full">
       <h1 className="text-xl font-bold mb-4">手动粘贴Cookie</h1>
 
-      {/* 表单 */}
       <form onSubmit={handleSubmit(onSubmit)}>
-        {/* MUSIC_A_T */}
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">MUSIC_A_T</label>
+          <label className="block text-sm font-medium mb-1">dedeuserid</label>
           <Input
             type="text"
-            {...register("MUSIC_A_T")}
-            placeholder="请输入 MUSIC_A_T"
+            {...register("dedeuserid")}
+            placeholder="请输入 dedeuserid"
           />
         </div>
 
-        {/* MUSIC_U */}
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">MUSIC_U</label>
+          <label className="block text-sm font-medium mb-1">sessdata</label>
           <Input
             type="text"
-            {...register("MUSIC_U")}
-            placeholder="请输入 MUSIC_U"
+            {...register("sessdata")}
+            placeholder="请输入 sessdata"
           />
         </div>
 
-        {/* MUSIC_R_T */}
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">MUSIC_R_T</label>
+          <label className="block text-sm font-medium mb-1">bili_jct</label>
           <Input
             type="text"
-            {...register("MUSIC_R_T")}
-            placeholder="请输入 MUSIC_R_T"
+            {...register("bili_jct")}
+            placeholder="请输入 bili_jct"
           />
         </div>
 
-        {/* 按钮组 */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-1">ac_time_value</label>
+          <Input
+            type="text"
+            {...register("ac_time_value")}
+            placeholder="请输入 ac_time_value"
+          />
+        </div>
+
         <div className="flex space-x-2">
           <Button
             type="submit"

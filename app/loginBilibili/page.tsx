@@ -1,6 +1,6 @@
 import {SidebarInset, SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar";
 import {AppSidebar} from "@/components/app-sidebar";
-import LoginNetMusic from "@/app/loginNetMusic/LoginNetMusic";
+import LoginBilibili from "@/app/loginBilibili/LoginBilibili";
 import {Separator} from "@/components/ui/separator";
 import {
   Breadcrumb,
@@ -30,13 +30,13 @@ export default function LoginNetMusicPage() {
                   </BreadcrumbItem>
                   <BreadcrumbSeparator className="hidden md:block"/>
                   <BreadcrumbItem>
-                    <BreadcrumbPage>登录网易云</BreadcrumbPage>
+                    <BreadcrumbPage>登录bilibili</BreadcrumbPage>
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
             </div>
           </header>
-          <LoginNetMusic/>
+          <LoginBilibili/>
         </SidebarInset>
       </SidebarProvider>
     </div>

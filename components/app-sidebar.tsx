@@ -18,7 +18,7 @@ import {cookies} from "next/headers";
 const data = {
   navMain: [
     {
-      title: "首页",
+      title: "播客列表",
       url: "/",
     },
     {
