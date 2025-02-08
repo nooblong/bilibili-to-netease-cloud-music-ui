@@ -28,6 +28,8 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
+import {Switch} from "@/components/ui/switch";
+import {Label} from "@/components/ui/label";
 
 const formSchema = z.object({
   voiceListId: z.string().min(1, "voiceListId不能为空"),
@@ -275,19 +277,7 @@ export function AddSubscribe({onSubmitAction}: {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="processTime"
-            render={({field}) => (
-              <FormItem>
-                <FormLabel>上次检测到了新视频的时间</FormLabel>
-                <FormControl>
-                  <Input placeholder="上次检测到了新视频的时间" {...field}/>
-                </FormControl>
-                <FormMessage/>
-              </FormItem>
-            )}
-          />
+
           <FormField
             control={form.control}
             name="fromTime"
@@ -380,6 +370,27 @@ export function AddSubscribe({onSubmitAction}: {
                     />
                   </FormControl>
                   <FormLabel>启用</FormLabel>
+                </FormItem>
+              )}
+            />
+            <Switch id="airplane-mode" onCheckedChange={(checked) => {
+              if (checked) {
+                form.setValue("processTime", form.getValues("fromTime"))
+              } else {
+                form.setValue("processTime", formatDate(new Date()))
+              }
+            }}/>
+            <Label htmlFor="airplane-mode">上传以前所有视频（范围内）</Label>
+            <FormField
+              control={form.control}
+              name="processTime"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel>上次检测到了新视频的时间</FormLabel>
+                  <FormControl>
+                    <Input placeholder="上次检测到了新视频的时间" {...field}/>
+                  </FormControl>
+                  <FormMessage/>
                 </FormItem>
               )}
             />

@@ -166,7 +166,24 @@ function MusicForm() {
 
   // 表单提交处理函数
   const onSubmit = (data) => {
-    alert(`提交的 JSON 数据：\n${JSON.stringify(data, null, 2)}`);
+    fetch("/api/common/bilibili/setBiliCookies", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Token": Cookies.get("token") ?? ""
+      },
+      body: JSON.stringify(data)
+    }).then(res => res.json())
+      .then(json => {
+        if (json.data && json.data.account !== null) {
+          toast({description: "设置成功"})
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000)
+        } else {
+          toast({description: "cookie无效", variant: "destructive"});
+        }
+      })
   };
 
   return (
@@ -174,14 +191,6 @@ function MusicForm() {
       <h1 className="text-xl font-bold mb-4">手动粘贴Cookie</h1>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">dedeuserid</label>
-          <Input
-            type="text"
-            {...register("dedeuserid")}
-            placeholder="请输入 dedeuserid"
-          />
-        </div>
 
         <div className="mb-4">
           <label className="block text-sm font-medium mb-1">sessdata</label>

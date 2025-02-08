@@ -211,19 +211,6 @@ export function EditSubscribe({onSubmitAction, baseData}: {
           />
           <FormField
             control={form.control}
-            name="processTime"
-            render={({field}) => (
-              <FormItem>
-                <FormLabel>上次检测到了新视频的时间</FormLabel>
-                <FormControl>
-                  <Input placeholder="上次检测到了新视频的时间" {...field}/>
-                </FormControl>
-                <FormMessage/>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
             name="fromTime"
             render={({field}) => (
               <FormItem>
@@ -314,6 +301,19 @@ export function EditSubscribe({onSubmitAction, baseData}: {
                     />
                   </FormControl>
                   <FormLabel>启用</FormLabel>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="processTime"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel>上次检测到了新视频的时间</FormLabel>
+                  <FormControl>
+                    <Input placeholder="上次检测到了新视频的时间" {...field}/>
+                  </FormControl>
+                  <FormMessage/>
                 </FormItem>
               )}
             />

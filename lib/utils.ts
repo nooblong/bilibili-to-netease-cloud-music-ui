@@ -22,6 +22,7 @@ export const formatDate = (date: Date): string => {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 
+
 export const replaceImageUrl = (url: string): string => {
   if (url === null || url === undefined || url === "") {
     return "https://github.com/shadcn.png"

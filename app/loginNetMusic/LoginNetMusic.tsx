@@ -154,7 +154,24 @@ function MusicForm() {
 
   // 表单提交处理函数
   const onSubmit = (data) => {
-    alert(`提交的 JSON 数据：\n${JSON.stringify(data, null, 2)}`);
+    fetch("/api/common/netmusic/setNetCookie", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Token": Cookies.get("token") ?? ""
+      },
+      body: JSON.stringify(data)
+    }).then(res => res.json())
+      .then(json => {
+        if (json.data && json.data.account !== null) {
+          toast({description: "设置成功"})
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000)
+        } else {
+          toast({description: "cookie无效", variant: "destructive"});
+        }
+      })
   };
 
   return (

@@ -112,6 +112,7 @@ export default async function UploadOnePage(props: any): Promise<any> {
                     <input type="hidden" name="id" value={item.id}/>
                     <Button type="submit">delete</Button>
                   </form>
+                  ({item.type})
                 </div>
               )
             })
