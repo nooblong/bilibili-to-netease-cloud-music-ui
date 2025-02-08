@@ -306,9 +306,9 @@ export function AddSubscribe({onSubmitAction}: {
             name="toTime"
             render={({field}) => (
               <FormItem>
-                <FormLabel>不会处理这个时间以后的数据</FormLabel>
+                <FormLabel>不会处理这个时间以后的视频</FormLabel>
                 <FormControl>
-                  <Input placeholder="不会处理这个时间以后的数据" {...field}/>
+                  <Input placeholder="不会处理这个时间以后的视频" {...field}/>
                 </FormControl>
                 <FormMessage/>
               </FormItem>
