@@ -100,7 +100,7 @@ export function EditSubscribe({onSubmitAction, baseData}: {
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="col-span-2">
-            订阅的合集id
+            {baseData.type === "UP" ? "订阅的合集id" : "订阅的收藏夹id"}
             <Input disabled defaultValue={baseData.channelIds} placeholder="订阅的合集id"/>
           </div>
           <FormField
@@ -122,7 +122,7 @@ export function EditSubscribe({onSubmitAction, baseData}: {
             name="voiceListId"
             disabled={true}
             render={({field}) => (
-              <FormItem>
+              <FormItem hidden>
                 <FormLabel>网易播客id</FormLabel>
                 <FormControl>
                   <Input

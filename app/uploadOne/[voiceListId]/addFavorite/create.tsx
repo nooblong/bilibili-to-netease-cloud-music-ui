@@ -63,14 +63,14 @@ export function AddFavorite({onSubmitAction}: {
 }) {
   const params = useParams();
   const [upInfo, setUpInfo] = useState<any>(null);
-  const [channelInfo, setChannelInfo] = useState<any[]>([]);
+  const [favInfo, setFavInfo] = useState<any[]>([]);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       remark: "",
       voiceListId: String(params.voiceListId),
-      upId: "148524702",
-      type: "UP",
+      upId: "6906052",
+      type: "FAVORITE",
       processTime: formatDate(new Date()),
       fromTime: "2010-01-01 00:00:00",
       toTime: "2050-01-01 00:00:00",
@@ -86,7 +86,6 @@ export function AddFavorite({onSubmitAction}: {
     },
   });
   const channelIdsWatch = form.watch("channelIdsList") || []
-  const [filterChannel, setFilterChannel] = useState(false);
   return (
     <Form {...form}>
       <form
@@ -121,74 +120,50 @@ export function AddFavorite({onSubmitAction}: {
             event.preventDefault()
             const upId = form.getValues("upId");
             const res = await fetch(`/api/common/bilibili/getUserInfo?uid=${upId}`).then((res) => res.json());
-            const upChannels = await fetch(`/api/common/bilibili/getUpChannels?upId=${upId}`).then((res) => res.json());
+            const upFavs = await fetch(`/api/common/bilibili/getFavoriteList?uid=${upId}`).then((res) => res.json());
             form.reset()
             form.setValue("upId", upId)
             setUpInfo(res.data.data);
-            setChannelInfo(upChannels.data.data);
+            setFavInfo(upFavs.data.data.list);
             console.log(res.data.data)
-            console.log(upChannels.data.data)
+            console.log(upFavs.data.data)
           }}>解析</Button>
 
           {upInfo && <div>{upInfo.name}</div>}
           {upInfo && upInfo.face && <img src={replaceImageUrl(upInfo.face)} alt=""/>}
 
-          <div hidden={!(channelInfo && channelInfo.length > 0)}>
-            <Checkbox
-              checked={filterChannel}
-              onCheckedChange={() => {
-                setFilterChannel(!filterChannel);
-              }}
-            />过滤合集
-          </div>
-
-          <div hidden={!filterChannel}>
-            <FormField
-              control={form.control}
-              name="channelIdsList"
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>选择合集</FormLabel>
-                  {channelInfo && channelInfo.map((item) => {
-                    return (
-                      <FormControl key={item.id_}>
-                        <div>
-                          {item.meta.name}<Checkbox key={item.id_}
-                                                    checked={channelIdsWatch.includes(item.id_)}
-                                                    onCheckedChange={(checked) => {
-                                                      const newSelected = checked
-                                                        ? [...channelIdsWatch, item.id_]
-                                                        : channelIdsWatch.filter(channelId => channelId !== item.id_);
-                                                      form.setValue(field.name, newSelected);
-                                                    }}
-                        />
-                        </div>
-                      </FormControl>
-                    )
-                  })}
-                  <FormMessage/>
-                </FormItem>
-              )}
-            />
-          </div>
-          {/*<FormField*/}
-          {/*  control={form.control}*/}
-          {/*  name="remark"*/}
-          {/*  render={({field}) => (*/}
-          {/*    <FormItem>*/}
-          {/*      <FormLabel>备注</FormLabel>*/}
-          {/*      <FormControl>*/}
-          {/*        <Input placeholder="输入备注" {...field}/>*/}
-          {/*      </FormControl>*/}
-          {/*      <FormMessage/>*/}
-          {/*    </FormItem>*/}
-          {/*  )}*/}
-          {/*/>*/}
+          <FormField
+            control={form.control}
+            name="channelIdsList"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>选择收藏夹</FormLabel>
+                {favInfo && favInfo.map((item) => {
+                  return (
+                    <FormControl key={item.fid}>
+                      <div>
+                        {item.title}<Checkbox key={item.fid}
+                                                  checked={channelIdsWatch.includes(item.fid)}
+                                                  onCheckedChange={(checked) => {
+                                                    const newSelected = checked
+                                                      ? [...channelIdsWatch, item.fid]
+                                                      : channelIdsWatch.filter(channelId => channelId !== item.fid);
+                                                    form.setValue(field.name, newSelected);
+                                                  }}
+                      />
+                      </div>
+                    </FormControl>
+                  )
+                })}
+                <FormMessage/>
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="voiceListId"
             render={({field}) => (
-              <FormItem>
+              <FormItem hidden>
                 <FormLabel>网易播客id</FormLabel>
                 <FormControl>
                   <Input
@@ -249,24 +224,6 @@ export function AddFavorite({onSubmitAction}: {
                   <Input
                     type="number"
                     placeholder="限制时长"
-                    {...field}
-                    value={field.value ?? ""}
-                  />
-                </FormControl>
-                <FormMessage/>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="keyWord"
-            render={({field}) => (
-              <FormItem>
-                <FormLabel>需要包含的关键词（可选）</FormLabel>
-                <FormControl>
-                  <Input
-                    type="text"
-                    placeholder="需要包含的关键词（可选）"
                     {...field}
                     value={field.value ?? ""}
                   />
