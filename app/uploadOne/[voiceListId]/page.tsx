@@ -1,5 +1,5 @@
 import {DataTable} from "./data-table"
-import {columnsSubscribe, columnsUploadDetail} from "@/app/uploadOne/[voiceListId]/columnsUploadDetail";
+import {columnsUploadDetail} from "@/app/uploadOne/[voiceListId]/columnsUploadDetail";
 import {AppSidebar} from "@/components/app-sidebar";
 import {SidebarInset, SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar";
 import {Separator} from "@/components/ui/separator";
@@ -11,7 +11,6 @@ import {
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import {api, replaceImageUrl} from "@/lib/utils";
-import {SubscribeDataTable} from "@/app/uploadOne/[voiceListId]/subscribe-data-table";
 import {cookies} from "next/headers";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
@@ -117,7 +116,6 @@ export default async function UploadOnePage(props: any): Promise<any> {
               )
             })
           }
-          {/*<SubscribeDataTable columns={columnsSubscribe} data={subscribe} total={subscribe.length}/>*/}
         </div>
         <div className="container mx-auto py-10">
           total:

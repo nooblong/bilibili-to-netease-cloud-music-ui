@@ -96,10 +96,10 @@ const LoginBilibiliQr = () => {
   return (
     <div className="flex flex-col items-center p-6 space-y-6 min-h-screen">
       <div className="">
-        {userInfo && <Avatar className="w-24 h-24">
+        {userInfo ? <Avatar className="w-24 h-24">
             <AvatarImage
                 src={replaceImageUrl(userInfo.face)}/>
-        </Avatar>}
+        </Avatar> : "未登录"}
         <br/>
         {userInfo &&
             <div className="text-xl rounded">{userInfo.name}</div>}

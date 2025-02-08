@@ -84,10 +84,10 @@ const LoginNetMusicQr = () => {
   return (
     <div className="flex flex-col items-center p-6 space-y-6 min-h-screen">
       <div className="">
-        {userInfo && userInfo.data && userInfo.data.profile && <Avatar className="w-24 h-24">
+        {userInfo && userInfo.data && userInfo.data.profile ? <Avatar className="w-24 h-24">
             <AvatarImage
                 src={userInfo.data.profile.avatarUrl}/>
-        </Avatar>}
+        </Avatar> : <h1>未登录</h1>}
         <br/>
         {userInfo && userInfo.data && userInfo.data.profile &&
             <div className="text-xl rounded">{userInfo.data.profile.nickname}</div>}

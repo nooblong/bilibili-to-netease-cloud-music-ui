@@ -16,18 +16,34 @@ import {
 import {api} from "@/lib/utils";
 import {cookies} from "next/headers";
 import Link from "next/link";
+import {Button} from "@/components/ui/button";
+import {revalidatePath} from "next/cache";
 
 async function getData(): Promise<any> {
   const cookieStore = await cookies()
   const token = cookieStore.get("token")
   const username = cookieStore.get("username")
   const json = await fetch(api + `/uploadDetail/listVoicelist?username=${username?.value}`, {
-  // const json = await fetch("https://1bc53407a65d4ef492b871e2f9f8fb88.api.mockbin.io/", {
+    // const json = await fetch("https://1bc53407a65d4ef492b871e2f9f8fb88.api.mockbin.io/", {
     method: "GET",
     headers: {
-      "token": token ? token.value : ""
+      "Access-Token": token ? token.value : ""
     }
   }).then(res => res.json())
+  return json.data
+}
+
+async function syncVoicelist(): Promise<any> {
+  'use server'
+  const cookieStore = await cookies()
+  const token = cookieStore.get("token")
+  const json = await fetch(api + `/uploadDetail/refreshVoiceList`, {
+    method: "GET",
+    headers: {
+      "Access-Token": token ? token.value : ""
+    }
+  }).then(res => res.json())
+  revalidatePath("")
   return json.data
 }
 
@@ -60,6 +76,9 @@ export default async function Page() {
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          <form action={syncVoicelist}>
+            <Button type="submit">刷新播客数据</Button>
+          </form>
           <div className="grid auto-rows-min gap-4 grid-cols-2 lg:grid-cols-3 ">
             {data.map((item) => {
               return (
@@ -81,7 +100,6 @@ export default async function Page() {
             })
             }
           </div>
-          {/*<div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min"/>*/}
         </div>
       </SidebarInset>
     </SidebarProvider>
