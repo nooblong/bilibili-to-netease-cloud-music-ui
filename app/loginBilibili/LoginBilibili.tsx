@@ -47,7 +47,6 @@ const LoginBilibiliQr = () => {
         }
       }).then(res => res.json())
         .then((json: any) => {
-          console.log(json)
           toast({description: "" + json.data.data.message});
           if (json.data.data.code === 86038) {
             toast({
@@ -86,7 +85,6 @@ const LoginBilibiliQr = () => {
       }
     }).then((data: any) => data.json())
       .then(json => {
-        console.log(json)
         if (json.code === 0) {
           setUserInfo(json.data.data);
         }

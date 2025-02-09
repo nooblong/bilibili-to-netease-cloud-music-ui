@@ -142,14 +142,14 @@ export function AddFavorite({onSubmitAction}: {
                 <FormLabel>选择收藏夹</FormLabel>
                 {favInfo && favInfo.map((item) => {
                   return (
-                    <FormControl key={item.fid}>
+                    <FormControl key={item.id}>
                       <div>
-                        {item.title}<Checkbox key={item.fid}
-                                              checked={channelIdsWatch.includes(item.fid)}
+                        {item.title}<Checkbox key={item.id}
+                                              checked={channelIdsWatch.includes(item.id)}
                                               onCheckedChange={(checked) => {
                                                 const newSelected = checked
-                                                  ? [...channelIdsWatch, item.fid]
-                                                  : channelIdsWatch.filter(channelId => channelId !== item.fid);
+                                                  ? [...channelIdsWatch, item.id]
+                                                  : channelIdsWatch.filter(channelId => channelId !== item.id);
                                                 form.setValue(field.name, newSelected);
                                               }}
                       />
