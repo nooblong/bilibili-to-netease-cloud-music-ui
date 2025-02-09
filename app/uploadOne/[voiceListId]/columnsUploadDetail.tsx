@@ -30,7 +30,7 @@ export type UploadDetailAdd = {
   uploadName: string,
   cid: string,
   voiceListId: string,
-  useDefaultImg: number,
+  useVideoCover: number,
   voiceOffset: number,
   voiceBeginSec: number,
   voiceEndSec: number,

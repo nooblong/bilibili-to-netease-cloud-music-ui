@@ -32,7 +32,7 @@ const formSchema = z.object({
   uploadName: z.string().min(1, "uploadName不能为空"),
   cid: z.string().min(1, "cid不能为空").optional(),
   voiceListId: z.string().min(1, "voiceListId不能为空"),
-  useDefaultImg: z.coerce.number().min(0).max(1),
+  useVideoCover: z.coerce.number().min(0).max(1),
   offset: z.coerce.number().min(0),
   beginSec: z.coerce.number().min(0),
   endSec: z.coerce.number().min(0),
@@ -62,7 +62,7 @@ export function AddOne({onSubmitAction}: {
     defaultValues: {
       voiceListId: String(params.voiceListId),
       bvid: "BV1vQ4y1Y7h2",
-      useDefaultImg: 1,
+      useVideoCover: 1,
       privacy: 0,
       crack: 0,
       offset: 0,
@@ -278,7 +278,7 @@ export function AddOne({onSubmitAction}: {
           <div className="space-y-2">
             <FormField
               control={form.control}
-              name="useDefaultImg"
+              name="useVideoCover"
               render={({field}) => (
                 <FormItem className="flex items-center space-x-2">
                   <FormControl>
