@@ -14,8 +14,6 @@ import {AddFavorite} from "@/app/uploadOne/[voiceListId]/addFavorite/create";
 
 async function submit(val: any) {
   'use server'
-  console.log("fuck val")
-  console.log(val)
   const json = await fetch(api + `/subscribe/add`, {
     method: "POST",
     headers: {
@@ -25,7 +23,6 @@ async function submit(val: any) {
     body: JSON.stringify(val)
   })
     .then(response => response.json());
-  console.log(json)
   handleRes(json, `/uploadOne/${val.voiceListId}`)
   return json.data
 }

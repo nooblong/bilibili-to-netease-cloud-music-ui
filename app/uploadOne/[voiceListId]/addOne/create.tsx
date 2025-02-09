@@ -77,7 +77,6 @@ export function AddOne({onSubmitAction}: {
         onSubmit={(event) => {
           event.preventDefault();
           const data = form.getValues();
-          console.log(data)
           const toPost: any[] = [];
           cids.forEach(i => {
             toPost.push({
@@ -93,8 +92,6 @@ export function AddOne({onSubmitAction}: {
               uploadName: data.uploadName,
             })
           }
-          console.log("fuck toPost")
-          console.log(toPost)
           // @ts-ignore
           form.setValue("uploadDetails", toPost)
           // @ts-ignore
@@ -121,6 +118,7 @@ export function AddOne({onSubmitAction}: {
             const bvid = form.getValues("bvid");
             const res = await fetch(`/api/common/bilibili/getVideoInfo?bvid=${bvid}`).then((res) => res.json());
             form.reset()
+            setCids([])
             setVideoInfo(res.data);
             form.setValue("bvid", bvid)
             form.setValue("uploadName", res.data.title)

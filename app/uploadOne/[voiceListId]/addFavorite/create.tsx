@@ -35,7 +35,7 @@ import Cookies from "js-cookie";
 const formSchema = z.object({
   voiceListId: z.string().min(1, "voiceListId不能为空"),
   upId: z.string().min(1, "upId不能为空"),
-  channelIdsList: z.array(z.any()).optional(),
+  channelIdsList: z.array(z.any()).min(1, "收藏夹列表不能为空"),
   type: z.string().min(1, "type不能为空"),
   processTime: z.string().min(1, "processTime不能为空"),
   fromTime: z.string().min(1, "fromTime不能为空"),
@@ -129,8 +129,6 @@ export function AddFavorite({onSubmitAction}: {
             form.setValue("upId", upId)
             setUpInfo(res.data.data);
             setFavInfo(upFavs.data.data.list);
-            console.log(res.data.data)
-            console.log(upFavs.data.data)
           }}>解析</Button>
 
           {upInfo && <div>{upInfo.name}</div>}

@@ -14,8 +14,6 @@ import {EditSubscribe} from "@/app/uploadOne/[voiceListId]/editSubscribe/[subscr
 
 async function submit(val: any) {
   'use server'
-  console.log("fuck val")
-  console.log(val)
   const json = await fetch(api + `/subscribe/edit`, {
     method: "POST",
     headers: {
@@ -25,7 +23,6 @@ async function submit(val: any) {
     body: JSON.stringify(val)
   })
     .then(response => response.json());
-  console.log(json)
   handleRes(json, `/uploadOne/${val.voiceListId}`)
   return json.data
 }
@@ -34,7 +31,6 @@ async function getOne(subscribeId: any) {
   'use server'
   const json = await fetch(api + `/subscribe/detail?id=${subscribeId}`)
     .then(response => response.json());
-  console.log(json)
   return json.data
 }
 

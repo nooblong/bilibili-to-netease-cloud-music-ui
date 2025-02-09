@@ -11,12 +11,9 @@ import {
 import {api, handleRes} from "@/lib/utils";
 import {cookies} from "next/headers";
 import {AddSubscribe} from "@/app/uploadOne/[voiceListId]/addSubscribe/create";
-import {redirect} from "next/navigation";
 
 async function submit(val: any) {
   'use server'
-  console.log("fuck val")
-  console.log(val)
   const json = await fetch(api + `/subscribe/add`, {
     method: "POST",
     headers: {
@@ -26,7 +23,6 @@ async function submit(val: any) {
     body: JSON.stringify(val)
   })
     .then(response => response.json());
-  console.log(json)
   handleRes(json, `/uploadOne/${val.voiceListId}`)
   return json.data
 }

@@ -68,7 +68,6 @@ export function AddSubscribe({onSubmitAction}: {
   const [upInfo, setUpInfo] = useState<any>(null);
   const [channelInfo, setChannelInfo] = useState<any[]>([]);
   const username = Cookies.get("username");
-  console.log(!username?.toLowerCase().includes("admin"))
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -131,8 +130,6 @@ export function AddSubscribe({onSubmitAction}: {
             form.setValue("upId", upId)
             setUpInfo(res.data.data);
             setChannelInfo(upChannels.data.data);
-            console.log(res.data.data)
-            console.log(upChannels.data.data)
           }}>解析</Button>
 
           {upInfo && <div>{upInfo.name}</div>}

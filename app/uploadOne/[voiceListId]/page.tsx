@@ -34,8 +34,19 @@ async function getSubscribe(username: string, status: string, voiceListId: strin
 
 async function deleteSubscribe(formData: FormData): Promise<any> {
   'use server'
-  console.log(formData.get("id"))
   const json = await fetch(api + `/subscribe/delete?id=${formData.get("id")}`, {
+    headers: {
+      "Access-Token": (await cookies()).get("token")?.value ?? ""
+    }
+  })
+    .then(response => response.json());
+  revalidatePath("")
+  return json.data
+}
+
+async function checkSubscribe(): Promise<any> {
+  'use server'
+  const json = await fetch(api + `/subscribe/checkMyUpJob`, {
     headers: {
       "Access-Token": (await cookies()).get("token")?.value ?? ""
     }
@@ -93,6 +104,10 @@ export default async function UploadOnePage(props: any): Promise<any> {
           <Link href={`/uploadOne/${params.voiceListId}/addFavorite`}>
             <Button>订阅收藏夹</Button>
           </Link>
+          <form action={checkSubscribe}>
+            <input type="hidden" name="id"/>
+            <Button type="submit">立即检查订阅</Button>
+          </form>
         </div>
         <div className="container mx-auto py-10">
           {
@@ -105,11 +120,11 @@ export default async function UploadOnePage(props: any): Promise<any> {
                   </Avatar>
                   {item.upName}
                   <Link href={`/uploadOne/${params.voiceListId}/editSubscribe/${item.id}`}>
-                    <Button>edit</Button>
+                    <Button>编辑</Button>
                   </Link>
                   <form action={deleteSubscribe}>
                     <input type="hidden" name="id" value={item.id}/>
-                    <Button type="submit">delete</Button>
+                    <Button type="submit">删除</Button>
                   </form>
                   ({item.type})
                 </div>

@@ -11,11 +11,10 @@ import {
 import {AddOne} from "@/app/uploadOne/[voiceListId]/addOne/create";
 import {api} from "@/lib/utils";
 import {cookies} from "next/headers";
+import {redirect} from "next/navigation";
 
 async function submit(val: any) {
   'use server'
-  console.log("fuck val")
-  console.log(val)
   const json = await fetch(api + `/uploadDetail/add`, {
     method: "POST",
     headers: {
@@ -25,7 +24,9 @@ async function submit(val: any) {
     body: JSON.stringify(val)
   })
     .then(response => response.json());
-  console.log(json)
+  if (json.code === 0) {
+    redirect(`/uploadOne/${val.voiceListId}`)
+  }
   return json.data
 }
 
