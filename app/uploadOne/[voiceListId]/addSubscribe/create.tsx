@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/select";
 import {Switch} from "@/components/ui/switch";
 import {Label} from "@/components/ui/label";
+import Cookies from "js-cookie";
 
 const formSchema = z.object({
   voiceListId: z.string().min(1, "voiceListId不能为空"),
@@ -66,6 +67,8 @@ export function AddSubscribe({onSubmitAction}: {
   const params = useParams();
   const [upInfo, setUpInfo] = useState<any>(null);
   const [channelInfo, setChannelInfo] = useState<any[]>([]);
+  const username = Cookies.get("username");
+  console.log(!username?.toLowerCase().includes("admin"))
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -150,7 +153,7 @@ export function AddSubscribe({onSubmitAction}: {
               name="channelIdsList"
               render={({field}) => (
                 <FormItem>
-                  <FormLabel>选择合集</FormLabel>
+                  <FormLabel>选择合集，不支持旧合集(视频点进去右边没有合集列表的那种 )</FormLabel>
                   {channelInfo && channelInfo.map((item) => {
                     return (
                       <FormControl key={item.id_}>
@@ -346,6 +349,7 @@ export function AddSubscribe({onSubmitAction}: {
                 <FormItem className="flex items-center space-x-2">
                   <FormControl>
                     <Checkbox
+                      disabled={!username?.toLowerCase().includes("admin")}
                       checked={field.value === 1}
                       onCheckedChange={() => {
                         form.setValue(field.name, field.value === 1 ? 0 : 1)

@@ -19,6 +19,7 @@ import {useState} from "react";
 import {useParams} from "next/navigation";
 import {UploadDetailAdd} from "@/app/uploadOne/[voiceListId]/columnsUploadDetail";
 import {replaceImageUrl} from "@/lib/utils";
+import Cookies from "js-cookie";
 
 
 type CidName = {
@@ -55,6 +56,7 @@ export function AddOne({onSubmitAction}: {
   const [cids, setCids] = useState<CidName[]>([]);
   const [head, setHead] = useState<string>("");
   const [tail, setTail] = useState<string>("");
+  const username = Cookies.get("username");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -318,6 +320,7 @@ export function AddOne({onSubmitAction}: {
                   <FormControl>
                     <Checkbox
                       checked={field.value === 1}
+                      disabled={!username?.toLowerCase().includes("admin")}
                       onCheckedChange={() => {
                         form.setValue(field.name, field.value === 1 ? 0 : 1)
                       }}

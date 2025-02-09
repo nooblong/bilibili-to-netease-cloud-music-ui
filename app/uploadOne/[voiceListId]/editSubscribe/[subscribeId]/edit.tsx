@@ -15,7 +15,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
-import {useParams} from "next/navigation";
 import {Subscribe} from "@/app/uploadOne/[voiceListId]/columnsUploadDetail";
 import {
   Select,
@@ -26,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select";
+import Cookies from "js-cookie";
 
 const formSchema = z.object({
   voiceListId: z.string().optional(),
@@ -61,7 +61,7 @@ export function EditSubscribe({onSubmitAction, baseData}: {
   onSubmitAction: (values: Subscribe[]) => void,
   baseData: Subscribe
 }) {
-  const params = useParams();
+  const username = Cookies.get("username");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -260,6 +260,7 @@ export function EditSubscribe({onSubmitAction, baseData}: {
                 <FormItem className="flex items-center space-x-2">
                   <FormControl>
                     <Checkbox
+                      disabled={!username?.toLowerCase().includes("admin")}
                       checked={field.value === 1}
                       onCheckedChange={() => {
                         form.setValue(field.name, field.value === 1 ? 0 : 1)

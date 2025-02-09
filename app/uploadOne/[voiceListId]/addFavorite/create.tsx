@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/select";
 import {Label} from "@/components/ui/label";
 import {Switch} from "@/components/ui/switch";
+import Cookies from "js-cookie";
 
 const formSchema = z.object({
   voiceListId: z.string().min(1, "voiceListId不能为空"),
@@ -66,6 +67,7 @@ export function AddFavorite({onSubmitAction}: {
   const params = useParams();
   const [upInfo, setUpInfo] = useState<any>(null);
   const [favInfo, setFavInfo] = useState<any[]>([]);
+  const username = Cookies.get("username");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -303,6 +305,7 @@ export function AddFavorite({onSubmitAction}: {
                   <FormControl>
                     <Checkbox
                       checked={field.value === 1}
+                      disabled={!username?.toLowerCase().includes("admin")}
                       onCheckedChange={() => {
                         form.setValue(field.name, field.value === 1 ? 0 : 1)
                       }}
