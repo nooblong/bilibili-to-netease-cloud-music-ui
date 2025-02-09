@@ -44,9 +44,9 @@ async function deleteSubscribe(formData: FormData): Promise<any> {
   return json.data
 }
 
-async function checkSubscribe(): Promise<any> {
+async function checkSubscribe(formData: FormData): Promise<any> {
   'use server'
-  const json = await fetch(api + `/subscribe/checkMyUpJob`, {
+  const json = await fetch(api + `/subscribe/checkMyUpJob?voicelistId=${formData.get("voicelistId")}`, {
     headers: {
       "Access-Token": (await cookies()).get("token")?.value ?? ""
     }
@@ -105,7 +105,7 @@ export default async function UploadOnePage(props: any): Promise<any> {
             <Button>订阅收藏夹</Button>
           </Link>
           <form action={checkSubscribe}>
-            <input type="hidden" name="id"/>
+            <input type="hidden" name="voicelistId" value={params.voiceListId} />
             <Button type="submit">立即检查订阅</Button>
           </form>
         </div>

@@ -81,6 +81,7 @@ export function EditSubscribe({onSubmitAction, baseData}: {
       regName: baseData.regName,
       filterChannel: baseData.channelIds.length > 0 ? 1 : 0,
       channelIdsList: baseData.channelIds.split(","),
+      keyWord: baseData.keyWord,
     },
   });
   return (
