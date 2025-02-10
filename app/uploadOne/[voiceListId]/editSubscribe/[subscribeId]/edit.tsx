@@ -100,7 +100,7 @@ export function EditSubscribe({onSubmitAction, baseData}: {
         className="space-y-4 p-4 border rounded-lg"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="col-span-2">
+          <div className="md:col-span-2">
             {baseData.type === "UP" ? "订阅的合集id" : "订阅的收藏夹id"}
             <Input disabled defaultValue={baseData.channelIds} placeholder="订阅的合集id"/>
           </div>
