@@ -8,9 +8,19 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import Cookies from "js-cookie";
+import {toast} from "@/hooks/use-toast";
+import {Toaster} from "@/components/ui/toaster";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import {useState} from "react";
+import {ScrollArea} from "@/components/ui/scroll-area";
 
 export type UploadDetail = {
   id: string
@@ -21,8 +31,9 @@ export type UploadDetail = {
   createTime: string
   voiceListName: string
   uploadRetryTimes: number
-  status: string
+  musicStatus: string
   uploadStatus: string
+  log: string
 }
 
 export type UploadDetailAdd = {
@@ -77,65 +88,75 @@ export type SubscribeReg = {
 export const columnsUploadDetail: ColumnDef<UploadDetail>[] = [
   {
     accessorKey: "uploadName",
-    header: "Upload Name",
+    header: "上传标题",
   },
   {
     accessorKey: "title",
-    header: "Title",
+    header: "视频标题",
   },
   {
     accessorKey: "subscribeName",
-    header: "Subscribe Name",
-  },
-  {
-    accessorKey: "userId",
-    header: "User Id",
+    header: "来源",
   },
   {
     accessorKey: "createTime",
-    header: "Create TIme"
-  },
-  {
-    accessorKey: "voiceListName",
-    header: "Voice List Name",
+    header: "创建时间"
   },
   {
     accessorKey: "uploadRetryTimes",
-    header: "Upload Retry Times",
+    header: "上传重试次数",
   },
   {
-    accessorKey: "status",
+    header: "网易审核状态",
+    accessorKey: "musicStatus",
     cell: ({row}) => {
-      return <div>{row.getValue("status")}</div>
+      return <div>{row.getValue("musicStatus")}</div>
     },
   },
   {
     accessorKey: "uploadStatus",
-    header: "Upload Status",
+    header: "上传状态",
   },
   {
     id: "actions",
     cell: ({row}) => {
-      const payment = row.original
-
+      const ud = row.original
+      const [open, setOpen] = useState(false);
       return (
         <DropdownMenu>
+          <Toaster/>
+          <Dialog open={open} onOpenChange={() => {
+            setOpen(!open)
+          }}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>日志</DialogTitle>
+                <ScrollArea className="w-full h-[400px] whitespace-pre-wrap break-all rounded-md border p-4">
+                  {ud.log}
+                </ScrollArea>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">打开菜单</span>
               <MoreHorizontal className="h-4 w-4"/>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator/>
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuLabel>操作</DropdownMenuLabel>
+            <DropdownMenuItem onClick={async () => {
+              const json = await fetch(`/api/common/uploadDetail/delete?id=${ud.id}`, {
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Token": Cookies.get("token") ?? ""
+                }
+              }).then(res => res.json())
+              toast({description: json.message})
+            }}>删除</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {
+              setOpen(!open)
+            }}>查看日志</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
