@@ -7,7 +7,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
+  DropdownMenuLabel, DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import Cookies from "js-cookie";
@@ -24,6 +24,8 @@ import {ScrollArea} from "@/components/ui/scroll-area";
 
 export type UploadDetail = {
   id: string
+  bvid: string,
+  cid: string,
   subscribeId: string
   uploadName: string
   title: string
@@ -118,6 +120,13 @@ export const columnsUploadDetail: ColumnDef<UploadDetail>[] = [
     header: "上传状态",
   },
   {
+    header: "bvid&cid",
+    accessorKey: "bvid",
+    cell: ({row}) => {
+      return <div>{row.original.bvid}, {row.original.cid}</div>
+    },
+  },
+  {
     id: "actions",
     cell: ({row}) => {
       const ud = row.original
@@ -130,7 +139,7 @@ export const columnsUploadDetail: ColumnDef<UploadDetail>[] = [
           }}>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>日志</DialogTitle>
+                <DialogTitle>查看日志</DialogTitle>
                 <ScrollArea className="w-full h-[400px] whitespace-pre-wrap break-all rounded-md border p-4">
                   {ud.log}
                 </ScrollArea>
@@ -145,7 +154,20 @@ export const columnsUploadDetail: ColumnDef<UploadDetail>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>操作</DropdownMenuLabel>
+            <DropdownMenuItem onClick={() => {
+              setOpen(!open)
+            }}>查看日志</DropdownMenuItem>
             <DropdownMenuItem onClick={async () => {
+              const json = await fetch(`/api/common/uploadDetail/restartJob?id=${ud.id}`, {
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Token": Cookies.get("token") ?? ""
+                }
+              }).then(res => res.json())
+              toast({description: json.message})
+            }}>重新上传</DropdownMenuItem>
+            <DropdownMenuSeparator/>
+            <DropdownMenuItem className="mt-10" onClick={async () => {
               const json = await fetch(`/api/common/uploadDetail/delete?id=${ud.id}`, {
                 headers: {
                   "Content-Type": "application/json",
@@ -154,9 +176,6 @@ export const columnsUploadDetail: ColumnDef<UploadDetail>[] = [
               }).then(res => res.json())
               toast({description: json.message})
             }}>删除</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => {
-              setOpen(!open)
-            }}>查看日志</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
