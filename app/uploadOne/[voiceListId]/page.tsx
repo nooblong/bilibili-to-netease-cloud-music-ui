@@ -145,12 +145,12 @@ export default async function UploadOnePage(props: any): Promise<any> {
             </AlertDialogContent>
           </AlertDialog>
           <AlertDialog>
-            <AlertDialogTrigger className={buttonVariants()}>取消所有等待状态单曲</AlertDialogTrigger>
+            <AlertDialogTrigger className={buttonVariants()}>删除所有等待状态单曲</AlertDialogTrigger>
             <AlertDialogContent>
               <form action={delAllWait}>
                 <input type="hidden" name="voicelistId" value={params.voiceListId}/>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>取消所有等待状态单曲？</AlertDialogTitle>
+                  <AlertDialogTitle>删除所有等待状态单曲？</AlertDialogTitle>
                   <AlertDialogDescription>
                   </AlertDialogDescription>
                 </AlertDialogHeader>

@@ -41,4 +41,4 @@ export const handleRes = (json: any, redirectUrl: string) => {
   }
 }
 
-export const api = "http://127.0.0.1:25566"
+export const api = "http://106.75.218.120:25565"
