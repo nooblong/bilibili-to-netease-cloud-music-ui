@@ -4,6 +4,17 @@ import {AppSidebar} from "@/components/app-sidebar";
 import {SidebarInset, SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar";
 import {Separator} from "@/components/ui/separator";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -12,7 +23,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import {api, replaceImageUrl} from "@/lib/utils";
 import {cookies} from "next/headers";
-import {Button} from "@/components/ui/button";
+import {Button, buttonVariants} from "@/components/ui/button";
 import Link from "next/link";
 import {Avatar, AvatarImage} from "@/components/ui/avatar";
 import {revalidatePath} from "next/cache";
@@ -47,6 +58,18 @@ async function deleteSubscribe(formData: FormData): Promise<any> {
 async function checkSubscribe(formData: FormData): Promise<any> {
   'use server'
   const json = await fetch(api + `/subscribe/checkMyUpJob?voicelistId=${formData.get("voicelistId")}`, {
+    headers: {
+      "Access-Token": (await cookies()).get("token")?.value ?? ""
+    }
+  })
+    .then(response => response.json());
+  revalidatePath("")
+  return json.data
+}
+
+async function delAllWait(formData: FormData): Promise<any> {
+  'use server'
+  const json = await fetch(api + `/uploadDetail/delAllWait?voicelistId=${formData.get("voicelistId")}`, {
     headers: {
       "Access-Token": (await cookies()).get("token")?.value ?? ""
     }
@@ -104,10 +127,40 @@ export default async function UploadOnePage(props: any): Promise<any> {
           <Link href={`/uploadOne/${params.voiceListId}/addFavorite`}>
             <Button>订阅收藏夹</Button>
           </Link>
-          <form action={checkSubscribe}>
-            <input type="hidden" name="voicelistId" value={params.voiceListId} />
-            <Button type="submit">立即检查订阅</Button>
-          </form>
+          <AlertDialog>
+            <AlertDialogTrigger className={buttonVariants()}>立即检查订阅</AlertDialogTrigger>
+            <AlertDialogContent>
+              <form action={checkSubscribe}>
+                <input type="hidden" name="voicelistId" value={params.voiceListId}/>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>立即检查订阅？</AlertDialogTitle>
+                  <AlertDialogDescription>
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>取消</AlertDialogCancel>
+                  <AlertDialogAction type="submit">确认</AlertDialogAction>
+                </AlertDialogFooter>
+              </form>
+            </AlertDialogContent>
+          </AlertDialog>
+          <AlertDialog>
+            <AlertDialogTrigger className={buttonVariants()}>取消所有等待状态单曲</AlertDialogTrigger>
+            <AlertDialogContent>
+              <form action={delAllWait}>
+                <input type="hidden" name="voicelistId" value={params.voiceListId}/>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>取消所有等待状态单曲？</AlertDialogTitle>
+                  <AlertDialogDescription>
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>取消</AlertDialogCancel>
+                  <AlertDialogAction type="submit">确认</AlertDialogAction>
+                </AlertDialogFooter>
+              </form>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
         <div className="container mx-auto py-10">
           {
@@ -133,7 +186,6 @@ export default async function UploadOnePage(props: any): Promise<any> {
           }
         </div>
         <div className="container mx-auto py-10">
-          total:
           <DataTable columns={columnsUploadDetail} data={uploadDetail.records} total={uploadDetail.total}
                      pageNo={Number(searchParams?.pageNo) || 1}
                      pageSize={Number(searchParams?.pageSize) || 10}/>
