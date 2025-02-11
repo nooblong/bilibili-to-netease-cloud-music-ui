@@ -73,7 +73,7 @@ export function AddSubscribe({onSubmitAction}: {
     defaultValues: {
       remark: "",
       voiceListId: String(params.voiceListId),
-      upId: "148524702",
+      upId: "6906052",
       type: "UP",
       processTime: formatDate(new Date()),
       fromTime: "2010-01-01 00:00:00",
@@ -108,84 +108,78 @@ export function AddSubscribe({onSubmitAction}: {
         className="space-y-4 p-4 border rounded-lg"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="upId"
-            render={({field}) => (
-              <FormItem>
-                <FormLabel>upId</FormLabel>
-                <FormControl>
-                  <Input placeholder="输入up主id" {...field} />
-                </FormControl>
-                <FormMessage/>
-              </FormItem>
-            )}
-          />
-          <Button className="" onClick={async (event) => {
-            event.preventDefault()
-            const upId = form.getValues("upId");
-            const res = await fetch(`/api/common/bilibili/getUserInfo?uid=${upId}`).then((res) => res.json());
-            const upChannels = await fetch(`/api/common/bilibili/getUpChannels?upId=${upId}`).then((res) => res.json());
-            form.reset()
-            form.setValue("upId", upId)
-            setUpInfo(res.data.data);
-            setChannelInfo(upChannels.data.data);
-          }}>解析</Button>
-
-          {upInfo && <div>{upInfo.name}</div>}
-          {upInfo && upInfo.face && <img src={replaceImageUrl(upInfo.face)} alt=""/>}
-
-          <div hidden={!(channelInfo && channelInfo.length > 0)}>
-            <Checkbox
-              checked={filterChannel}
-              onCheckedChange={() => {
-                setFilterChannel(!filterChannel);
-              }}
-            />过滤合集
-          </div>
-
-          <div hidden={!filterChannel}>
+          <div className="grid gap-2">
             <FormField
               control={form.control}
-              name="channelIdsList"
+              name="upId"
               render={({field}) => (
                 <FormItem>
-                  <FormLabel>选择合集，不支持旧合集(视频点进去右边没有合集列表的那种 )</FormLabel>
-                  {channelInfo && channelInfo.map((item) => {
-                    return (
-                      <FormControl key={item.id_}>
-                        <div>
-                          {item.meta.name}<Checkbox key={item.id_}
-                                                    checked={channelIdsWatch.includes(item.id_)}
-                                                    onCheckedChange={(checked) => {
-                                                      const newSelected = checked
-                                                        ? [...channelIdsWatch, item.id_]
-                                                        : channelIdsWatch.filter(channelId => channelId !== item.id_);
-                                                      form.setValue(field.name, newSelected);
-                                                    }}
-                        />
-                        </div>
-                      </FormControl>
-                    )
-                  })}
+                  <FormLabel>upId</FormLabel>
+                  <FormControl>
+                    <Input placeholder="输入up主id" {...field} />
+                  </FormControl>
                   <FormMessage/>
                 </FormItem>
               )}
             />
+            <Button className="w-full" onClick={async (event) => {
+              event.preventDefault()
+              const upId = form.getValues("upId");
+              const res = await fetch(`/api/common/bilibili/getUserInfo?uid=${upId}`).then((res) => res.json());
+              const upChannels = await fetch(`/api/common/bilibili/getUpChannels?upId=${upId}`).then((res) => res.json());
+              form.reset()
+              form.setValue("upId", upId)
+              setUpInfo(res.data.data);
+              setChannelInfo(upChannels.data.data);
+            }}>解析</Button>
+            <div>
+              {upInfo && <div>{upInfo.name}</div>}
+            </div>
+            <div>
+              {upInfo && upInfo.face && <img src={replaceImageUrl(upInfo.face)} alt=""/>}
+            </div>
           </div>
-          {/*<FormField*/}
-          {/*  control={form.control}*/}
-          {/*  name="remark"*/}
-          {/*  render={({field}) => (*/}
-          {/*    <FormItem>*/}
-          {/*      <FormLabel>备注</FormLabel>*/}
-          {/*      <FormControl>*/}
-          {/*        <Input placeholder="输入备注" {...field}/>*/}
-          {/*      </FormControl>*/}
-          {/*      <FormMessage/>*/}
-          {/*    </FormItem>*/}
-          {/*  )}*/}
-          {/*/>*/}
+
+          <div>
+            <div hidden={!(channelInfo && channelInfo.length > 0)}>
+              <Checkbox
+                checked={filterChannel}
+                onCheckedChange={() => {
+                  setFilterChannel(!filterChannel);
+                }}
+              />过滤合集
+            </div>
+
+            <div hidden={!filterChannel}>
+              <FormField
+                control={form.control}
+                name="channelIdsList"
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel>选择合集，不支持旧合集(视频点进去右边没有合集列表的那种 )</FormLabel>
+                    {channelInfo && channelInfo.map((item) => {
+                      return (
+                        <FormControl key={item.id_}>
+                          <div>
+                            {item.meta.name}<Checkbox key={item.id_}
+                                                      checked={channelIdsWatch.includes(item.id_)}
+                                                      onCheckedChange={(checked) => {
+                                                        const newSelected = checked
+                                                          ? [...channelIdsWatch, item.id_]
+                                                          : channelIdsWatch.filter(channelId => channelId !== item.id_);
+                                                        form.setValue(field.name, newSelected);
+                                                      }}
+                          />
+                          </div>
+                        </FormControl>
+                      )
+                    })}
+                    <FormMessage/>
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
           <FormField
             control={form.control}
             name="voiceListId"

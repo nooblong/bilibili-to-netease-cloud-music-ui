@@ -107,33 +107,35 @@ export function AddFavorite({onSubmitAction}: {
         className="space-y-4 p-4 border rounded-lg"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="upId"
-            render={({field}) => (
-              <FormItem>
-                <FormLabel>upId</FormLabel>
-                <FormControl>
-                  <Input placeholder="输入up主id" {...field} />
-                </FormControl>
-                <FormMessage/>
-              </FormItem>
-            )}
-          />
-          <Button className="" onClick={async (event) => {
-            event.preventDefault()
-            const upId = form.getValues("upId");
-            const res = await fetch(`/api/common/bilibili/getUserInfo?uid=${upId}`).then((res) => res.json());
-            const upFavs = await fetch(`/api/common/bilibili/getFavoriteList?uid=${upId}`).then((res) => res.json());
-            form.reset()
-            form.setValue("upId", upId)
-            setUpInfo(res.data.data);
-            setFavInfo(upFavs.data.data.list);
-          }}>解析</Button>
-
-          {upInfo && <div>{upInfo.name}</div>}
-          {upInfo && upInfo.face && <img src={replaceImageUrl(upInfo.face)} alt=""/>}
-
+          <div className="grid gap-2">
+            <FormField
+              control={form.control}
+              name="upId"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel>upId</FormLabel>
+                  <FormControl>
+                    <Input placeholder="输入up主id" {...field} />
+                  </FormControl>
+                  <FormMessage/>
+                </FormItem>
+              )}
+            />
+            <Button className="" onClick={async (event) => {
+              event.preventDefault()
+              const upId = form.getValues("upId");
+              const res = await fetch(`/api/common/bilibili/getUserInfo?uid=${upId}`).then((res) => res.json());
+              const upFavs = await fetch(`/api/common/bilibili/getFavoriteList?uid=${upId}`).then((res) => res.json());
+              form.reset()
+              form.setValue("upId", upId)
+              setUpInfo(res.data.data);
+              setFavInfo(upFavs.data.data.list);
+            }}>解析</Button>
+            <div>
+              {upInfo && <div>{upInfo.name}</div>}
+              {upInfo && upInfo.face && <img src={replaceImageUrl(upInfo.face)} alt=""/>}
+            </div>
+          </div>
           <FormField
             control={form.control}
             name="channelIdsList"

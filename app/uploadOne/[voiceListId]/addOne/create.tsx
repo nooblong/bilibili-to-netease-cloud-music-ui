@@ -100,34 +100,38 @@ export function AddOne({onSubmitAction}: {
         className="space-y-4 p-4 border rounded-lg"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="bvid"
-            render={({field}) => (
-              <FormItem>
-                <FormLabel>BVID</FormLabel>
-                <FormControl>
-                  <Input placeholder="输入BVID" {...field} />
-                </FormControl>
-                <FormMessage/>
-              </FormItem>
-            )}
-          />
-          <Button onClick={async (event) => {
-            event.preventDefault()
-            const bvid = form.getValues("bvid");
-            const res = await fetch(`/api/common/bilibili/getVideoInfo?bvid=${bvid}`).then((res) => res.json());
-            form.reset()
-            setCids([])
-            setVideoInfo(res.data);
-            form.setValue("bvid", bvid)
-            form.setValue("uploadName", res.data.title)
-          }}>解析</Button>
+          <div className="grid gap-2">
+            <FormField
+              control={form.control}
+              name="bvid"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel>BVID</FormLabel>
+                  <FormControl>
+                    <Input placeholder="输入BVID" {...field} />
+                  </FormControl>
+                  <FormMessage/>
+                </FormItem>
+              )}
+            />
+            <Button className="w-full" onClick={async (event) => {
+              event.preventDefault()
+              const bvid = form.getValues("bvid");
+              const res = await fetch(`/api/common/bilibili/getVideoInfo?bvid=${bvid}`).then((res) => res.json());
+              form.reset()
+              setCids([])
+              setVideoInfo(res.data);
+              form.setValue("bvid", bvid)
+              form.setValue("uploadName", res.data.title)
+            }}>解析</Button>
+            <div>
+              {videoInfo && <div>{videoInfo.title}</div>}
+              {videoInfo && videoInfo.image && <img src={replaceImageUrl(videoInfo.image)} alt=""/>}
+            </div>
+          </div>
 
-          {videoInfo && <div>{videoInfo.title}</div>}
-          {videoInfo && videoInfo.image && <img src={replaceImageUrl(videoInfo.image)} alt=""/>}
 
-          <div hidden={videoInfo && videoInfo.pages.length <= 1}>
+          <div hidden={videoInfo && videoInfo.pages.length <= 1} className="grid gap-2">
             <Input
               type="text"
               placeholder="上传名称（前）"
@@ -160,42 +164,45 @@ export function AddOne({onSubmitAction}: {
                     })
                     setCids(toSet);
                   }}>全选</Button>
-
-                  {videoInfo && videoInfo.pages.map((item) => {
-                    return (
-                      <FormControl key={item.cid}>
-                        <div>
-                          {head + item.part + tail}<Checkbox key={item.cid}
-                                                             checked={cids.some(i => i.cid === item.cid)}
-                                                             onCheckedChange={(checked) => {
-                                                               const newSelected = checked
-                                                                 ? [...cids, {cid: item.cid, name: item.part}]
-                                                                 : cids.filter(cidName => cidName.cid !== item.cid);
-                                                               setCids(newSelected);
-                                                             }}
-                        />
-                        </div>
-                      </FormControl>
-                    )
-                  })}
+                  <div className="grid grid-cols-1 md:grid-cols-2">
+                    {videoInfo && videoInfo.pages.map((item) => {
+                      return (
+                        <FormControl key={item.cid}>
+                          <div>
+                            <Checkbox key={item.cid}
+                                      checked={cids.some(i => i.cid === item.cid)}
+                                      onCheckedChange={(checked) => {
+                                        const newSelected = checked
+                                          ? [...cids, {cid: item.cid, name: item.part}]
+                                          : cids.filter(cidName => cidName.cid !== item.cid);
+                                        setCids(newSelected);
+                                      }}
+                            />&nbsp;&nbsp;{head + item.part + tail}
+                          </div>
+                        </FormControl>
+                      )
+                    })}
+                  </div>
                   <FormMessage/>
                 </FormItem>
               )}
             />
           </div>
-          <FormField
-            control={form.control}
-            name="uploadName"
-            render={({field}) => (
-              <FormItem>
-                <FormLabel>上传名称</FormLabel>
-                <FormControl>
-                  <Input placeholder="输入上传名称" {...field} disabled={videoInfo && videoInfo.pages.length > 1}/>
-                </FormControl>
-                <FormMessage/>
-              </FormItem>
-            )}
-          />
+          <div hidden={videoInfo && videoInfo.pages.length > 1}>
+            <FormField
+              control={form.control}
+              name="uploadName"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel>上传名称</FormLabel>
+                  <FormControl>
+                    <Input placeholder="输入上传名称" {...field} disabled={videoInfo && videoInfo.pages.length > 1}/>
+                  </FormControl>
+                  <FormMessage/>
+                </FormItem>
+              )}
+            />
+          </div>
           <FormField
             control={form.control}
             name="voiceListId"
@@ -234,45 +241,49 @@ export function AddOne({onSubmitAction}: {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="beginSec"
-            render={({field}) => (
-              <FormItem>
-                <FormLabel>开始时间（秒）</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    step="0.1"
-                    placeholder="开始时间（秒）"
-                    {...field}
-                    value={field.value ?? 0}
-                  />
-                </FormControl>
-                <FormMessage/>
-              </FormItem>
-            )}
-          />
+          <div hidden={videoInfo && videoInfo.pages.length > 1}>
+            <FormField
+              control={form.control}
+              name="beginSec"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel>开始时间（秒）</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      step="0.1"
+                      placeholder="开始时间（秒）"
+                      {...field}
+                      value={field.value ?? 0}
+                    />
+                  </FormControl>
+                  <FormMessage/>
+                </FormItem>
+              )}
+            />
+          </div>
 
-          <FormField
-            control={form.control}
-            name="endSec"
-            render={({field}) => (
-              <FormItem>
-                <FormLabel>结束时间（秒）</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    step="0.1"
-                    placeholder="结束时间（秒）"
-                    {...field}
-                    value={field.value ?? 0}
-                  />
-                </FormControl>
-                <FormMessage/>
-              </FormItem>
-            )}
-          />
+          <div hidden={videoInfo && videoInfo.pages.length > 1}>
+            <FormField
+              control={form.control}
+              name="endSec"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel>结束时间（秒）</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      step="0.1"
+                      placeholder="结束时间（秒）"
+                      {...field}
+                      value={field.value ?? 0}
+                    />
+                  </FormControl>
+                  <FormMessage/>
+                </FormItem>
+              )}
+            />
+          </div>
           <div className="space-y-2">
             <FormField
               control={form.control}
@@ -287,7 +298,7 @@ export function AddOne({onSubmitAction}: {
                       }}
                     />
                   </FormControl>
-                  <FormLabel>使用播客封面作为封面</FormLabel>
+                  <FormLabel>使用视频封面作为封面</FormLabel>
                 </FormItem>
               )}
             />
