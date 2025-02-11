@@ -19,11 +19,12 @@ import Link from "next/link";
 import {Button} from "@/components/ui/button";
 import {revalidatePath} from "next/cache";
 
-async function getData(): Promise<any> {
+async function getData(seeOther: boolean): Promise<any> {
   const cookieStore = await cookies()
   const token = cookieStore.get("token")
   const username = cookieStore.get("username")
-  const json = await fetch(api + `/uploadDetail/listVoicelist?username=${username?.value}`, {
+  let name = username?.value
+  const json = await fetch(api + `/uploadDetail/listVoicelist${seeOther ? '' : "?username="}${seeOther ? "" : name}`, {
     // const json = await fetch("https://1bc53407a65d4ef492b871e2f9f8fb88.api.mockbin.io/", {
     method: "GET",
     headers: {
@@ -47,9 +48,11 @@ async function syncVoicelist(): Promise<any> {
   return json.data
 }
 
-export default async function Page() {
-  const data = await getData()
-
+export default async function Page(props: any) {
+  const searchParams = await props.searchParams;
+  const seeOther = searchParams.seeOther === '1'
+  console.log(seeOther)
+  const data = await getData(seeOther)
 
   return (
     <SidebarProvider>
@@ -76,9 +79,19 @@ export default async function Page() {
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <form action={syncVoicelist} className="w-full">
+          <form action={syncVoicelist}>
             <Button type="submit" className="w-full lg:w-auto">刷新播客数据</Button>
           </form>
+          <div hidden={seeOther}>
+            <Link href="/?seeOther=1">
+              <Button className="w-full lg:w-auto">偷窥其他播客</Button>
+            </Link>
+          </div>
+          <div hidden={!seeOther}>
+            <Link href="/">
+              <Button className="w-full lg:w-auto">返回我的播客</Button>
+            </Link>
+          </div>
 
           <div className="grid auto-rows-min gap-4 grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
             {data.map((item) => (
