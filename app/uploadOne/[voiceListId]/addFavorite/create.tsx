@@ -199,7 +199,7 @@ export function AddFavorite({onSubmitAction}: {
               <FormItem>
                 <FormLabel>上传顺序</FormLabel>
                 <FormControl>
-                  <Select defaultValue={field.value}>
+                  <Select value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger>
                       <SelectValue placeholder="上传顺序"/>
                     </SelectTrigger>
