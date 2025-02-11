@@ -84,7 +84,7 @@ export default async function Page(props: any) {
           </form>
           <div hidden={seeOther}>
             <Link href="/?seeOther=1">
-              <Button className="w-full lg:w-auto">偷窥其他播客</Button>
+              <Button className="w-full lg:w-auto">窥探其他播客</Button>
             </Link>
           </div>
           <div hidden={!seeOther}>
