@@ -107,13 +107,10 @@ export default async function Page(props: any) {
                       className="rounded-xl object-cover w-full h-full"
                     />
                   </div>
-                  <div className="flex-1 p-4 w-2/3">
-                    <h3 className="text-xl font-semibold mb-2 break-all">
+                  <div className="flex-1 p-4 w-2/3 gap-4">
+                    <h3 className="text-sm md:text-xl font-semibold overflow-hidden">
                       {item.voicelistName}
                     </h3>
-                    <p className="text-sm text-muted-foreground break-all">
-                      {item.voicelistDescription || '点击进入'}
-                    </p>
                   </div>
                 </div>
               </Link>
