@@ -7,8 +7,53 @@ import {
   BreadcrumbLink,
   BreadcrumbList
 } from "@/components/ui/breadcrumb";
+import {Card, CardContent, CardHeader} from "@/components/ui/card";
+import {ScrollArea} from "@/components/ui/scroll-area";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+import {Skeleton} from "@/components/ui/skeleton";
+import {api, cn} from "@/lib/utils";
+import {redirect} from "next/navigation";
+import {cookies} from "next/headers";
 
-export default function Page() {
+async function fetchSysInfo(): Promise<SysInfo | null> {
+  'use server'
+  const response = await fetch(api + "/sys/sysInfo").then((res) => res.json());
+  if (response.code != 0) {
+    redirect(`/customError?msg=${encodeURIComponent(JSON.stringify(response))}`);
+  }
+  await fetch(api + "/sys/log", {
+    headers: {
+      "Access-Token": (await cookies()).get("token")?.value ?? ""
+    }
+  })
+  return response.data;
+}
+
+async function fetchUploadQueue(): Promise<UploadDetail[]> {
+  'use server'
+  const response = await fetch(api + "/sys/queueInfo?pageNo=1&pageSize=100").then(res => res.json());
+  if (response.code != 0) {
+    redirect(`/customError?msg=${encodeURIComponent(JSON.stringify(response))}`);
+  }
+  return response.data.records || [];
+}
+
+interface SysInfo {
+  regNum: number;
+  annoVisitNum: number;
+  userVisitNum: number;
+}
+
+interface UploadDetail {
+  priority: number;
+  title: string;
+  uploadName: string;
+}
+
+export default async function Page() {
+  const sysInfo = await fetchSysInfo();
+  const uploadQueue = await fetchUploadQueue();
+  const loading = !sysInfo && uploadQueue.length === 0;
   return (
     <SidebarProvider>
       <AppSidebar/>
@@ -29,6 +74,58 @@ export default function Page() {
             </Breadcrumb>
           </div>
         </header>
+        <div className="container mx-auto p-6 space-y-6">
+          <Card className="shadow-xl">
+            <CardHeader>
+              <h2 className="text-xl font-bold">System Information</h2>
+            </CardHeader>
+            <CardContent>
+              {loading ? (
+                <Skeleton className="h-24 w-full"/>
+              ) : sysInfo ? (
+                <div className="grid grid-cols-3 gap-4">
+                  <div>注册用户数: {sysInfo.regNum}</div>
+                  <div>游客访问数: {sysInfo.annoVisitNum}</div>
+                  <div>用户访问数: {sysInfo.userVisitNum}</div>
+                </div>
+              ) : (
+                <div>No System Information Available</div>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-xl">
+            <CardHeader>
+              <h2 className="text-xl font-bold">上传队列</h2>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="h-80">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>上传名字</TableHead>
+                      <TableHead>优先级</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {loading ? (
+                      <TableRow>
+                        <TableCell colSpan={3}><Skeleton className="h-6 w-full"/></TableCell>
+                      </TableRow>
+                    ) : (
+                      uploadQueue.map((detail, index) => (
+                        <TableRow key={index}>
+                          <TableCell>{detail.uploadName ? detail.uploadName : detail.title}</TableCell>
+                          <TableCell>{detail.priority}</TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

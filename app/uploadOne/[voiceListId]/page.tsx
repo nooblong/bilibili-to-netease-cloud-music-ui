@@ -27,6 +27,7 @@ import {Button, buttonVariants} from "@/components/ui/button";
 import Link from "next/link";
 import {Avatar, AvatarImage} from "@/components/ui/avatar";
 import {revalidatePath} from "next/cache";
+import SubscribeLog from "@/app/uploadOne/[voiceListId]/subscribeLog";
 
 async function getUploadDetail(pageNo: number, pageSize: number, title: string, status: string, voiceListId: string): Promise<any> {
   'use server'
@@ -179,6 +180,8 @@ export default async function UploadOnePage(props: any): Promise<any> {
                     <input type="hidden" name="id" value={item.id}/>
                     <Button type="submit">删除</Button>
                   </form>
+                  <SubscribeLog log={item.log}/>
+                  <div>{item.processTime}</div>
                   ({item.type})
                 </div>
               )

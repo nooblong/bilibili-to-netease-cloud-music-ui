@@ -137,11 +137,11 @@ export const columnsUploadDetail: ColumnDef<UploadDetail>[] = [
           <Dialog open={open} onOpenChange={() => {
             setOpen(!open)
           }}>
-            <DialogContent>
+            <DialogContent className="max-w-2xl">
               <DialogHeader>
                 <DialogTitle>查看日志</DialogTitle>
-                <ScrollArea className="w-full h-[400px] whitespace-pre-wrap break-all rounded-md border p-4">
-                  {ud.log}
+                <ScrollArea className="h-96 p-4">
+                  <pre className="whitespace-pre-wrap break-all text-sm">{ud.log}</pre>
                 </ScrollArea>
               </DialogHeader>
             </DialogContent>
