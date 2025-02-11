@@ -41,7 +41,7 @@ async function getUploadDetail(pageNo: number, pageSize: number, title: string, 
 
 async function getSubscribe(username: string, status: string, voiceListId: string): Promise<any> {
   'use server'
-  const json = await fetch(api + `/subscribe/list?username=${username}&status=${status}&voiceListId=${voiceListId}`)
+  const json = await fetch(api + `/subscribe/list?&status=${status}&voiceListId=${voiceListId}`)
     .then(response => response.json());
   return json.data
 }
