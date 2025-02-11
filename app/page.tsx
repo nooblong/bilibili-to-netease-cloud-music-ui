@@ -76,29 +76,35 @@ export default async function Page() {
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <form action={syncVoicelist}>
-            <Button type="submit">刷新播客数据</Button>
+          <form action={syncVoicelist} className="w-full">
+            <Button type="submit" className="w-full lg:w-auto">刷新播客数据</Button>
           </form>
-          <div className="grid auto-rows-min gap-4 grid-cols-2 lg:grid-cols-3 ">
-            {data.map((item) => {
-              return (
-                <Link key={item.id} href={`/uploadOne/${item.voicelistId}`}>
-                  <div key={item.id} className="flex aspect-video rounded-xl bg-muted/50  items-center">
-                    <div className="flex-1 p-4 aspect-[1/1] w-1/3">
-                      <img src={item.voicelistImage} alt=""
-                           className="rounded"></img>
-                    </div>
-                    <div className="flex-1 p-4 w-2/3">
-                      <h3 className="text-xl font-semibold mb-2">{item.voicelistName}</h3>
-                      <p className="text-sm">
 
-                      </p>
-                    </div>
+          <div className="grid auto-rows-min gap-4 grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
+            {data.map((item) => (
+              <Link key={item.id} href={`/uploadOne/${item.voicelistId}`}>
+                <div
+                  className="relative flex aspect-video rounded-2xl bg-muted/50 items-center
+              overflow-hidden transform transition-all hover:scale-105 shadow-md"
+                >
+                  <div className="flex-1 p-4 aspect-square w-1/3">
+                    <img
+                      src={item.voicelistImage}
+                      alt="Voicelist Image"
+                      className="rounded-xl object-cover w-full h-full"
+                    />
                   </div>
-                </Link>
-              )
-            })
-            }
+                  <div className="flex-1 p-4 w-2/3">
+                    <h3 className="text-xl font-semibold mb-2 truncate">
+                      {item.voicelistName}
+                    </h3>
+                    <p className="text-sm text-muted-foreground truncate">
+                      {item.voicelistDescription || '点击进入'}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </SidebarInset>

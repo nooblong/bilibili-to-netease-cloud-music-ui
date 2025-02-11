@@ -28,6 +28,8 @@ import Link from "next/link";
 import {Avatar, AvatarImage} from "@/components/ui/avatar";
 import {revalidatePath} from "next/cache";
 import SubscribeLog from "@/app/uploadOne/[voiceListId]/subscribeLog";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import {ScrollArea} from "@/components/ui/scroll-area";
 
 async function getUploadDetail(pageNo: number, pageSize: number, title: string, status: string, voiceListId: string): Promise<any> {
   'use server'
@@ -118,80 +120,109 @@ export default async function UploadOnePage(props: any): Promise<any> {
             </Breadcrumb>
           </div>
         </header>
-        <div className="flex gap-2">
-          <Link href={`/uploadOne/${params.voiceListId}/addOne`}>
-            <Button>单曲上传</Button>
-          </Link>
-          <Link href={`/uploadOne/${params.voiceListId}/addSubscribe`}>
-            <Button>订阅up主</Button>
-          </Link>
-          <Link href={`/uploadOne/${params.voiceListId}/addFavorite`}>
-            <Button>订阅收藏夹</Button>
-          </Link>
-          <AlertDialog>
-            <AlertDialogTrigger className={buttonVariants()}>立即检查订阅</AlertDialogTrigger>
-            <AlertDialogContent>
-              <form action={checkSubscribe}>
-                <input type="hidden" name="voicelistId" value={params.voiceListId}/>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>立即检查订阅？</AlertDialogTitle>
-                  <AlertDialogDescription>
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>取消</AlertDialogCancel>
-                  <AlertDialogAction type="submit">确认</AlertDialogAction>
-                </AlertDialogFooter>
-              </form>
-            </AlertDialogContent>
-          </AlertDialog>
-          <AlertDialog>
-            <AlertDialogTrigger className={buttonVariants()}>删除所有等待状态单曲</AlertDialogTrigger>
-            <AlertDialogContent>
-              <form action={delAllWait}>
-                <input type="hidden" name="voicelistId" value={params.voiceListId}/>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>删除所有等待状态单曲？</AlertDialogTitle>
-                  <AlertDialogDescription>
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>取消</AlertDialogCancel>
-                  <AlertDialogAction type="submit">确认</AlertDialogAction>
-                </AlertDialogFooter>
-              </form>
-            </AlertDialogContent>
-          </AlertDialog>
-        </div>
-        <div className="container mx-auto py-10">
-          {
-            subscribe && subscribe.map(item => {
-              return (
-                <div key={item.id} className="flex gap-2">
-                  <Avatar>
-                    <AvatarImage
-                      src={replaceImageUrl(item.upImage)}/>
-                  </Avatar>
-                  {item.upName}
-                  <Link href={`/uploadOne/${params.voiceListId}/editSubscribe/${item.id}`}>
-                    <Button>编辑</Button>
-                  </Link>
-                  <form action={deleteSubscribe}>
-                    <input type="hidden" name="id" value={item.id}/>
-                    <Button type="submit">删除</Button>
-                  </form>
-                  <SubscribeLog log={item.log}/>
-                  <div>{item.processTime}</div>
-                  ({item.type})
-                </div>
-              )
-            })
-          }
-        </div>
-        <div className="container mx-auto py-10">
-          <DataTable columns={columnsUploadDetail} data={uploadDetail.records} total={uploadDetail.total}
-                     pageNo={Number(searchParams?.pageNo) || 1}
-                     pageSize={Number(searchParams?.pageSize) || 10}/>
+        <div className="p-6 space-y-6">
+          <Card className="shadow-xl p-4">
+            <CardHeader>
+              <CardTitle className="text-xl font-semibold">订阅操作</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-4">
+                <Link href={`/uploadOne/${params.voiceListId}/addOne`}>
+                  <Button>单曲上传</Button>
+                </Link>
+                <Link href={`/uploadOne/${params.voiceListId}/addSubscribe`}>
+                  <Button>订阅 UP 主</Button>
+                </Link>
+                <Link href={`/uploadOne/${params.voiceListId}/addFavorite`}>
+                  <Button>订阅收藏夹</Button>
+                </Link>
+
+                <AlertDialog>
+                  <AlertDialogTrigger className={buttonVariants()}>立即检查订阅</AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <form action={checkSubscribe}>
+                      <input type="hidden" name="voicelistId" value={params.voiceListId}/>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>立即检查订阅？</AlertDialogTitle>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>取消</AlertDialogCancel>
+                        <AlertDialogAction type="submit">确认</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </form>
+                  </AlertDialogContent>
+                </AlertDialog>
+
+                <AlertDialog>
+                  <AlertDialogTrigger className={buttonVariants()}>删除所有等待状态单曲</AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <form action={delAllWait}>
+                      <input type="hidden" name="voicelistId" value={params.voiceListId}/>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>删除所有等待状态单曲？</AlertDialogTitle>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>取消</AlertDialogCancel>
+                        <AlertDialogAction type="submit">确认</AlertDialogAction>
+                      </AlertDialogFooter>
+                    </form>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="shadow-xl p-4">
+            <CardHeader>
+              <CardTitle className="text-xl font-semibold">订阅列表</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="max-h-[500px] p-2">
+                {subscribe && subscribe.length > 0 ? (
+                  <div className="space-y-4">
+                    {subscribe.map(item => (
+                      <div key={item.id} className="flex items-center justify-between p-4 rounded-lg shadow-sm">
+                        <div className="flex items-center gap-4">
+                          <Avatar>
+                            <AvatarImage src={replaceImageUrl(item.upImage)}/>
+                          </Avatar>
+                          <div className="text-sm font-medium">{item.upName}({item.type})</div>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Link href={`/uploadOne/${params.voiceListId}/editSubscribe/${item.id}`}>
+                            <Button variant="secondary">编辑</Button>
+                          </Link>
+                          <AlertDialog>
+                            <AlertDialogTrigger className={buttonVariants()}>删除</AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <form action={deleteSubscribe}>
+                                <input type="hidden" name="id" value={item.id}/>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>删除？</AlertDialogTitle>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>取消</AlertDialogCancel>
+                                  <AlertDialogAction type="submit">确认</AlertDialogAction>
+                                </AlertDialogFooter>
+                              </form>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                          <SubscribeLog log={item.log}/>
+                          <div className="text-xs text-gray-500">{item.processTime}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-gray-500 text-sm">暂无订阅信息。</div>
+                )}
+              </ScrollArea>
+            </CardContent>
+          </Card>
+          <div className="container mx-auto py-10">
+            <DataTable columns={columnsUploadDetail} data={uploadDetail.records} total={uploadDetail.total}
+                       pageNo={Number(searchParams?.pageNo) || 1}
+                       pageSize={Number(searchParams?.pageSize) || 10}/>
+          </div>
         </div>
       </SidebarInset>
     </SidebarProvider>
