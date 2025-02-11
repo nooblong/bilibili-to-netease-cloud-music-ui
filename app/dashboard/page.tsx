@@ -29,13 +29,14 @@ async function fetchSysInfo(): Promise<SysInfo | null> {
   return response.data;
 }
 
-async function fetchUploadQueue(): Promise<UploadDetail[]> {
+async function fetchUploadQueue(): Promise<any> {
   'use server'
   const response = await fetch(api + "/sys/queueInfo?pageNo=1&pageSize=100").then(res => res.json());
+  console.log(response)
   if (response.code != 0) {
     redirect(`/customError?msg=${encodeURIComponent(JSON.stringify(response))}`);
   }
-  return response.data.records || [];
+  return response.data;
 }
 
 interface SysInfo {
@@ -96,7 +97,7 @@ export default async function Page() {
 
           <Card className="shadow-xl">
             <CardHeader>
-              <h2 className="text-xl font-bold">上传队列</h2>
+              <h2 className="text-xl font-bold">总上传队列: 剩余{uploadQueue.total}</h2>
             </CardHeader>
             <CardContent>
               <ScrollArea className="h-80">
@@ -113,7 +114,7 @@ export default async function Page() {
                         <TableCell colSpan={3}><Skeleton className="h-6 w-full"/></TableCell>
                       </TableRow>
                     ) : (
-                      uploadQueue.map((detail, index) => (
+                      uploadQueue.records.map((detail, index) => (
                         <TableRow key={index}>
                           <TableCell>{detail.uploadName ? detail.uploadName : detail.title}</TableCell>
                           <TableCell>{detail.priority}</TableCell>
