@@ -100,7 +100,7 @@ export default async function Page(props: any) {
                   className="relative flex aspect-video rounded-2xl bg-muted/50 items-center
               overflow-hidden transform transition-all hover:scale-105 shadow-md"
                 >
-                  <div className="flex-1 p-4 aspect-square w-1/3">
+                  <div className="flex-1 p-4 aspect-square h-full w-full">
                     <img
                       src={item.voicelistImage}
                       alt="Voicelist Image"
@@ -108,10 +108,10 @@ export default async function Page(props: any) {
                     />
                   </div>
                   <div className="flex-1 p-4 w-2/3">
-                    <h3 className="text-xl font-semibold mb-2 truncate">
+                    <h3 className="text-xl font-semibold mb-2 break-all">
                       {item.voicelistName}
                     </h3>
-                    <p className="text-sm text-muted-foreground truncate">
+                    <p className="text-sm text-muted-foreground break-all">
                       {item.voicelistDescription || '点击进入'}
                     </p>
                   </div>
