@@ -18,6 +18,7 @@ import {cookies} from "next/headers";
 import Link from "next/link";
 import {Button} from "@/components/ui/button";
 import {revalidatePath} from "next/cache";
+import {redirect} from "next/navigation";
 
 async function getData(seeOther: boolean): Promise<any> {
   const cookieStore = await cookies()
@@ -44,8 +45,7 @@ async function syncVoicelist(): Promise<any> {
       "Access-Token": token ? token.value : ""
     }
   }).then(res => res.json())
-  revalidatePath("")
-  return json.data
+  redirect("/")
 }
 
 export default async function Page(props: any) {
@@ -79,13 +79,19 @@ export default async function Page(props: any) {
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <form action={syncVoicelist}>
-            <Button type="submit" className="w-full lg:w-auto">刷新播客数据</Button>
-          </form>
-          <div hidden={seeOther}>
-            <Link href="/?seeOther=1">
-              <Button className="w-full lg:w-auto">窥探其他播客</Button>
-            </Link>
+          <div className="grid grid-cols-2 gap-4">
+            <Link href="https://frp-dad.com:24700/"><Button variant="outline" className="w-full">超高速访问域名(移动)</Button></Link>
+            <Link href="https://frp-oil.com:58050/"><Button variant="outline" className="w-full">超高速访问域名(电信)</Button></Link>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <form action={syncVoicelist}>
+              <Button type="submit" className="w-full">刷新播客数据</Button>
+            </form>
+            <div hidden={seeOther}>
+              <Link href="/?seeOther=1">
+                <Button className="w-full">窥探其他播客</Button>
+              </Link>
+            </div>
           </div>
           <div hidden={!seeOther}>
             <Link href="/">
