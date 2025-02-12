@@ -1,5 +1,5 @@
-[[redirects]]
-  from = "/api/common/*"
-  to = "http://106.75.218.120:25565/:splat"
-  status = 200
-  force = false
+#[[redirects]]
+#  from = "/api/common/*"
+#  to = "http://106.75.218.120:25565/:splat"
+#  status = 200
+#  force = false
