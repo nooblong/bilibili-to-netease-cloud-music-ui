@@ -51,8 +51,8 @@ async function syncVoicelist(): Promise<any> {
 export default async function Page(props: any) {
   const searchParams = await props.searchParams;
   const seeOther = searchParams.seeOther === '1'
-  console.log(seeOther)
   const data = await getData(seeOther)
+  const cookieStore = await cookies()
 
   return (
     <SidebarProvider>
@@ -80,8 +80,10 @@ export default async function Page(props: any) {
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <div className="grid grid-cols-2 gap-4">
-            <Link href="https://frp-dad.com:24700/"><Button variant="outline" className="w-full">超高速访问域名(移动)</Button></Link>
-            <Link href="https://frp-oil.com:58050/"><Button variant="outline" className="w-full">超高速访问域名(电信)</Button></Link>
+            <Link href="https://frp-dad.com:24700/"><Button variant="outline"
+                                                            className="w-full">超高速访问域名(移动)</Button></Link>
+            <Link href="https://frp-oil.com:58050/"><Button variant="outline"
+                                                            className="w-full">超高速访问域名(电信)</Button></Link>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <form action={syncVoicelist}>
@@ -92,11 +94,11 @@ export default async function Page(props: any) {
                 <Button className="w-full">窥探其他播客</Button>
               </Link>
             </div>
-          </div>
-          <div hidden={!seeOther}>
-            <Link href="/">
-              <Button className="w-full lg:w-auto">返回我的播客</Button>
-            </Link>
+            <div hidden={!seeOther}>
+              <Link href="/">
+                <Button className="w-full">返回我的播客</Button>
+              </Link>
+            </div>
           </div>
 
           <div className="grid auto-rows-min gap-4 grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
@@ -117,10 +119,22 @@ export default async function Page(props: any) {
                     <h3 className="text-sm md:text-xl font-semibold overflow-hidden">
                       {item.voicelistName}
                     </h3>
+                    <div className="flex-col text-xs">
+                      <div>订阅:{item.subscribeNum}</div>
+                      <div>歌曲:{item.uploadCount}</div>
+                    </div>
                   </div>
                 </div>
               </Link>
             ))}
+            {
+              !cookieStore.has("token") && <div className="text-4xl font-extrabold">请注册</div>
+            }
+            {data.length == 0 && cookieStore.has("token") && <div>
+                <h1 className="text-4xl font-extrabold">
+                    请登录网易云账号并创建播客后点击刷新播客数据
+                </h1>
+            </div>}
           </div>
         </div>
       </SidebarInset>

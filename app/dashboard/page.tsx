@@ -32,7 +32,6 @@ async function fetchSysInfo(): Promise<SysInfo | null> {
 async function fetchUploadQueue(): Promise<any> {
   'use server'
   const response = await fetch(api + "/sys/queueInfo?pageNo=1&pageSize=100").then(res => res.json());
-  console.log(response)
   if (response.code != 0) {
     redirect(`/customError?msg=${encodeURIComponent(JSON.stringify(response))}`);
   }

@@ -13,6 +13,7 @@ import {
 import {NavUser} from "@/app/nav-user";
 import Link from "next/link";
 import {cookies} from "next/headers";
+import {redirect} from "next/navigation";
 
 // This is sample data.
 const data = {
@@ -89,6 +90,7 @@ export async function AppSidebar({...props}: React.ComponentProps<typeof Sidebar
             const cookieStore = await cookies();
             cookieStore.delete("username")
             cookieStore.delete("token")
+            redirect("/")
           }}/> :
           <Link href={"/login"}>
             <div className="flex items-center gap-2 px-1 py-1.5 text-sm">
