@@ -107,7 +107,7 @@ export default async function Page(props: any) {
                       className="rounded-xl object-cover w-full h-full"
                     />
                   </div>
-                  <div className="flex-1 p-4 w-2/3 gap-4">
+                  <div className="flex-1 w-2/3 gap-2">
                     <h3 className="text-sm md:text-xl font-semibold overflow-hidden">
                       {item.voicelistName}
                     </h3>
