@@ -41,4 +41,10 @@ export const handleRes = (json: any, redirectUrl: string) => {
   }
 }
 
+export function extractUrl(text: string): string | null {
+  const urlRegex = /(https?:\/\/[^\s]+)/;
+  const match = text.match(urlRegex);
+  return match ? match[0] : null;
+}
+
 export const api = "http://106.75.218.120:25565"

@@ -18,7 +18,7 @@ import {Input} from "@/components/ui/input";
 import {useState} from "react";
 import {useParams} from "next/navigation";
 import {UploadDetailAdd} from "@/app/uploadOne/[voiceListId]/columnsUploadDetail";
-import {replaceImageUrl} from "@/lib/utils";
+import {extractUrl, replaceImageUrl} from "@/lib/utils";
 import Cookies from "js-cookie";
 
 
@@ -107,7 +107,17 @@ export function AddOne({onSubmitAction}: {
               name="bvid"
               render={({field}) => (
                 <FormItem>
-                  <FormLabel>BVID</FormLabel>
+                  <FormLabel>BVID:<p className="text-xs">
+                    支持: https://www.bilibili.com/video/BV1p5N6esEcM/
+                    <br/>
+                    支持: www.bilibili.com/video/BV1p5N6esEcM/
+                    <br/>
+                    支持: 【《xxxx》-哔哩哔哩】 https://b23.tv/xxxxxx
+                    <br/>
+                    支持: b23.tv/xxxxxx
+                    <br/>
+                    支持: BV1p5N6esEcM
+                  </p></FormLabel>
                   <FormControl>
                     <Input placeholder="输入BVID" {...field} />
                   </FormControl>
@@ -118,11 +128,12 @@ export function AddOne({onSubmitAction}: {
             <Button className="w-full" onClick={async (event) => {
               event.preventDefault()
               const bvid = form.getValues("bvid");
-              const res = await fetch(`/api/common/bilibili/getVideoInfo?bvid=${bvid}`).then((res) => res.json());
+              const url = extractUrl(bvid);
+              const res = await fetch(`/api/common/bilibili/getVideoInfo?bvid=${url === null ? bvid : url}`).then((res) => res.json());
               form.reset()
               setCids([])
               setVideoInfo(res.data);
-              form.setValue("bvid", bvid)
+              form.setValue("bvid", url === null ? bvid : url)
               form.setValue("uploadName", res.data.title)
             }}>解析</Button>
             <div>
