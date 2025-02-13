@@ -71,6 +71,7 @@ export function AddOne({onSubmitAction}: {
       uploadName: "uploadName",
     },
   });
+  const isMulti: boolean = videoInfo !== null && videoInfo.pages.length > 1
   return (
     <Form {...form}>
       <form
@@ -130,8 +131,7 @@ export function AddOne({onSubmitAction}: {
             </div>
           </div>
 
-
-          <div hidden={videoInfo && videoInfo.pages.length <= 1} className="grid gap-2">
+          <div className={"grid gap-2 " + (isMulti ? "" : "hidden")}>
             <Input
               type="text"
               placeholder="上传名称（前）"
@@ -188,7 +188,7 @@ export function AddOne({onSubmitAction}: {
               )}
             />
           </div>
-          <div hidden={videoInfo && videoInfo.pages.length > 1}>
+          <div hidden={isMulti}>
             <FormField
               control={form.control}
               name="uploadName"
@@ -196,7 +196,7 @@ export function AddOne({onSubmitAction}: {
                 <FormItem>
                   <FormLabel>上传名称</FormLabel>
                   <FormControl>
-                    <Input placeholder="输入上传名称" {...field} disabled={videoInfo && videoInfo.pages.length > 1}/>
+                    <Input placeholder="输入上传名称" {...field} disabled={isMulti}/>
                   </FormControl>
                   <FormMessage/>
                 </FormItem>
@@ -241,7 +241,7 @@ export function AddOne({onSubmitAction}: {
               </FormItem>
             )}
           />
-          <div hidden={videoInfo && videoInfo.pages.length > 1}>
+          <div hidden={isMulti}>
             <FormField
               control={form.control}
               name="beginSec"
@@ -263,7 +263,7 @@ export function AddOne({onSubmitAction}: {
             />
           </div>
 
-          <div hidden={videoInfo && videoInfo.pages.length > 1}>
+          <div hidden={isMulti}>
             <FormField
               control={form.control}
               name="endSec"
