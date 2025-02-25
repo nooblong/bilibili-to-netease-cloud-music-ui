@@ -154,10 +154,11 @@ export const columnsUploadDetail: ColumnDef<UploadDetail>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>操作</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => {
+            <DropdownMenuItem className="mt-10" onClick={() => {
               setOpen(!open)
             }}>查看日志</DropdownMenuItem>
-            <DropdownMenuItem onClick={async () => {
+            <DropdownMenuSeparator/>
+            <DropdownMenuItem className="mt-10" onClick={async () => {
               const json = await fetch(`/api/common/uploadDetail/restartJob?id=${ud.id}`, {
                 headers: {
                   "Content-Type": "application/json",

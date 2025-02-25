@@ -32,7 +32,7 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {ScrollArea} from "@/components/ui/scroll-area";
 import TestData from "@/app/uploadOne/[voiceListId]/testData";
 
-async function getUploadDetail(pageNo: number, pageSize: number, title: string, status: string, voiceListId: string): Promise<any> {
+export async function getUploadDetail(pageNo: number, pageSize: number, title: string, status: string, voiceListId: string): Promise<any> {
   'use server'
   const json = await fetch(api + `/uploadDetail/list?pageNo=${pageNo}&pageSize=${pageSize}
   &title=${title}&status=${status}&voiceListId=${voiceListId}`)

@@ -12,8 +12,11 @@ import {ScrollArea} from "@/components/ui/scroll-area";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Skeleton} from "@/components/ui/skeleton";
 import {api, cn} from "@/lib/utils";
-import {redirect} from "next/navigation";
+import {redirect, useSearchParams} from "next/navigation";
 import {cookies} from "next/headers";
+import {DataTable} from "@/app/uploadOne/[voiceListId]/data-table";
+import {columnsUploadDetail} from "@/app/uploadOne/[voiceListId]/columnsUploadDetail";
+import {getUploadDetail} from "@/app/uploadOne/[voiceListId]/page";
 
 async function fetchSysInfo(): Promise<SysInfo | null> {
   'use server'
@@ -50,10 +53,15 @@ interface UploadDetail {
   uploadName: string;
 }
 
-export default async function Page() {
+export default async function Page(props: any) {
+  const searchParams = await props.searchParams;
   const sysInfo = await fetchSysInfo();
   const uploadQueue = await fetchUploadQueue();
   const loading = !sysInfo && uploadQueue.length === 0;
+  const uploadDetail = await getUploadDetail(
+    (Number(searchParams?.pageNo) || 1),
+    Number(searchParams?.pageSize) || 10,
+    "", "", "");
   return (
     <SidebarProvider>
       <AppSidebar/>
@@ -77,7 +85,9 @@ export default async function Page() {
         <div className="container mx-auto p-6 space-y-6">
           <Card className="shadow-xl">
             <CardHeader>
-              <h2 className="text-xl font-bold">System Information</h2>
+              <h2>反馈bug:
+                <a className="text-blue-300" href="https://github.com/nooblong/bilibili-to-netease-cloud-music/issues">Github Issue</a>
+              </h2>
             </CardHeader>
             <CardContent>
               {loading ? (
@@ -123,6 +133,16 @@ export default async function Page() {
                   </TableBody>
                 </Table>
               </ScrollArea>
+            </CardContent>
+          </Card>
+          <Card className="shadow-xl">
+            <CardHeader><h2 className="text-xl font-bold">最近上传</h2></CardHeader>
+            <CardContent>
+              <div className="container mx-auto py-10">
+                <DataTable columns={columnsUploadDetail} data={uploadDetail.records} total={uploadDetail.total}
+                           pageNo={Number(searchParams?.pageNo) || 1}
+                           pageSize={Number(searchParams?.pageSize) || 10}/>
+              </div>
             </CardContent>
           </Card>
         </div>
