@@ -30,6 +30,7 @@ import {revalidatePath} from "next/cache";
 import SubscribeLog from "@/app/uploadOne/[voiceListId]/subscribeLog";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {ScrollArea} from "@/components/ui/scroll-area";
+import TestData from "@/app/uploadOne/[voiceListId]/testData";
 
 async function getUploadDetail(pageNo: number, pageSize: number, title: string, status: string, voiceListId: string): Promise<any> {
   'use server'
@@ -207,6 +208,7 @@ export default async function UploadOnePage(props: any): Promise<any> {
                             </AlertDialogContent>
                           </AlertDialog>
                           <SubscribeLog log={item.log}/>
+                          <TestData subscribeId={item.id}/>
                           <div className="text-xs text-gray-500">{item.processTime}</div>
                         </div>
                       </div>

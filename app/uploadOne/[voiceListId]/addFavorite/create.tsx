@@ -345,9 +345,9 @@ export function AddFavorite({onSubmitAction}: {
               name="processTime"
               render={({field}) => (
                 <FormItem>
-                  <FormLabel>上次检测到了新视频的时间</FormLabel>
+                  <FormLabel>上次检测时间</FormLabel>
                   <FormControl>
-                    <Input placeholder="上次检测到了新视频的时间" {...field}/>
+                    <Input placeholder="上次检测时间" {...field}/>
                   </FormControl>
                   <FormMessage/>
                 </FormItem>

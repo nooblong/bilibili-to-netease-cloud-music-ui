@@ -142,7 +142,7 @@ export function EditSubscribe({onSubmitAction, baseData}: {
             name="regName"
             render={({field}) => (
               <FormItem>
-                <FormLabel>上传名字：{"{title}代表视频标题，{pubdate}代表视频发布日期"}</FormLabel>
+                <FormLabel>上传名字：{"{title}代表视频标题，{partname}代表分p标题，{pubdate}代表视频发布日期，保存后在外面可预览上传名字"}</FormLabel>
                 <FormControl>
                   <Input placeholder="输入上传名字" {...field}/>
                 </FormControl>
@@ -311,9 +311,9 @@ export function EditSubscribe({onSubmitAction, baseData}: {
               name="processTime"
               render={({field}) => (
                 <FormItem>
-                  <FormLabel>上次检测到了新视频的时间</FormLabel>
+                  <FormLabel>上次检测时间</FormLabel>
                   <FormControl>
-                    <Input placeholder="上次检测到了新视频的时间" {...field}/>
+                    <Input placeholder="上次检测时间" {...field}/>
                   </FormControl>
                   <FormMessage/>
                 </FormItem>
