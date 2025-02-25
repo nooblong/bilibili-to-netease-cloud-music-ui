@@ -186,7 +186,8 @@ export function AddFavorite({onSubmitAction}: {
             name="regName"
             render={({field}) => (
               <FormItem>
-                <FormLabel>上传名字：{"{title}代表视频标题，{pubdate}代表视频发布日期"}</FormLabel>
+                <FormLabel>上传名字：{"{title}代表视频标题，{partname}代表分p标题，{pubdate}代表视频发布日期，" +
+                  "保存后在外面可预览上传名字，还可以使用双括号来获取title的内容，例如{{《(.*?)》}}会被替换成title中第一个《》包裹的内容"}</FormLabel>
                 <FormControl>
                   <Input placeholder="输入上传名字" {...field}/>
                 </FormControl>
