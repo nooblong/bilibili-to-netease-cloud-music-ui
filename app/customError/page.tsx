@@ -2,7 +2,7 @@
 
 import {useSearchParams} from "next/navigation";
 
-export default function CustomErrorPage(params: any) {
+export default function CustomErrorPage() {
   const searchParams = useSearchParams();
   return (
     <>

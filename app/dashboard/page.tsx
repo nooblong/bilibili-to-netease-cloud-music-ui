@@ -11,8 +11,8 @@ import {Card, CardContent, CardHeader} from "@/components/ui/card";
 import {ScrollArea} from "@/components/ui/scroll-area";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Skeleton} from "@/components/ui/skeleton";
-import {api, cn} from "@/lib/utils";
-import {redirect, useSearchParams} from "next/navigation";
+import {api} from "@/lib/utils";
+import {redirect} from "next/navigation";
 import {cookies} from "next/headers";
 import {DataTable} from "@/app/uploadOne/[voiceListId]/data-table";
 import {columnsUploadDetail} from "@/app/uploadOne/[voiceListId]/columnsUploadDetail";
@@ -45,12 +45,6 @@ interface SysInfo {
   regNum: number;
   annoVisitNum: number;
   userVisitNum: number;
-}
-
-interface UploadDetail {
-  priority: number;
-  title: string;
-  uploadName: string;
 }
 
 export default async function Page(props: any) {

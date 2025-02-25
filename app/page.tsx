@@ -8,23 +8,19 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import {Separator} from "@/components/ui/separator"
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar"
+import {SidebarInset, SidebarProvider, SidebarTrigger,} from "@/components/ui/sidebar"
 import {api} from "@/lib/utils";
 import {cookies} from "next/headers";
 import Link from "next/link";
 import {Button} from "@/components/ui/button";
-import {revalidatePath} from "next/cache";
 import {redirect} from "next/navigation";
+import Image from "next/image";
 
 async function getData(seeOther: boolean): Promise<any> {
   const cookieStore = await cookies()
   const token = cookieStore.get("token")
   const username = cookieStore.get("username")
-  let name = username?.value
+  const name = username?.value
   const json = await fetch(api + `/uploadDetail/listVoicelist${seeOther ? '' : "?username="}${seeOther ? "" : name}`, {
     // const json = await fetch("https://1bc53407a65d4ef492b871e2f9f8fb88.api.mockbin.io/", {
     method: "GET",
@@ -39,7 +35,7 @@ async function syncVoicelist(): Promise<any> {
   'use server'
   const cookieStore = await cookies()
   const token = cookieStore.get("token")
-  const json = await fetch(api + `/uploadDetail/refreshVoiceList`, {
+  await fetch(api + `/uploadDetail/refreshVoiceList`, {
     method: "GET",
     headers: {
       "Access-Token": token ? token.value : ""
@@ -109,7 +105,10 @@ export default async function Page(props: any) {
               overflow-hidden transform transition-all hover:scale-105 shadow-md"
                 >
                   <div className="flex-1 p-4 aspect-square h-full w-full">
-                    <img
+                    <Image
+                      width={10000}
+                      height={10000}
+                      unoptimized
                       src={item.voicelistImage}
                       alt="Voicelist Image"
                       className="rounded-xl object-cover w-full h-full"

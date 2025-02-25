@@ -76,7 +76,7 @@ const LoginBilibiliQr = () => {
     return () => {
       clearInterval(id);
     };
-  }, [checking, key]);
+  }, [checking, key, toast]);
 
   useEffect(() => {
     fetch("/api/common/bilibili/getSelfInfo", {
@@ -114,7 +114,7 @@ const LoginBilibiliQr = () => {
           <DialogHeader>
             <DialogTitle>扫码登录</DialogTitle>
           </DialogHeader>
-          {img !== "" && <img src={img} alt=""/>}
+          {img !== "" && <Image unoptimized width={10000} height={10000} src={img} alt=""/>}
         </DialogContent>
       </Dialog>
       <Dialog>

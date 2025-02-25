@@ -31,6 +31,7 @@ import {
 import {Label} from "@/components/ui/label";
 import {Switch} from "@/components/ui/switch";
 import Cookies from "js-cookie";
+import Image from "next/image";
 
 const formSchema = z.object({
   voiceListId: z.string().min(1, "voiceListId不能为空"),
@@ -133,7 +134,7 @@ export function AddFavorite({onSubmitAction}: {
             }}>解析</Button>
             <div>
               {upInfo && <div>{upInfo.name}</div>}
-              {upInfo && upInfo.face && <img src={replaceImageUrl(upInfo.face)} alt=""/>}
+              {upInfo && upInfo.face && <Image unoptimized width={10000} height={10000} src={replaceImageUrl(upInfo.face)} alt=""/>}
             </div>
           </div>
           <FormField

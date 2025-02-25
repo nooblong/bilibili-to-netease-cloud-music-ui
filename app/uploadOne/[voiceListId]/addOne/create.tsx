@@ -20,6 +20,7 @@ import {useParams} from "next/navigation";
 import {UploadDetailAdd} from "@/app/uploadOne/[voiceListId]/columnsUploadDetail";
 import {extractUrl, replaceImageUrl} from "@/lib/utils";
 import Cookies from "js-cookie";
+import Image from "next/image";
 
 
 type CidName = {
@@ -138,7 +139,8 @@ export function AddOne({onSubmitAction}: {
             }}>解析</Button>
             <div>
               {videoInfo && <div>{videoInfo.title}</div>}
-              {videoInfo && videoInfo.image && <img src={replaceImageUrl(videoInfo.image)} alt=""/>}
+              {videoInfo && videoInfo.image && <Image unoptimized width={300} height={300}
+                                                      src={replaceImageUrl(videoInfo.image)} alt=""/>}
             </div>
           </div>
 

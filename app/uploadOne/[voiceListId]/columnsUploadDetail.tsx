@@ -129,58 +129,62 @@ export const columnsUploadDetail: ColumnDef<UploadDetail>[] = [
   {
     id: "actions",
     cell: ({row}) => {
-      const ud = row.original
-      const [open, setOpen] = useState(false);
-      return (
-        <DropdownMenu>
-          <Toaster/>
-          <Dialog open={open} onOpenChange={() => {
-            setOpen(!open)
-          }}>
-            <DialogContent className="max-w-2xl">
-              <DialogHeader>
-                <DialogTitle>查看日志</DialogTitle>
-                <ScrollArea className="h-96 p-4">
-                  <pre className="whitespace-pre-wrap break-all text-sm">{ud.log}</pre>
-                </ScrollArea>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">打开菜单</span>
-              <MoreHorizontal className="h-4 w-4"/>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>操作</DropdownMenuLabel>
-            <DropdownMenuItem className="mt-10" onClick={() => {
-              setOpen(!open)
-            }}>查看日志</DropdownMenuItem>
-            <DropdownMenuSeparator/>
-            <DropdownMenuItem className="mt-10" onClick={async () => {
-              const json = await fetch(`/api/common/uploadDetail/restartJob?id=${ud.id}`, {
-                headers: {
-                  "Content-Type": "application/json",
-                  "Access-Token": Cookies.get("token") ?? ""
-                }
-              }).then(res => res.json())
-              toast({description: json.message})
-            }}>重新上传</DropdownMenuItem>
-            <DropdownMenuSeparator/>
-            <DropdownMenuItem className="mt-10" onClick={async () => {
-              const json = await fetch(`/api/common/uploadDetail/delete?id=${ud.id}`, {
-                headers: {
-                  "Content-Type": "application/json",
-                  "Access-Token": Cookies.get("token") ?? ""
-                }
-              }).then(res => res.json())
-              toast({description: json.message})
-            }}>删除</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
+      return <ActionCell row={row}/>
     },
   },
 ]
+
+const ActionCell = ({row}) => {
+  const ud = row.original
+  const [open, setOpen] = useState(false);
+  return (
+    <DropdownMenu>
+      <Toaster/>
+      <Dialog open={open} onOpenChange={() => {
+        setOpen(!open)
+      }}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>查看日志</DialogTitle>
+            <ScrollArea className="h-96 p-4">
+              <pre className="whitespace-pre-wrap break-all text-sm">{ud.log}</pre>
+            </ScrollArea>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">打开菜单</span>
+          <MoreHorizontal className="h-4 w-4"/>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>操作</DropdownMenuLabel>
+        <DropdownMenuItem className="mt-10" onClick={() => {
+          setOpen(!open)
+        }}>查看日志</DropdownMenuItem>
+        <DropdownMenuSeparator/>
+        <DropdownMenuItem className="mt-10" onClick={async () => {
+          const json = await fetch(`/api/common/uploadDetail/restartJob?id=${ud.id}`, {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Token": Cookies.get("token") ?? ""
+            }
+          }).then(res => res.json())
+          toast({description: json.message})
+        }}>重新上传</DropdownMenuItem>
+        <DropdownMenuSeparator/>
+        <DropdownMenuItem className="mt-10" onClick={async () => {
+          const json = await fetch(`/api/common/uploadDetail/delete?id=${ud.id}`, {
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Token": Cookies.get("token") ?? ""
+            }
+          }).then(res => res.json())
+          toast({description: json.message})
+        }}>删除</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
 

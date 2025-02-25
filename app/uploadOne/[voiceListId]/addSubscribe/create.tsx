@@ -31,6 +31,7 @@ import {
 import {Switch} from "@/components/ui/switch";
 import {Label} from "@/components/ui/label";
 import Cookies from "js-cookie";
+import Image from "next/image";
 
 const formSchema = z.object({
   voiceListId: z.string().min(1, "voiceListId不能为空"),
@@ -136,7 +137,7 @@ export function AddSubscribe({onSubmitAction}: {
               {upInfo && <div>{upInfo.name}</div>}
             </div>
             <div>
-              {upInfo && upInfo.face && <img src={replaceImageUrl(upInfo.face)} alt=""/>}
+              {upInfo && upInfo.face && <Image unoptimized width={300} height={300} src={replaceImageUrl(upInfo.face)} alt=""/>}
             </div>
           </div>
 
