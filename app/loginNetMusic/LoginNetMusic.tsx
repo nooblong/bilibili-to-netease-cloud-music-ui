@@ -114,7 +114,7 @@ const LoginNetMusicQr = () => {
         <DialogContent className="w-[80vw] h-[70vh] max-w-none">
           <DialogHeader>
             <DialogTitle></DialogTitle>
-            <Image unoptimized width={10000} height={10000} src="/a.png" alt=""/>
+            <Image unoptimized width={10000} height={10000} src="/how.png" alt=""/>
           </DialogHeader>
         </DialogContent>
       </Dialog>
