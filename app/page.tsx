@@ -15,6 +15,8 @@ import Link from "next/link";
 import {Button} from "@/components/ui/button";
 import {redirect} from "next/navigation";
 import Image from "next/image";
+import {WaitButton} from "@/components/ui/WaitButton";
+import WaitDiv from "@/components/ui/WaitDiv";
 
 async function getData(seeOther: boolean): Promise<any> {
   const cookieStore = await cookies()
@@ -86,45 +88,43 @@ export default async function Page(props: any) {
               <Button type="submit" className="w-full">刷新播客数据</Button>
             </form>
             <div hidden={seeOther}>
-              <Link href="/?seeOther=1">
-                <Button className="w-full">窥探其他播客</Button>
-              </Link>
+              <WaitButton className="w-full"><Link href="/?seeOther=1">窥探其他播客</Link></WaitButton>
             </div>
             <div hidden={!seeOther}>
-              <Link href="/">
-                <Button className="w-full">返回我的播客</Button>
-              </Link>
+              <WaitButton className="w-full"><Link href="/">返回我的播客</Link></WaitButton>
             </div>
           </div>
 
           <div className="grid auto-rows-min gap-4 grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
             {data.map((item) => (
-              <Link key={item.id} href={`/uploadOne/${item.voicelistId}`}>
-                <div
-                  className="relative flex aspect-video rounded-2xl bg-muted/50 items-center
+              <WaitDiv key={item.id}>
+                <Link key={item.id} href={`/uploadOne/${item.voicelistId}`}>
+                  <div
+                    className="relative flex aspect-video rounded-2xl bg-muted/50 items-center
               overflow-hidden transform transition-all hover:scale-105 shadow-md"
-                >
-                  <div className="flex-1 p-4 aspect-square h-full w-full">
-                    <Image
-                      width={10000}
-                      height={10000}
-                      unoptimized
-                      src={item.voicelistImage}
-                      alt="Voicelist Image"
-                      className="rounded-xl object-cover w-full h-full"
-                    />
-                  </div>
-                  <div className="flex-1 w-2/3 gap-2">
-                    <h3 className="text-sm md:text-xl font-semibold overflow-hidden">
-                      {item.voicelistName}
-                    </h3>
-                    <div className="flex-col text-xs">
-                      <div>订阅:{item.subscribeNum}</div>
-                      <div>歌曲:{item.uploadCount}</div>
+                  >
+                    <div className="flex-1 p-4 aspect-square h-full w-full">
+                      <Image
+                        width={10000}
+                        height={10000}
+                        unoptimized
+                        src={item.voicelistImage}
+                        alt="Voicelist Image"
+                        className="rounded-xl object-cover w-full h-full"
+                      />
+                    </div>
+                    <div className="flex-1 w-2/3 gap-2">
+                      <h3 className="text-sm md:text-xl font-semibold overflow-hidden">
+                        {item.voicelistName}
+                      </h3>
+                      <div className="flex-col text-xs">
+                        <div>订阅:{item.subscribeNum}</div>
+                        <div>歌曲:{item.uploadCount}</div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </WaitDiv>
             ))}
             {
               !cookieStore.has("token") && <div className="text-4xl font-extrabold">请注册</div>
