@@ -40,21 +40,21 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="text-2xl">登录</CardTitle>
           <CardDescription>
-            Enter your username below to signup to your account
+            输入账号和密码来登录
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form action={doLogin}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="email">Username</Label>
+                <Label htmlFor="email">账号</Label>
                 <Input
                   id="username"
                   name="username"
                   type="text"
-                  placeholder="username"
+                  placeholder="账号"
                   required
                 />
               </div>
@@ -68,16 +68,16 @@ export function LoginForm({
                   {/*  Forgot your password?*/}
                   {/*</a>*/}
                 </div>
-                <Input id="password" name="password" placeholder="username" type="password" required/>
+                <Input id="password" name="password" placeholder="密码" type="password" required/>
               </div>
               <Button type="submit" className="w-full">
-                Login
+                登录
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
+              没有账户?{" "}
               <Link href={"/login/signup"} className="underline underline-offset-4">
-                Sign up
+                去注册
               </Link>
             </div>
           </form>

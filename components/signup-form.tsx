@@ -40,9 +40,9 @@ export function SignupForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">SignUp</CardTitle>
+          <CardTitle className="text-2xl">注册</CardTitle>
           <CardDescription>
-            Enter your username below to signup to your account
+            输入无限制的账号和密码
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -54,7 +54,7 @@ export function SignupForm({
                   id="username"
                   name="username"
                   type="text"
-                  placeholder="username"
+                  placeholder="账号"
                   required
                 />
               </div>
@@ -65,7 +65,7 @@ export function SignupForm({
                 <Input id="password" type="password" name="password" required/>
               </div>
               <Button type="submit" className="w-full">
-                Signup
+                注册
               </Button>
             </div>
           </form>
