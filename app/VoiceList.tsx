@@ -15,7 +15,7 @@ async function getData(seeOther: boolean): Promise<any> {
       "Access-Token": token ? token.value : ""
     }
   }).then(res => res.json())
-  return new Promise((resolve) => setTimeout(() => resolve(json.data), 1000))
+  return new Promise((resolve) => setTimeout(() => resolve(json.data), 0))
 }
 
 export default async function VoiceList({seeOther}: { seeOther: boolean }): Promise<any> {
