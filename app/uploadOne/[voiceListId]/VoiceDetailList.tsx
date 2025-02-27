@@ -1,6 +1,7 @@
 import {DataTable} from "@/app/uploadOne/[voiceListId]/data-table";
 import {columnsUploadDetail} from "@/app/uploadOne/[voiceListId]/columnsUploadDetail";
 import {api} from "@/lib/utils";
+import {Card, CardHeader, CardTitle} from "@/components/ui/card";
 
 
 export async function getUploadDetail(pageNo: number, pageSize: number, title: string, status: string, voiceListId: string): Promise<any> {
@@ -21,9 +22,11 @@ export default async function VoiceDetailList({props}: { props: any }) {
     (searchParams?.title || ""),
     (searchParams?.status || ""),
     params.voiceListId);
-  return (<div className="container mx-auto py-10">
+  return (<Card className="shadow-xl p-4"><CardHeader>
+    <CardTitle className="text-xl font-semibold">上传列表</CardTitle>
+  </CardHeader>
     <DataTable columns={columnsUploadDetail} data={uploadDetail.records} total={uploadDetail.total}
                pageNo={Number(searchParams?.pageNo) || 1}
                pageSize={Number(searchParams?.pageSize) || 10}/>
-  </div>)
+  </Card>)
 }

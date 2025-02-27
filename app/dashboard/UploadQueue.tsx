@@ -26,7 +26,7 @@ export default async function UploadQueue({props}: { props: any }) {
     Number(searchParams?.pageSize) || 10,
     "", "", "");
 
-  return (<div><Card className="shadow-xl">
+  return (<div className="space-y-6"><Card className="shadow-xl">
     <CardHeader>
       <h2 className="text-xl font-bold">总上传队列: 剩余{uploadQueue.total}</h2>
     </CardHeader>
@@ -54,11 +54,9 @@ export default async function UploadQueue({props}: { props: any }) {
     <Card className="shadow-xl">
       <CardHeader><h2 className="text-xl font-bold">最近上传</h2></CardHeader>
       <CardContent>
-        <div className="container mx-auto py-10">
-          <DataTable columns={columnsUploadDetail} data={uploadDetail.records} total={uploadDetail.total}
-                     pageNo={Number(searchParams?.pageNo) || 1}
-                     pageSize={Number(searchParams?.pageSize) || 10}/>
-        </div>
+        <DataTable columns={columnsUploadDetail} data={uploadDetail.records} total={uploadDetail.total}
+                   pageNo={Number(searchParams?.pageNo) || 1}
+                   pageSize={Number(searchParams?.pageSize) || 10}/>
       </CardContent>
     </Card></div>)
 }
