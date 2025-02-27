@@ -49,7 +49,7 @@ export function SignupForm({
           <form action={doSignup}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="email">Username</Label>
+                <Label htmlFor="email">账号</Label>
                 <Input
                   id="username"
                   name="username"
@@ -60,7 +60,7 @@ export function SignupForm({
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">密码</Label>
                 </div>
                 <Input id="password" type="password" name="password" required/>
               </div>
