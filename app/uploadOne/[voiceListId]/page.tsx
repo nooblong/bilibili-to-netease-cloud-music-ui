@@ -1,5 +1,3 @@
-import {DataTable} from "./data-table"
-import {columnsUploadDetail} from "@/app/uploadOne/[voiceListId]/columnsUploadDetail";
 import {AppSidebar} from "@/components/app-sidebar";
 import {SidebarInset, SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar";
 import {Separator} from "@/components/ui/separator";
@@ -17,46 +15,20 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  BreadcrumbList, BreadcrumbPage,
+  BreadcrumbList,
+  BreadcrumbPage,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
-import {api, replaceImageUrl} from "@/lib/utils";
+import {api} from "@/lib/utils";
 import {cookies} from "next/headers";
 import {Button, buttonVariants} from "@/components/ui/button";
 import Link from "next/link";
-import {Avatar, AvatarImage} from "@/components/ui/avatar";
 import {revalidatePath} from "next/cache";
-import SubscribeLog from "@/app/uploadOne/[voiceListId]/subscribeLog";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
-import {ScrollArea} from "@/components/ui/scroll-area";
-import TestData from "@/app/uploadOne/[voiceListId]/testData";
+import SubscribeList from "@/app/uploadOne/[voiceListId]/SubscribeList";
+import {Suspense} from "react";
+import VoiceDetailList from "@/app/uploadOne/[voiceListId]/VoiceDetailList";
 
-export async function getUploadDetail(pageNo: number, pageSize: number, title: string, status: string, voiceListId: string): Promise<any> {
-  'use server'
-  const json = await fetch(api + `/uploadDetail/list?pageNo=${pageNo}&pageSize=${pageSize}
-  &title=${title}&status=${status}&voiceListId=${voiceListId}`)
-    .then(response => response.json());
-  return json.data
-}
-
-async function getSubscribe(username: string, status: string, voiceListId: string): Promise<any> {
-  'use server'
-  const json = await fetch(api + `/subscribe/list?&status=${status}&voiceListId=${voiceListId}`)
-    .then(response => response.json());
-  return json.data
-}
-
-async function deleteSubscribe(formData: FormData): Promise<any> {
-  'use server'
-  const json = await fetch(api + `/subscribe/delete?id=${formData.get("id")}`, {
-    headers: {
-      "Access-Token": (await cookies()).get("token")?.value ?? ""
-    }
-  })
-    .then(response => response.json());
-  revalidatePath("")
-  return json.data
-}
 
 async function checkSubscribe(formData: FormData): Promise<any> {
   'use server'
@@ -83,19 +55,7 @@ async function delAllWait(formData: FormData): Promise<any> {
 }
 
 export default async function UploadOnePage(props: any): Promise<any> {
-  const searchParams = await props.searchParams;
   const params = await props.params;
-  const cookieStore = await cookies();
-  const username = cookieStore.get("username")?.value;
-  const uploadDetail = await getUploadDetail((Number(searchParams?.pageNo) || 1),
-    Number(searchParams?.pageSize) || 10,
-    (searchParams?.title || ""),
-    (searchParams?.status || ""),
-    params.voiceListId);
-  const subscribe = await getSubscribe(
-    (username || ""),
-    (searchParams?.status || ""),
-    params.voiceListId);
   return (
     <SidebarProvider>
       <AppSidebar/>
@@ -171,59 +131,13 @@ export default async function UploadOnePage(props: any): Promise<any> {
               </div>
             </CardContent>
           </Card>
-          <Card className="shadow-xl p-4">
-            <CardHeader>
-              <CardTitle className="text-xl font-semibold">订阅列表</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="max-h-[500px] p-2">
-                {subscribe && subscribe.length > 0 ? (
-                  <div className="space-y-4">
-                    {subscribe.map(item => (
-                      <div key={item.id} className="flex items-center justify-between p-4 rounded-lg shadow-sm">
-                        <div className="flex items-center gap-4">
-                          <Avatar>
-                            <AvatarImage src={replaceImageUrl(item.upImage)}/>
-                          </Avatar>
-                          <div className="text-sm font-medium">{item.upName}({item.type})</div>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Link href={`/uploadOne/${params.voiceListId}/editSubscribe/${item.id}`}>
-                            <Button variant="secondary">编辑</Button>
-                          </Link>
-                          <AlertDialog>
-                            <AlertDialogTrigger className={buttonVariants()}>删除</AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <form action={deleteSubscribe}>
-                                <input type="hidden" name="id" value={item.id}/>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>删除？</AlertDialogTitle>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>取消</AlertDialogCancel>
-                                  <AlertDialogAction type="submit">确认</AlertDialogAction>
-                                </AlertDialogFooter>
-                              </form>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                          <SubscribeLog log={item.log}/>
-                          <TestData subscribeId={item.id}/>
-                          <div className="text-xs text-gray-500">{item.processTime}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-gray-500 text-sm">暂无订阅信息。</div>
-                )}
-              </ScrollArea>
-            </CardContent>
-          </Card>
-          <div className="container mx-auto py-10">
-            <DataTable columns={columnsUploadDetail} data={uploadDetail.records} total={uploadDetail.total}
-                       pageNo={Number(searchParams?.pageNo) || 1}
-                       pageSize={Number(searchParams?.pageSize) || 10}/>
-          </div>
+
+          <Suspense fallback={<div>loading...</div>}>
+            <SubscribeList props={props}/>
+          </Suspense>
+          <Suspense fallback={<div>loading...</div>}>
+            <VoiceDetailList props={props}/>
+          </Suspense>
         </div>
       </SidebarInset>
     </SidebarProvider>

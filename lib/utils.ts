@@ -6,9 +6,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// @ts-ignore
-const fetcher = (...args) => fetch(...args).then(res => res.json())
-
 export const formatDate = (date: Date): string => {
   const padZero = (num: number): string => num.toString().padStart(2, "0");
 

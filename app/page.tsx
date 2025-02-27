@@ -14,24 +14,9 @@ import {cookies} from "next/headers";
 import Link from "next/link";
 import {Button} from "@/components/ui/button";
 import {redirect} from "next/navigation";
-import Image from "next/image";
-import {WaitButton} from "@/components/ui/WaitButton";
-import WaitDiv from "@/components/ui/WaitDiv";
+import {Suspense} from "react";
+import VoiceList from "@/app/VoiceList";
 
-async function getData(seeOther: boolean): Promise<any> {
-  const cookieStore = await cookies()
-  const token = cookieStore.get("token")
-  const username = cookieStore.get("username")
-  const name = username?.value
-  const json = await fetch(api + `/uploadDetail/listVoicelist${seeOther ? '' : "?username="}${seeOther ? "" : name}`, {
-    // const json = await fetch("https://1bc53407a65d4ef492b871e2f9f8fb88.api.mockbin.io/", {
-    method: "GET",
-    headers: {
-      "Access-Token": token ? token.value : ""
-    }
-  }).then(res => res.json())
-  return json.data
-}
 
 async function syncVoicelist(): Promise<any> {
   'use server'
@@ -49,8 +34,6 @@ async function syncVoicelist(): Promise<any> {
 export default async function Page(props: any) {
   const searchParams = await props.searchParams;
   const seeOther = searchParams.seeOther === '1'
-  const data = await getData(seeOther)
-  const cookieStore = await cookies()
 
   return (
     <SidebarProvider>
@@ -88,53 +71,16 @@ export default async function Page(props: any) {
               <Button type="submit" className="w-full">刷新播客数据</Button>
             </form>
             <div hidden={seeOther}>
-              <WaitButton className="w-full"><Link href="/?seeOther=1">窥探其他播客</Link></WaitButton>
+              <Link href="/?seeOther=1" shallow={false}><Button className="w-full"> 窥探其他播客</Button></Link>
             </div>
             <div hidden={!seeOther}>
-              <WaitButton className="w-full"><Link href="/">返回我的播客</Link></WaitButton>
+              <Link href="/" shallow={false} prefetch={false}><Button className="w-full">返回我的播客</Button></Link>
             </div>
           </div>
 
-          <div className="grid auto-rows-min gap-4 grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
-            {data.map((item) => (
-              <WaitDiv key={item.id}>
-                <Link key={item.id} href={`/uploadOne/${item.voicelistId}`}>
-                  <div
-                    className="relative flex aspect-video rounded-2xl bg-muted/50 items-center
-              overflow-hidden transform transition-all hover:scale-105 shadow-md"
-                  >
-                    <div className="flex-1 p-4 aspect-square h-full w-full">
-                      <Image
-                        width={10000}
-                        height={10000}
-                        unoptimized
-                        src={item.voicelistImage}
-                        alt="Voicelist Image"
-                        className="rounded-xl object-cover w-full h-full"
-                      />
-                    </div>
-                    <div className="flex-1 w-2/3 gap-2">
-                      <h3 className="text-sm md:text-xl font-semibold overflow-hidden">
-                        {item.voicelistName}
-                      </h3>
-                      <div className="flex-col text-xs">
-                        <div>订阅:{item.subscribeNum}</div>
-                        <div>歌曲:{item.uploadCount}</div>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </WaitDiv>
-            ))}
-            {
-              !cookieStore.has("token") && <div className="text-4xl font-extrabold">请注册</div>
-            }
-            {data.length == 0 && cookieStore.has("token") && <div>
-                <h1 className="text-4xl font-extrabold">
-                    请登录网易云账号并创建播客后点击刷新播客数据
-                </h1>
-            </div>}
-          </div>
+          <Suspense key={crypto.randomUUID()} fallback={<div>loading...</div>}>
+            <VoiceList seeOther={seeOther}/>
+          </Suspense>
         </div>
       </SidebarInset>
     </SidebarProvider>

@@ -50,7 +50,7 @@ export async function AppSidebar({...props}: React.ComponentProps<typeof Sidebar
               <a href="https://github.com/nooblong/bilibili-to-netease-cloud-music">
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-semibold"></span>
-                  <span className="">Github</span>
+                  <span className="text-blue-300">Github</span>
                 </div>
               </a>
             </SidebarMenuButton>
@@ -67,17 +67,6 @@ export async function AppSidebar({...props}: React.ComponentProps<typeof Sidebar
                     {item.title}
                   </Link>
                 </SidebarMenuButton>
-                {/*{item.items?.length ? (*/}
-                {/*  <SidebarMenuSub>*/}
-                {/*    {item.items.map((item) => (*/}
-                {/*      <SidebarMenuSubItem key={item.title}>*/}
-                {/*        <SidebarMenuSubButton asChild isActive={item.isActive}>*/}
-                {/*          <a href={item.url}>{item.title}</a>*/}
-                {/*        </SidebarMenuSubButton>*/}
-                {/*      </SidebarMenuSubItem>*/}
-                {/*    ))}*/}
-                {/*  </SidebarMenuSub>*/}
-                {/*) : null}*/}
               </SidebarMenuItem>
             ) )}
           </SidebarMenu>
