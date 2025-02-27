@@ -62,7 +62,7 @@ export function SignupForm({
                 <div className="flex items-center">
                   <Label htmlFor="password">密码</Label>
                 </div>
-                <Input id="password" type="password" name="password" required/>
+                <Input id="password" type="password" name="password" placeholder="密码" required/>
               </div>
               <Button type="submit" className="w-full">
                 注册
