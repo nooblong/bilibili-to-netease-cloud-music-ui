@@ -10,6 +10,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ path: s
     method: 'GET',
     headers: {
       ...headers,
+      'Connection': 'close',
     },
   });
 
@@ -27,6 +28,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ path: 
     method: 'POST',
     headers: {
       ...headers,
+      'Connection': 'close',
     },
     body,
   });
