@@ -14,7 +14,8 @@ export async function GET(req: NextRequest, context: { params: Promise<{ path: s
   });
 
   const data = await backendResponse.text();
-  return new NextResponse(data, {status: backendResponse.status});
+  const respHeader = backendResponse.headers;
+  return new NextResponse(data, {status: backendResponse.status, headers: respHeader});
 }
 
 export async function POST(req: NextRequest, context: { params: Promise<{ path: string[] }> }) {
@@ -31,5 +32,6 @@ export async function POST(req: NextRequest, context: { params: Promise<{ path: 
     body,
   });
   const data = await backendResponse.text();
-  return new NextResponse(data, {status: backendResponse.status});
+  const respHeader = backendResponse.headers;
+  return new NextResponse(data, {status: backendResponse.status, headers: respHeader});
 }
