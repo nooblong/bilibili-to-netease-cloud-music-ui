@@ -61,10 +61,11 @@ export default async function Page(props: any) {
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
           <div className="grid grid-cols-2 gap-4">
-            <Link href="https://frp-dad.com:24700/"><Button variant="outline"
-                                                            className="w-full">超高速访问域名(移动)</Button></Link>
-            <Link href="https://frp-oil.com:58050/"><Button variant="outline"
-                                                            className="w-full">超高速访问域名(电信)</Button></Link>
+            {/*<Link href="https://frp-dad.com:24700/"><Button variant="outline"*/}
+            {/*                                                className="w-full">超高速访问域名(移动)</Button></Link>*/}
+            {/*<Link href="https://frp-oil.com:58050/"><Button variant="outline"*/}
+            {/*                                                className="w-full">超高速访问域名(电信)</Button></Link>*/}
+            <h1 className="text-3xl">已从nooblong.tech转移到<a className="text-blue-300" href="https://nooblong.me">nooblong.me</a></h1>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <form action={syncVoicelist}>
