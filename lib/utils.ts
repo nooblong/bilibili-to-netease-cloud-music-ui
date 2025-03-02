@@ -44,4 +44,4 @@ export function extractUrl(text: string): string | null {
   return match ? match[0] : null;
 }
 
-export const api = "http://106.75.218.120:25565"
+export const api = "http://157.245.200.20:25565"
