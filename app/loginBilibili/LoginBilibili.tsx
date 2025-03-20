@@ -102,8 +102,8 @@ const LoginBilibiliQr = () => {
         {userInfo &&
             <div className="text-xl rounded">{userInfo.name}</div>}
       </div>
-      <div>由于bilibili-api可能存在缓存，这里显示的不一定是自己的（好像是最近登录的），如果能看到有人提供了账号就不需要登录啦</div>
-      <div>如果一个都没有，整个系统就会暂停</div>
+      <div>由于bilibili-api可能存在缓存，这里显示的不一定是自己的（好像是最近登录的）</div>
+      <div>如果还能上传歌曲，就代表别人登录了，你就不需要登录了</div>
       <Dialog onOpenChange={(open: boolean) => {
         setChecking(open);
       }}>
