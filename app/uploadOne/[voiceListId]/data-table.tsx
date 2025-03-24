@@ -100,6 +100,7 @@ export function DataTable<TData, TValue>({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="title">Title</SelectItem>
+              <SelectItem value="uploadName">UploadName</SelectItem>
               <SelectItem value="status">Status</SelectItem>
             </SelectContent>
           </Select>

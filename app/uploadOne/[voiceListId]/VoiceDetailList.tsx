@@ -4,10 +4,11 @@ import {api} from "@/lib/utils";
 import {Card, CardHeader, CardTitle} from "@/components/ui/card";
 
 
-export async function getUploadDetail(pageNo: number, pageSize: number, title: string, status: string, voiceListId: string): Promise<any> {
+export async function getUploadDetail(pageNo: number, pageSize: number, title: string, status: string,
+                                      uploadName: string, voiceListId: string): Promise<any> {
   'use server'
   const json = await fetch(api + `/uploadDetail/list?pageNo=${pageNo}&pageSize=${pageSize}
-  &title=${title}&status=${status}&voiceListId=${voiceListId}`)
+  &title=${title}&status=${status}&uploadName=${uploadName}&voiceListId=${voiceListId}`)
     .then(response => response.json());
   return new Promise((resolve) => {
     return setTimeout(() => resolve(json.data), 0);
@@ -21,6 +22,7 @@ export default async function VoiceDetailList({props}: { props: any }) {
     Number(searchParams?.pageSize) || 10,
     (searchParams?.title || ""),
     (searchParams?.status || ""),
+    (searchParams?.uploadName || ""),
     params.voiceListId);
   return (<Card className="shadow-xl p-4"><CardHeader>
     <CardTitle className="text-xl font-semibold">上传列表</CardTitle>

@@ -24,7 +24,7 @@ export default async function UploadQueue({props}: { props: any }) {
   const uploadDetail = await getUploadDetail(
     (Number(searchParams?.pageNo) || 1),
     Number(searchParams?.pageSize) || 10,
-    "", "", "");
+    "", "", "", "");
 
   return (<div className="space-y-6"><Card className="shadow-xl">
     <CardHeader>
