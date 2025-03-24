@@ -91,8 +91,7 @@ export function AddOne({onSubmitAction}: {
           // @ts-ignore
           form.setValue("uploadDetails", toPost)
           // @ts-ignore
-          // form.handleSubmit(onSubmitAction)(event)
-          console.log(toPost)
+          form.handleSubmit(onSubmitAction)(event)
         }}
         className="space-y-4 p-4 border rounded-lg"
       >
@@ -268,7 +267,6 @@ export function AddOne({onSubmitAction}: {
                                      });
                                      setVideoInfo(newVideoInfo)
                                      const cidList = cids.map(i => i.cid)
-                                     console.log(cidList)
                                      const newCids = videoInfo.pages.filter(i => cidList.includes(i.cid)).map(i => {
                                        return {
                                          cid: i.cid,
