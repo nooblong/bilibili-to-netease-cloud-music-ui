@@ -6,16 +6,9 @@ import {z} from "zod";
 
 import {Button} from "@/components/ui/button";
 import {Checkbox} from "@/components/ui/checkbox";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage,} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
-import {useState} from "react";
+import {useRef, useState} from "react";
 import {useParams} from "next/navigation";
 import {UploadDetailAdd} from "@/app/uploadOne/[voiceListId]/columnsUploadDetail";
 import {extractUrl, replaceImageUrl} from "@/lib/utils";
@@ -57,6 +50,7 @@ export function AddOne({onSubmitAction}: {
   const [cids, setCids] = useState<CidName[]>([]);
   const [head, setHead] = useState<string>("");
   const [tail, setTail] = useState<string>("");
+  const charRef = useRef<HTMLInputElement>(null);
   const username = Cookies.get("username");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -97,7 +91,8 @@ export function AddOne({onSubmitAction}: {
           // @ts-ignore
           form.setValue("uploadDetails", toPost)
           // @ts-ignore
-          form.handleSubmit(onSubmitAction)(event)
+          // form.handleSubmit(onSubmitAction)(event)
+          console.log(toPost)
         }}
         className="space-y-4 p-4 border rounded-lg"
       >
@@ -164,25 +159,95 @@ export function AddOne({onSubmitAction}: {
             <FormField
               control={form.control}
               name="cid"
-              render={({field}) => (
+              render={() => (
                 <FormItem>
-                  <FormLabel>多选分p-{field.name}</FormLabel>
-                  <Button className="ml-5" onClick={(event) => {
-                    event.preventDefault()
-                    const toSet: CidName[] = videoInfo.pages.map(i => {
-                      return {
-                        cid: i.cid,
-                        name: i.part
-                      }
-                    })
-                    setCids(toSet);
-                  }}>全选</Button>
-                  <div className="grid grid-cols-1 md:grid-cols-2">
+                  <FormLabel>多选:</FormLabel>
+                  <div className={"border rounded-lg"}>
+                    <Button className="m-1" onClick={(event) => {
+                      event.preventDefault()
+                      const toSet: CidName[] = videoInfo.pages.map(i => {
+                        return {
+                          cid: i.cid,
+                          name: i.part
+                        }
+                      })
+                      setCids(toSet);
+                    }}>全选</Button>
+                    <Button className="m-1" onClick={(event) => {
+                      event.preventDefault()
+                      setCids([]);
+                    }}>全不选</Button>
+                    <Button className="m-1" onClick={(event) => {
+                      event.preventDefault()
+                      const newVideoInfo = {...videoInfo};
+                      newVideoInfo.pages = newVideoInfo.pages.map((i: { cid: any; part: string; }) => {
+                        i.part = i.part.substring(1, i.part.length)
+                        return i
+                      });
+                      setVideoInfo(newVideoInfo)
+                      const cidList = cids.map(i => i.cid)
+                      const newCids = videoInfo.pages.filter(i => cidList.includes(i.cid)).map(i => {
+                        return {
+                          cid: i.cid,
+                          name: i.part
+                        }
+                      })
+                      setCids(newCids);
+                    }}>删除前1字</Button>
+                    <Button className="m-1" onClick={(event) => {
+                      event.preventDefault()
+                      const newVideoInfo = {...videoInfo};
+                      newVideoInfo.pages = newVideoInfo.pages.map((i: { cid: any; part: string; }) => {
+                        i.part = i.part.substring(0, i.part.length - 1)
+                        return i
+                      });
+                      setVideoInfo(newVideoInfo)
+                      const cidList = cids.map(i => i.cid)
+                      const newCids = videoInfo.pages.filter(i => cidList.includes(i.cid)).map(i => {
+                        return {
+                          cid: i.cid,
+                          name: i.part
+                        }
+                      })
+                      setCids(newCids);
+                    }}>删除后1字</Button>
+                    <div className={"flex w-full max-w-sm items-center space-x-2 m-1"}>
+                      <Button className="" onClick={(event) => {
+                        event.preventDefault()
+                        if (charRef.current === null || charRef.current.value === "") {
+                          alert("未输入字符")
+                          return
+                        }
+                        const newVideoInfo = {...videoInfo};
+                        newVideoInfo.pages = newVideoInfo.pages.map((i: { cid: any; part: string; }) => {
+                          if (charRef.current === null) {
+                            return;
+                          }
+                          let index = i.part.indexOf(charRef.current.value)
+                          if (index !== -1) {
+                            i.part = i.part.substring(index + 1, i.part.length)
+                          }
+                          return i
+                        });
+                        setVideoInfo(newVideoInfo)
+                        const cidList = cids.map(i => i.cid)
+                        const newCids = videoInfo.pages.filter(i => cidList.includes(i.cid)).map(i => {
+                          return {
+                            cid: i.cid,
+                            name: i.part
+                          }
+                        })
+                        setCids(newCids);
+                      }}>删除到字符</Button>
+                      <Input className={"w-10"} ref={charRef}></Input>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {videoInfo && videoInfo.pages.map((item) => {
                       return (
-                        <FormControl key={item.cid}>
-                          <div>
-                            <Checkbox key={item.cid}
+                        <FormControl key={item.cid} className={"p-2 rounded-lg border"}>
+                          <label className="flex items-center space-x-2">
+                            <Checkbox className={"rounded"} key={item.cid}
                                       checked={cids.some(i => i.cid === item.cid)}
                                       onCheckedChange={(checked) => {
                                         const newSelected = checked
@@ -190,8 +255,31 @@ export function AddOne({onSubmitAction}: {
                                           : cids.filter(cidName => cidName.cid !== item.cid);
                                         setCids(newSelected);
                                       }}
-                            />&nbsp;&nbsp;{head + item.part + tail}
-                          </div>
+                            />
+                            <div>{head}</div>
+                            <Input value={item.part} className={"w-full"}
+                                   onChange={(event) => {
+                                     const newVideoInfo = {...videoInfo};
+                                     newVideoInfo.pages = newVideoInfo.pages.map((i: { cid: any; part: string; }) => {
+                                       if (i.cid === item.cid) {
+                                         i.part = event.currentTarget.value
+                                       }
+                                       return i
+                                     });
+                                     setVideoInfo(newVideoInfo)
+                                     const cidList = cids.map(i => i.cid)
+                                     console.log(cidList)
+                                     const newCids = videoInfo.pages.filter(i => cidList.includes(i.cid)).map(i => {
+                                       return {
+                                         cid: i.cid,
+                                         name: i.part
+                                       }
+                                     })
+                                     setCids(newCids);
+                                   }}>
+                            </Input>
+                            <div>{tail}</div>
+                          </label>
                         </FormControl>
                       )
                     })}

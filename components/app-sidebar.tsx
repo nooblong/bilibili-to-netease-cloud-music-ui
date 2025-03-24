@@ -50,7 +50,7 @@ export async function AppSidebar({...props}: React.ComponentProps<typeof Sidebar
               <a href="https://github.com/nooblong/bilibili-to-netease-cloud-music">
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="font-semibold"></span>
-                  <span className="text-blue-300">Github</span>
+                  <span>Github</span>
                 </div>
               </a>
             </SidebarMenuButton>

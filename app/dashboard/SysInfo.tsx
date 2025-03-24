@@ -29,8 +29,8 @@ export default async function SysInfo() {
   const sysInfo = await fetchSysInfo();
   return (<Card className="shadow-xl">
     <CardHeader>
-      <h2>反馈bug:
-        <a className="text-blue-300" href="https://github.com/nooblong/bilibili-to-netease-cloud-music/issues">Github
+      <h2>反馈bug：
+        <a className="underline" href="https://github.com/nooblong/bilibili-to-netease-cloud-music/issues">Github
           Issue</a>
       </h2>
     </CardHeader>
