@@ -56,7 +56,8 @@ export default async function UploadQueue({props}: { props: any }) {
       <CardContent>
         <DataTable columns={columnsUploadDetail} data={uploadDetail.records} total={uploadDetail.total}
                    pageNo={Number(searchParams?.pageNo) || 1}
-                   pageSize={Number(searchParams?.pageSize) || 10}/>
+                   pageSize={Number(searchParams?.pageSize) || 10}
+                   showFilter={false}/>
       </CardContent>
     </Card></div>)
 }

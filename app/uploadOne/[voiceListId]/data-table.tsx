@@ -25,7 +25,8 @@ interface DataTableProps<TData, TValue> {
   data: TData[],
   total: number,
   pageNo: number,
-  pageSize: number
+  pageSize: number,
+  showFilter?: boolean
 }
 
 export function DataTable<TData, TValue>({
@@ -33,7 +34,8 @@ export function DataTable<TData, TValue>({
                                            data,
                                            total,
                                            pageNo,
-                                           pageSize
+                                           pageSize,
+                                           showFilter=true
                                          }: DataTableProps<TData, TValue>
 ) {
 
@@ -71,7 +73,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4 space-x-6 ">
+      {showFilter && <div className="flex items-center py-4 space-x-6 ">
         <div>
           <Input
             ref={inputRef}
@@ -102,7 +104,7 @@ export function DataTable<TData, TValue>({
             </SelectContent>
           </Select>
         </div>
-      </div>
+      </div>}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
