@@ -102,7 +102,8 @@ const LoginBilibiliQr = () => {
         {userInfo &&
             <div className="text-xl rounded">{userInfo.name}</div>}
       </div>
-      <div>由于bilibili-api可能存在缓存，这里显示的不一定是自己的（好像是最近登录的）</div>
+      <div>系统会从所有用户之中拿一个可用的大会员账号进行下载视频</div>
+      <div>由于bilibili-api可能存在缓存，这里显示的不一定是自己的，而是当前系统使用的b站账号</div>
       <div>如果还能上传歌曲，就代表别人登录了，你就不需要登录了</div>
       <Dialog onOpenChange={(open: boolean) => {
         setChecking(open);
