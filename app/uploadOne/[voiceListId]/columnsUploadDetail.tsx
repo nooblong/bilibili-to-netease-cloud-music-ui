@@ -67,6 +67,7 @@ export type Subscribe = {
   toTime: string;
   keyWord: string;
   limitSec: number;
+  minSec: number;
   videoOrder: string;
   remark: string;
   netCover: string;

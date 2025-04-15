@@ -43,6 +43,7 @@ const formSchema = z.object({
   toTime: z.string().min(1, "toTime不能为空"),
   keyWord: z.string().optional(),
   limitSec: z.coerce.number().min(0).optional(),
+  minSec: z.coerce.number().min(0).optional(),
   videoOrder: z.string().min(1),
   remark: z.string().optional(),
   enable: z.coerce.number().min(0).max(1),
@@ -80,6 +81,7 @@ export function AddFavorite({onSubmitAction}: {
       fromTime: "2010-01-01 00:00:00",
       toTime: "2050-01-01 00:00:00",
       limitSec: 300,
+      minSec: 0,
       videoOrder: "PUB_NEW_FIRST_THEN_OLD",
       enable: 1,
       crack: 0,
@@ -222,14 +224,32 @@ export function AddFavorite({onSubmitAction}: {
           />
           <FormField
             control={form.control}
-            name="limitSec"
+            name="minSec"
             render={({field}) => (
               <FormItem>
-                <FormLabel>限制时长(s)</FormLabel>
+                <FormLabel>限制最小时长(s)</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
-                    placeholder="限制时长"
+                    placeholder="限制最小时长(s)"
+                    {...field}
+                    value={field.value ?? ""}
+                  />
+                </FormControl>
+                <FormMessage/>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="limitSec"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>限制最大时长(s)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder="限制最小时长(s)"
                     {...field}
                     value={field.value ?? ""}
                   />

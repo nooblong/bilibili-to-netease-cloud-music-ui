@@ -37,6 +37,7 @@ const formSchema = z.object({
   toTime: z.string().optional(),
   keyWord: z.string().optional(),
   limitSec: z.coerce.number().min(0).optional(),
+  minSec: z.coerce.number().min(0).optional(),
   videoOrder: z.string().min(1).optional(),
   remark: z.string().optional(),
   enable: z.coerce.number().min(0).max(1).optional(),
@@ -73,6 +74,7 @@ export function EditSubscribe({onSubmitAction, baseData}: {
       fromTime: baseData.fromTime,
       toTime: baseData.toTime,
       limitSec: baseData.limitSec,
+      minSec: baseData.minSec,
       videoOrder: baseData.videoOrder,
       enable: baseData.enable,
       crack: baseData.crack,
@@ -177,14 +179,32 @@ export function EditSubscribe({onSubmitAction, baseData}: {
           />
           <FormField
             control={form.control}
-            name="limitSec"
+            name="minSec"
             render={({field}) => (
               <FormItem>
-                <FormLabel>限制时长(s)</FormLabel>
+                <FormLabel>限制最小时长(s)</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
-                    placeholder="限制时长"
+                    placeholder="限制最小时长(s)"
+                    {...field}
+                    value={field.value ?? ""}
+                  />
+                </FormControl>
+                <FormMessage/>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="limitSec"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>限制最大时长(s)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder="限制最大时长(s)"
                     {...field}
                     value={field.value ?? ""}
                   />
