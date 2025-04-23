@@ -34,6 +34,7 @@ const formSchema = z.object({
   crack: z.coerce.number().min(0).max(1),
   uploadDetails: z.any(),
   cids: z.any(),
+  bitrate: z.number().min(0),
 }).refine(data =>
     !(data.beginSec && data.endSec) || data.endSec >= data.beginSec,
   {
@@ -63,6 +64,7 @@ export function AddOne({onSubmitAction}: {
       offset: 0,
       beginSec: 0,
       endSec: 0,
+      bitrate: 320000,
       uploadName: "uploadName",
     },
   });
@@ -332,6 +334,25 @@ export function AddOne({onSubmitAction}: {
                     type="number"
                     step="0.1"
                     placeholder="音量增加（db）"
+                    {...field}
+                    value={field.value ?? 0}
+                  />
+                </FormControl>
+                <FormMessage/>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="bitrate"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>上传比特率（默认320k）</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    step="1000"
+                    placeholder="上传比特率（默认320k）"
                     {...field}
                     value={field.value ?? 0}
                   />
