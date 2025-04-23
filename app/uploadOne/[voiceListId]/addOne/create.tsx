@@ -34,7 +34,7 @@ const formSchema = z.object({
   crack: z.coerce.number().min(0).max(1),
   uploadDetails: z.any(),
   cids: z.any(),
-  bitrate: z.number().min(0),
+  bitrate: z.coerce.number().min(0),
 }).refine(data =>
     !(data.beginSec && data.endSec) || data.endSec >= data.beginSec,
   {
@@ -354,7 +354,7 @@ export function AddOne({onSubmitAction}: {
                     step="1000"
                     placeholder="上传比特率（默认320k）"
                     {...field}
-                    value={field.value ?? 0}
+                    value={field.value ?? ""}
                   />
                 </FormControl>
                 <FormMessage/>

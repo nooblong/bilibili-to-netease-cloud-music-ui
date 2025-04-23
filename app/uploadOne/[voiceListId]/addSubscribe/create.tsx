@@ -52,7 +52,7 @@ const formSchema = z.object({
   checkPart: z.coerce.number().min(0),
   regName: z.string().min(1),
   filterChannel: z.coerce.number().optional(),
-  bitrate: z.number().min(0),
+  bitrate: z.coerce.number().min(0),
   subscribeRegs: z.array(
     z.object({
       id: z.string().optional(),
@@ -289,7 +289,7 @@ export function AddSubscribe({onSubmitAction}: {
                     step="1000"
                     placeholder="上传比特率（默认320k）"
                     {...field}
-                    value={field.value ?? 0}
+                    value={field.value ?? ""}
                   />
                 </FormControl>
                 <FormMessage/>

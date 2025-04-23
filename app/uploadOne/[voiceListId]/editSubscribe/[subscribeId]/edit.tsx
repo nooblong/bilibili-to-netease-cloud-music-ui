@@ -44,6 +44,7 @@ const formSchema = z.object({
   crack: z.coerce.number().min(0).max(1).optional(),
   useVideoCover: z.coerce.number().min(0).max(1).optional(),
   checkPart: z.coerce.number().min(0).optional(),
+  bitrate: z.coerce.number().min(0),
   regName: z.string().min(1).optional(),
   filterChannel: z.coerce.number().optional(),
   subscribeRegs: z.array(
@@ -84,6 +85,7 @@ export function EditSubscribe({onSubmitAction, baseData}: {
       filterChannel: baseData.channelIds.length > 0 ? 1 : 0,
       channelIdsList: baseData.channelIds.split(","),
       keyWord: baseData.keyWord,
+      bitrate: baseData.bitrate,
     },
   });
   return (
@@ -205,6 +207,25 @@ export function EditSubscribe({onSubmitAction, baseData}: {
                   <Input
                     type="number"
                     placeholder="限制最大时长(s)"
+                    {...field}
+                    value={field.value ?? ""}
+                  />
+                </FormControl>
+                <FormMessage/>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="bitrate"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>上传比特率（默认320k），非音乐请设置128000</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    step="1000"
+                    placeholder="上传比特率（默认320k）"
                     {...field}
                     value={field.value ?? ""}
                   />

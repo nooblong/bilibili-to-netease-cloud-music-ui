@@ -52,6 +52,7 @@ const formSchema = z.object({
   checkPart: z.coerce.number().min(0),
   regName: z.string().min(1),
   filterChannel: z.coerce.number().optional(),
+  bitrate: z.coerce.number().min(0),
   subscribeRegs: z.array(
     z.object({
       id: z.string().optional(),
@@ -89,6 +90,7 @@ export function AddFavorite({onSubmitAction}: {
       checkPart: 0,
       regName: "{title}",
       filterChannel: 0,
+      bitrate: 320000,
       channelIdsList: [],
     },
   });
@@ -250,6 +252,25 @@ export function AddFavorite({onSubmitAction}: {
                   <Input
                     type="number"
                     placeholder="限制最小时长(s)"
+                    {...field}
+                    value={field.value ?? ""}
+                  />
+                </FormControl>
+                <FormMessage/>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="bitrate"
+            render={({field}) => (
+              <FormItem>
+                <FormLabel>上传比特率（默认320k），非音乐请设置128000</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    step="1000"
+                    placeholder="上传比特率（默认320k）"
                     {...field}
                     value={field.value ?? ""}
                   />

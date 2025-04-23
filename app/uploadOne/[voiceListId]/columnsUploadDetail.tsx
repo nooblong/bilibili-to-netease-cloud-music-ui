@@ -36,6 +36,7 @@ export type UploadDetail = {
   musicStatus: string
   uploadStatus: string
   log: string
+  bitrate: number
 }
 
 export type UploadDetailAdd = {
@@ -49,6 +50,7 @@ export type UploadDetailAdd = {
   voiceEndSec: number,
   privacy: number,
   crack: number,
+  bitrate: number,
 }
 
 export type Subscribe = {
@@ -65,6 +67,7 @@ export type Subscribe = {
   updateTime: string;
   fromTime: string;
   toTime: string;
+  bitrate: number;
   keyWord: string;
   limitSec: number;
   minSec: number;
