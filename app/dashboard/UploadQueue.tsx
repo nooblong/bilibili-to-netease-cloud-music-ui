@@ -13,6 +13,7 @@ import {
 import { DataTable } from "@/app/uploadOne/[voiceListId]/data-table";
 import { columnsUploadDetail } from "@/app/uploadOne/[voiceListId]/columnsUploadDetail";
 import { getUploadDetail } from "@/app/uploadOne/[voiceListId]/VoiceDetailList";
+import { MobileDataView } from "@/app/components/MobileDataView";
 
 async function fetchUploadQueue(): Promise<any> {
     "use server";
@@ -118,14 +119,27 @@ export default async function UploadQueue({ props }: { props: any }) {
                 </CardHeader>
                 <CardContent className="p-0">
                     <div className="animate-in fade-in zoom-in-95 duration-500 delay-400">
-                        <DataTable
-                            columns={columnsUploadDetail}
-                            data={uploadDetail.records}
-                            total={uploadDetail.total}
-                            pageNo={Number(searchParams?.pageNo) || 1}
-                            pageSize={Number(searchParams?.pageSize) || 10}
-                            showFilter={false}
-                        />
+                        {/* 桌面端显示表格 */}
+                        <div className="hidden md:block">
+                            <DataTable
+                                columns={columnsUploadDetail}
+                                data={uploadDetail.records}
+                                total={uploadDetail.total}
+                                pageNo={Number(searchParams?.pageNo) || 1}
+                                pageSize={Number(searchParams?.pageSize) || 10}
+                                showFilter={false}
+                            />
+                        </div>
+
+                        {/* 移动端显示卡片式列表 */}
+                        <div className="block md:hidden p-3">
+                            <MobileDataView
+                                data={uploadDetail.records}
+                                total={uploadDetail.total}
+                                pageNo={Number(searchParams?.pageNo) || 1}
+                                pageSize={Number(searchParams?.pageSize) || 10}
+                            />
+                        </div>
                     </div>
                 </CardContent>
             </Card>
