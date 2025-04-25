@@ -285,3 +285,92 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+@keyframes float {
+    0% {
+        transform: translateY(0px) translateX(0px);
+    }
+    50% {
+        transform: translateY(-15px) translateX(10px);
+    }
+    100% {
+        transform: translateY(0px) translateX(0px);
+    }
+}
+
+@keyframes float-delayed {
+    0% {
+        transform: translateY(0px) translateX(0px);
+    }
+    50% {
+        transform: translateY(15px) translateX(-10px);
+    }
+    100% {
+        transform: translateY(0px) translateX(0px);
+    }
+}
+
+@keyframes pulse-delayed {
+    0% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    100% {
+        opacity: 0.3;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-float {
+    animation: float 8s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+    animation: float-delayed 10s ease-in-out infinite;
+}
+
+.animate-pulse-delayed {
+    animation: pulse-delayed 5s ease-in-out infinite;
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* 自定义滚动条样式 */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.3);
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(8, 145, 178, 0.5);
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(8, 145, 178, 0.7);
+}
+
+/* 移动端适配 */
+@media (max-width: 640px) {
+    .custom-scrollbar {
+        max-height: 300px;
+    }
+}
