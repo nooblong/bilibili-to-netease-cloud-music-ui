@@ -189,12 +189,13 @@ export function AddSubscribe({onSubmitAction}: {
             control={form.control}
             name="voiceListId"
             render={({field}) => (
-              <FormItem hidden>
+              <FormItem>
                 <FormLabel>网易播客id</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
                     placeholder="网易播客id"
+                    disabled
                     {...field}
                     value={field.value ?? ""}
                   />

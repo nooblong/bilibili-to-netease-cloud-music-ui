@@ -125,14 +125,14 @@ export function EditSubscribe({onSubmitAction, baseData}: {
           <FormField
             control={form.control}
             name="voiceListId"
-            disabled={true}
             render={({field}) => (
-              <FormItem hidden>
+              <FormItem>
                 <FormLabel>网易播客id</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
                     placeholder="网易播客id"
+                    disabled
                     {...field}
                     value={field.value ?? ""}
                   />

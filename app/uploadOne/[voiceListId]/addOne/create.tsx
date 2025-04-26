@@ -308,10 +308,11 @@ export function AddOne({onSubmitAction}: {
             control={form.control}
             name="voiceListId"
             render={({field}) => (
-              <FormItem hidden>
+              <FormItem>
                 <FormLabel>网易播客id</FormLabel>
                 <FormControl>
                   <Input
+                    disabled
                     type="number"
                     placeholder="网易播客id"
                     {...field}

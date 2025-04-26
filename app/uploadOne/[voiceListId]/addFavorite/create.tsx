@@ -172,11 +172,12 @@ export function AddFavorite({onSubmitAction}: {
             control={form.control}
             name="voiceListId"
             render={({field}) => (
-              <FormItem hidden>
+              <FormItem>
                 <FormLabel>网易播客id</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
+                    disabled
                     placeholder="网易播客id"
                     {...field}
                     value={field.value ?? ""}

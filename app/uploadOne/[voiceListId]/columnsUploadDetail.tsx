@@ -99,12 +99,14 @@ const getStatusBadgeStyles = (status: string) => {
         "px-2 py-0.5 rounded-full text-xs font-mono inline-flex items-center justify-center";
 
     const statusStyles: Record<string, string> = {
-        成功: "bg-green-900/40 text-green-400 border border-green-500/50",
-        等待中: "bg-blue-900/40 text-blue-400 border border-blue-500/50",
-        失败: "bg-red-900/40 text-red-400 border border-red-500/50",
-        处理中: "bg-purple-900/40 text-purple-400 border border-purple-500/50",
-        审核中: "bg-yellow-900/40 text-yellow-400 border border-yellow-500/50",
-        未通过: "bg-red-900/40 text-red-400 border border-red-500/50",
+        SUCCESS: "bg-green-900/40 text-green-400 border border-green-500/50",
+        ONLINE: "bg-green-900/40 text-green-400 border border-green-500/50",
+        WAIT: "bg-blue-900/40 text-blue-400 border border-blue-500/50",
+        ERROR: "bg-red-900/40 text-red-400 border border-red-500/50",
+        MAX_RETRY: "bg-red-900/40 text-red-400 border border-red-500/50",
+        PROCESSING: "bg-purple-900/40 text-purple-400 border border-purple-500/50",
+        AUDITING: "bg-yellow-900/40 text-yellow-400 border border-yellow-500/50",
+        ONLY_SELF_SEE: "bg-red-900/40 text-red-400 border border-red-500/50",
     };
 
     // 如果没有预定义的样式，使用默认样式
