@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
+import {cn, getStatusBadgeStyles} from "@/lib/utils";
 
 export type UploadDetail = {
     id: string;
@@ -91,30 +91,6 @@ export type SubscribeReg = {
     subscribeId: string;
     regex: string;
     pos: number;
-};
-
-// 上传状态对应的标签样式
-const getStatusBadgeStyles = (status: string) => {
-    const baseStyles =
-        "px-2 py-0.5 rounded-full text-xs font-mono inline-flex items-center justify-center";
-
-    const statusStyles: Record<string, string> = {
-        SUCCESS: "bg-green-900/40 text-green-400 border border-green-500/50",
-        ONLINE: "bg-green-900/40 text-green-400 border border-green-500/50",
-        WAIT: "bg-blue-900/40 text-blue-400 border border-blue-500/50",
-        ERROR: "bg-red-900/40 text-red-400 border border-red-500/50",
-        MAX_RETRY: "bg-red-900/40 text-red-400 border border-red-500/50",
-        PROCESSING: "bg-purple-900/40 text-purple-400 border border-purple-500/50",
-        AUDITING: "bg-yellow-900/40 text-yellow-400 border border-yellow-500/50",
-        ONLY_SELF_SEE: "bg-red-900/40 text-red-400 border border-red-500/50",
-    };
-
-    // 如果没有预定义的样式，使用默认样式
-    return cn(
-        baseStyles,
-        statusStyles[status] ||
-            "bg-slate-900/40 text-slate-400 border border-slate-500/50"
-    );
 };
 
 export const columnsUploadDetail: ColumnDef<UploadDetail>[] = [

@@ -32,7 +32,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { useDebouncedCallback } from "use-debounce";
-import { cn } from "@/lib/utils";
+import {cn, getStatusBadgeStyles} from "@/lib/utils";
 import {
     Dialog,
     DialogContent,
@@ -209,25 +209,7 @@ export function DataTable<TData, TValue>({
                                         {item.uploadStatus && (
                                             <Badge
                                                 variant="outline"
-                                                className={`text-xs ${
-                                                    item.uploadStatus.includes(
-                                                        "成功"
-                                                    )
-                                                        ? "bg-green-500/20 text-green-400 border-green-500/40"
-                                                        : item.uploadStatus.includes(
-                                                              "失败"
-                                                          )
-                                                        ? "bg-red-500/20 text-red-400 border-red-500/40"
-                                                        : item.uploadStatus.includes(
-                                                              "等待"
-                                                          )
-                                                        ? "bg-blue-500/20 text-blue-400 border-blue-500/40"
-                                                        : item.uploadStatus.includes(
-                                                              "处理"
-                                                          )
-                                                        ? "bg-yellow-500/20 text-yellow-400 border-yellow-500/40"
-                                                        : "bg-zinc-700 text-zinc-300"
-                                                }`}
+                                                className={`text-xs ${cn(getStatusBadgeStyles(item.uploadStatus))}`}
                                             >
                                                 {item.uploadStatus}
                                             </Badge>
@@ -259,24 +241,7 @@ export function DataTable<TData, TValue>({
                                         {item.musicStatus && (
                                             <Badge
                                                 variant="outline"
-                                                className={`text-[10px] ${
-                                                    item.musicStatus.includes(
-                                                        "成功"
-                                                    )
-                                                        ? "bg-green-500/20 text-green-400 border-green-500/40"
-                                                        : item.musicStatus.includes(
-                                                              "失败"
-                                                          ) ||
-                                                          item.musicStatus.includes(
-                                                              "未通过"
-                                                          )
-                                                        ? "bg-red-500/20 text-red-400 border-red-500/40"
-                                                        : item.musicStatus.includes(
-                                                              "审核"
-                                                          )
-                                                        ? "bg-yellow-500/20 text-yellow-400 border-yellow-500/40"
-                                                        : "bg-zinc-800/50 text-zinc-300"
-                                                }`}
+                                                className={`text-xs ${cn(getStatusBadgeStyles(item.musicStatus))}`}
                                             >
                                                 网易: {item.musicStatus}
                                             </Badge>
