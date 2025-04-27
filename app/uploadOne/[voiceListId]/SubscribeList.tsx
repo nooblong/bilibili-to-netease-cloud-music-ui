@@ -101,7 +101,7 @@ export default async function SubscribeList({ props }: { props: any }) {
                 </CardTitle>
             </CardHeader>
             <CardContent>
-                <ScrollArea className="max-h-[500px] p-2 rounded-lg bg-black/20 border border-cyan-500/20">
+                <ScrollArea className="p-2 rounded-lg bg-black/20 border border-cyan-500/20">
                     {subscribe && subscribe.length > 0 ? (
                         <div className="space-y-4">
                             {subscribe.map((item) => (

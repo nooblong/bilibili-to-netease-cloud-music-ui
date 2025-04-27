@@ -518,3 +518,7 @@ body {
         max-height: 300px;
     }
 }
+
+html {
+    scrollbar-gutter: stable;
+}
