@@ -51,7 +51,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             return acc;
         }, {} as Record<string, string>);
 
-        setUsername(cookies.username || null);
+        // 如果存在username cookie，则进行URL解码
+        if (cookies.username) {
+            try {
+                setUsername(decodeURIComponent(cookies.username) || null);
+            } catch (e) {
+                // 如果解码失败，直接使用原始值
+                setUsername(cookies.username || null);
+            }
+        }
     }, []);
 
     // 客户端注销函数
@@ -104,9 +112,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {username ? (
                     <NavUser
                         user={{
-                            name: username,
-                            email: username + "@example.com",
-                            avatar: "",
+                            username: username,
                         }}
                         logout={handleLogout}
                     />

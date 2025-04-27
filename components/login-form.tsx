@@ -47,7 +47,7 @@ export function LoginForm({
             {contextHolder}
             <Card
                 className="max-w-md mx-auto w-full"
-                bordered={false}
+                variant="outlined"
                 styles={{
                     header: {
                         borderBottom: "none",

@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 隐藏 Next.js 错误弹窗 */
+[data-nextjs-toast="true"],
+[data-nextjs-toast-wrapper="true"],
+.nextjs-toast-errors-parent,
+.nextjs-toast-errors,
+.nextjs-toast-error-message {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
 body {
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -80,11 +92,143 @@ body {
 
 @layer base {
     * {
-        @apply border-border;
+        @apply border-[color:hsl(var(--border))];
     }
     body {
-        @apply bg-background text-foreground;
+        @apply bg-[color:hsl(var(--background))] text-[color:hsl(var(--foreground))];
     }
+}
+
+/* 适用于 antd 4.x 的暗色主题支持 */
+.dark-theme {
+    /* 暗色主题基础颜色 */
+    --ant-primary-color: #1677ff;
+    --ant-primary-color-hover: #4096ff;
+
+    /* 背景色 */
+    --bg-color: #121212;
+    --component-bg: #1f1f1f;
+    --popover-bg: #1f1f1f;
+    --border-color: #303030;
+    --text-color: rgba(255, 255, 255, 0.85);
+    --text-color-secondary: rgba(255, 255, 255, 0.45);
+    --heading-color: rgba(255, 255, 255, 0.85);
+    --input-bg: #141414;
+    --input-border-color: #424242;
+
+    /* 设置全局背景颜色 */
+    background-color: #121212;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* 侧边栏暗色主题 */
+.dark-theme .ant-layout-sider,
+.dark-theme .ant-menu,
+.dark-theme .ant-layout-header {
+    background-color: #141414 !important;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+/* 侧边栏菜单项 */
+.dark-theme .ant-menu-item {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.dark-theme .ant-menu-item:hover,
+.dark-theme .ant-menu-item-active {
+    color: #1677ff;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark-theme .ant-menu-item-selected {
+    color: #1677ff;
+    background-color: rgba(22, 119, 255, 0.1);
+}
+
+/* 登录页面背景 */
+.dark-theme .ant-layout,
+.dark-theme .ant-layout-content {
+    background-color: #121212;
+}
+
+/* 卡片样式 */
+.dark-theme .ant-card {
+    background-color: #1f1f1f;
+    border-color: #303030;
+}
+
+.dark-theme .ant-card-head {
+    color: rgba(255, 255, 255, 0.85);
+    border-bottom-color: #303030;
+}
+
+.dark-theme .ant-input {
+    background-color: #141414;
+    border-color: #424242;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.dark-theme .ant-input-password {
+    background-color: #141414;
+}
+
+.dark-theme .ant-input-affix-wrapper {
+    background-color: #141414;
+    border-color: #424242;
+}
+
+.dark-theme .ant-form-item-label > label {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.dark-theme .ant-btn {
+    border-color: #303030;
+}
+
+/* 按钮样式 */
+.dark-theme .ant-btn-primary {
+    background-color: #1677ff;
+    border-color: #1677ff;
+}
+
+.dark-theme .ant-btn-primary:hover {
+    background-color: #4096ff;
+    border-color: #4096ff;
+}
+
+.dark-theme .ant-select-dropdown {
+    background-color: #1f1f1f;
+}
+
+.dark-theme .ant-select-item {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.dark-theme
+    .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark-theme
+    .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+    background-color: rgba(22, 119, 255, 0.2);
+}
+
+.dark-theme .ant-dropdown-menu {
+    background-color: #1f1f1f;
+}
+
+.dark-theme .ant-dropdown-menu-item,
+.dark-theme .ant-dropdown-menu-submenu-title {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.dark-theme .ant-typography {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.dark-theme .ant-typography.ant-typography-secondary {
+    color: rgba(255, 255, 255, 0.45);
 }
 
 /* Ant Design 暗黑主题自定义样式 */

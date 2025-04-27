@@ -18,6 +18,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useTheme } from "next-themes";
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -150,7 +151,7 @@ const SidebarProvider = React.forwardRef<
                             } as React.CSSProperties
                         }
                         className={cn(
-                            "group/sidebar-wrapper flex min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar",
+                            "group/sidebar-wrapper flex min-h-svh w-full has-[[data-variant=inset]]:bg-sidebar dark-theme",
                             className
                         )}
                         ref={ref}
@@ -185,6 +186,8 @@ const Sidebar = React.forwardRef<
         ref
     ) => {
         const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
+        const { theme } = useTheme();
+        const isDark = theme === "dark";
 
         if (collapsible === "none") {
             return (
@@ -211,7 +214,12 @@ const Sidebar = React.forwardRef<
                     <SheetContent
                         data-sidebar="sidebar"
                         data-mobile="true"
-                        className="w-[--sidebar-width] bg-zinc-900 border-zinc-800 p-0 text-sidebar-foreground [&>button]:hidden"
+                        className={cn(
+                            "w-[--sidebar-width] p-0 text-sidebar-foreground [&>button]:hidden",
+                            isDark
+                                ? "bg-zinc-900 border-zinc-800"
+                                : "bg-white border-gray-200"
+                        )}
                         style={
                             {
                                 "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -264,7 +272,10 @@ const Sidebar = React.forwardRef<
                 >
                     <div
                         data-sidebar="sidebar"
-                        className="flex h-full w-full flex-col bg-sidebar group-data-[variant=floating]:rounded-xl group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-lg"
+                        className={cn(
+                            "flex h-full w-full flex-col group-data-[variant=floating]:rounded-xl group-data-[variant=floating]:border group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:shadow-lg",
+                            isDark ? "bg-zinc-900" : "bg-sidebar"
+                        )}
                     >
                         {children}
                     </div>
