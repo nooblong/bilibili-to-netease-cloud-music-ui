@@ -42,11 +42,15 @@ const formSchema = z.object({
     tags: z.string().optional(),
 });
 
-export default async function EditSubscribePage({
-    params,
-}: {
-    params: { subscribeId: string; voiceListId: string };
-}) {
+interface PageProps {
+    params: {
+        subscribeId: string;
+        voiceListId: string;
+    };
+    searchParams: Record<string, string | string[] | undefined>;
+}
+
+export default async function EditSubscribePage({ params }: PageProps) {
     const subscribe = await getOne(params.subscribeId);
 
     return (

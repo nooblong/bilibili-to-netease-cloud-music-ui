@@ -20,12 +20,14 @@ import { AddFavorite } from "@/app/uploadOne/[voiceListId]/addFavorite/create";
 import { cn } from "@/lib/utils";
 import { submit } from "./actions";
 
-export default function addFavoritePage({
-    params,
-}: {
-    params: Promise<{ voiceListId: string }>;
-}) {
-    // 使用React.use()解包params
+interface PageProps {
+    params: Promise<{
+        voiceListId: string;
+    }>;
+    searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
+
+export default function addFavoritePage({ params }: PageProps) {
     const { voiceListId } = use(params);
 
     return (

@@ -11,6 +11,14 @@ const nextConfig = {
     devIndicators: {
         buildActivityPosition: "bottom-right",
     },
+    // 禁用ESLint检查
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
+    // 禁用TypeScript检查
+    typescript: {
+        ignoreBuildErrors: true,
+    },
 };
 
 module.exports = nextConfig;

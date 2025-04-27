@@ -20,12 +20,14 @@ import { AddOne } from "@/app/uploadOne/[voiceListId]/addOne/create";
 import { cn } from "@/lib/utils";
 import { submit } from "./actions";
 
-export default function addOnePage({
-    params,
-}: {
-    params: Promise<{ voiceListId: string }>;
-}) {
-    // 使用React.use()解包params，而不是直接访问
+interface PageProps {
+    params: Promise<{
+        voiceListId: string;
+    }>;
+    searchParams: Promise<Record<string, string | string[] | undefined>>;
+}
+
+export default function addOnePage({ params }: PageProps) {
     const { voiceListId } = use(params);
 
     return (
