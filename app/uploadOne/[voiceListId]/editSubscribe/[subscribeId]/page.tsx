@@ -1,10 +1,6 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 import { EditSubscribe } from "./edit";
-import { Subscribe } from "@/app/uploadOne/[voiceListId]/columnsUploadDetail";
 import "./styles.css";
-import { api } from "@/lib/utils";
 import { submit, getOne } from "./actions";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
@@ -23,8 +19,7 @@ import {
 } from "@/components/ui/breadcrumb";
 
 export const dynamic = "force-dynamic";
-
-const formSchema = z.object({
+z.object({
     mid: z.string().optional(),
     bvid: z.string().optional(),
     seasonId: z.string().optional(),
@@ -41,7 +36,6 @@ const formSchema = z.object({
     deDuplication: z.boolean().optional(),
     tags: z.string().optional(),
 });
-
 interface PageProps {
     params: {
         subscribeId: string;
@@ -52,7 +46,6 @@ interface PageProps {
 
 export default async function EditSubscribePage({ params }: PageProps) {
     const subscribe = await getOne(params.subscribeId);
-
     return (
         <SidebarProvider>
             <AppSidebar />

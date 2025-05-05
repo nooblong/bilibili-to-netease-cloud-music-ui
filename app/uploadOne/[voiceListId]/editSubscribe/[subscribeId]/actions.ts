@@ -1,6 +1,6 @@
 "use server";
 
-import { api, handleRes } from "@/lib/utils";
+import { api } from "@/lib/utils";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Subscribe } from "@/app/uploadOne/[voiceListId]/columnsUploadDetail";
@@ -25,7 +25,7 @@ export async function submit(val: any) {
 }
 
 export async function getOne(subscribeId: string | number): Promise<Subscribe> {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get("token")?.value ?? "";
 
     const json = await fetch(api + `/subscribe/detail?id=${subscribeId}`, {
