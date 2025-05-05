@@ -22,7 +22,7 @@ interface PageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-export default function addOnePage({params}: PageProps) {
+export default function AddOnePage({params}: PageProps) {
   const {voiceListId} = use(params);
 
   return (
@@ -49,7 +49,7 @@ export default function addOnePage({params}: PageProps) {
               orientation="vertical"
               className="mr-2 h-4 bg-cyan-500/50"
             />
-            <Breadcrumb className="overflow-hidden">
+            <Breadcrumb className="overflow-hidden h-4">
               <BreadcrumbList className="flex-wrap">
                 <BreadcrumbItem className="hidden sm:block">
                   <BreadcrumbLink

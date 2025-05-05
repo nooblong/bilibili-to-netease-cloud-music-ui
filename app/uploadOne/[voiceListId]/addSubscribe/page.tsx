@@ -22,7 +22,7 @@ interface PageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-export default function addSubscribePage({params}: PageProps) {
+export default function AddSubscribePage({params}: PageProps) {
   const {voiceListId} = use(params);
 
   return (
@@ -44,7 +44,7 @@ export default function addSubscribePage({params}: PageProps) {
               orientation="vertical"
               className="mr-2 h-4 bg-purple-500/50"
             />
-            <Breadcrumb className="overflow-hidden">
+            <Breadcrumb className="overflow-hidden h-4">
               <BreadcrumbList className="flex-wrap">
                 <BreadcrumbItem className="hidden sm:block">
                   <BreadcrumbLink

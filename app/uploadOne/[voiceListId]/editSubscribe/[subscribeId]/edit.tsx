@@ -66,7 +66,7 @@ const PurpleButton = ({
                       }: any) => (
   <Button
     className={cn(
-      "relative overflow-hidden bg-black hover:bg-gray-800 text-white transition-all shadow-md",
+      "relative overflow-hidden bg-slate-900/50 hover:bg-gray-800 text-white transition-all shadow-md",
       "active:scale-95",
       isLoading && "pointer-events-none opacity-70",
       className
@@ -136,9 +136,9 @@ export function EditSubscribe({
         <div className="flex flex-col lg:flex-row gap-6">
           {/* 左侧面板 - UP主信息和合集 */}
           <div className="w-full lg:w-1/3 space-y-6">
-            <Card className="border-gray-200 shadow-md">
-              <CardHeader className="bg-gray-50 rounded-t-lg">
-                <CardTitle className="text-xl text-gray-800">
+            <Card className="border-gray-200 shadow-md bg-slate-900/50">
+              <CardHeader className="rounded-t-lg">
+                <CardTitle className="text-xl text-gray-50">
                   UP主与合集信息
                 </CardTitle>
                 <CardDescription>
@@ -152,14 +152,14 @@ export function EditSubscribe({
                   name="upId"
                   render={({field}) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 font-medium">
+                      <FormLabel className="text-white font-medium">
                         UP主ID
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="UP主ID"
                           {...field}
-                          className="bg-black text-white border-gray-700"
+                          className=" bg-slate-900/50 text-white border-gray-700"
                         />
                       </FormControl>
                       <FormMessage/>
@@ -168,7 +168,7 @@ export function EditSubscribe({
                 />
 
                 <div className="pt-2">
-                  <FormLabel className="text-gray-700 font-medium">
+                  <FormLabel className="text-white font-medium">
                     {baseData.type === "UP"
                       ? "订阅的合集ID"
                       : "订阅的收藏夹ID"}
@@ -177,7 +177,7 @@ export function EditSubscribe({
                     disabled
                     defaultValue={baseData.channelIds}
                     placeholder="订阅ID"
-                    className="bg-black text-white border-gray-700 mt-1"
+                    className="bg-slate-900/50 text-white border-gray-700 mt-1"
                   />
                 </div>
 
@@ -186,7 +186,7 @@ export function EditSubscribe({
                   name="videoOrder"
                   render={({field}) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 font-medium">
+                      <FormLabel className="text-white font-medium">
                         上传顺序
                       </FormLabel>
                       <FormControl>
@@ -194,7 +194,7 @@ export function EditSubscribe({
                           disabled={true}
                           defaultValue={field.value}
                         >
-                          <SelectTrigger className="bg-black text-white border-gray-700">
+                          <SelectTrigger className="bg-slate-900/50 text-white border-gray-700">
                             <SelectValue placeholder="上传顺序"/>
                           </SelectTrigger>
                           <SelectContent>
@@ -217,11 +217,11 @@ export function EditSubscribe({
                   )}
                 />
 
-                <div className="p-4 bg-gray-50 rounded-lg border border-gray-100 mt-4">
-                  <h4 className="text-sm font-medium text-gray-700 mb-2">
+                <div className="p-4  rounded-lg border border-gray-100 mt-4">
+                  <h4 className="text-sm font-medium text-white mb-2">
                     订阅类型
                   </h4>
-                  <p className="text-sm text-gray-800 font-semibold">
+                  <p className="text-sm text-gray-50 font-semibold">
                     {baseData.type === "UP"
                       ? "UP主合集订阅"
                       : "收藏夹订阅"}
@@ -230,9 +230,9 @@ export function EditSubscribe({
               </CardContent>
             </Card>
 
-            <Card className="border-gray-200 shadow-md">
-              <CardHeader className="bg-gray-50 rounded-t-lg">
-                <CardTitle className="text-xl text-gray-800">
+            <Card className="border-gray-200 shadow-md bg-slate-900/50">
+              <CardHeader className=" rounded-t-lg">
+                <CardTitle className="text-xl text-gray-50">
                   订阅状态
                 </CardTitle>
               </CardHeader>
@@ -243,7 +243,7 @@ export function EditSubscribe({
                     name="enable"
                     render={({field}) => (
                       <FormItem
-                        className="flex items-center space-x-3 p-3 rounded-lg border border-gray-100 hover:bg-gray-50 transition-all">
+                        className="flex items-center space-x-3 p-3 rounded-lg border border-gray-100 hover: transition-all">
                         <FormControl>
                           <Checkbox
                             checked={
@@ -273,7 +273,7 @@ export function EditSubscribe({
                     name="crack"
                     render={({field}) => (
                       <FormItem
-                        className="flex items-center space-x-3 p-3 rounded-lg border border-gray-100 hover:bg-gray-50 transition-all">
+                        className="flex items-center space-x-3 p-3 rounded-lg border border-gray-100 hover: transition-all">
                         <FormControl>
                           <Checkbox
                             checked={
@@ -304,9 +304,9 @@ export function EditSubscribe({
 
           {/* 右侧面板 - 表单内容 */}
           <div className="w-full lg:w-2/3 space-y-6">
-            <Card className="border-gray-200 shadow-md">
-              <CardHeader className="bg-gray-50 rounded-t-lg">
-                <CardTitle className="text-xl text-gray-800">
+            <Card className="border-gray-200 shadow-md bg-slate-900/50">
+              <CardHeader className=" rounded-t-lg">
+                <CardTitle className="text-xl text-gray-50">
                   编辑订阅设置
                 </CardTitle>
                 <CardDescription>
@@ -321,7 +321,7 @@ export function EditSubscribe({
                       name="regName"
                       render={({field}) => (
                         <FormItem>
-                          <FormLabel className="text-gray-700 font-medium">
+                          <FormLabel className="text-white font-medium">
                             上传名字格式
                           </FormLabel>
                           <FormControl>
@@ -346,7 +346,7 @@ export function EditSubscribe({
                       name="bitrate"
                       render={({field}) => (
                         <FormItem>
-                          <FormLabel className="text-gray-700 font-medium">
+                          <FormLabel className="text-white font-medium">
                             上传比特率
                           </FormLabel>
                           <FormControl>
@@ -375,7 +375,7 @@ export function EditSubscribe({
                       name="minSec"
                       render={({field}) => (
                         <FormItem>
-                          <FormLabel className="text-gray-700 font-medium">
+                          <FormLabel className="text-white font-medium">
                             限制最小时长(秒)
                           </FormLabel>
                           <FormControl>
@@ -400,7 +400,7 @@ export function EditSubscribe({
                       name="limitSec"
                       render={({field}) => (
                         <FormItem>
-                          <FormLabel className="text-gray-700 font-medium">
+                          <FormLabel className="text-white font-medium">
                             限制最大时长(秒)
                           </FormLabel>
                           <FormControl>
@@ -425,7 +425,7 @@ export function EditSubscribe({
                       name="keyWord"
                       render={({field}) => (
                         <FormItem>
-                          <FormLabel className="text-gray-700 font-medium">
+                          <FormLabel className="text-white font-medium">
                             需要包含的关键词（可选）
                           </FormLabel>
                           <FormControl>
@@ -446,10 +446,10 @@ export function EditSubscribe({
                     />
                   </div>
 
-                  <Separator className="my-6 bg-gray-100"/>
+                  <Separator className="my-6 bg-slate-900/50"/>
 
                   <div>
-                    <h3 className="text-lg font-medium text-gray-800 mb-4">
+                    <h3 className="text-lg font-medium text-gray-50 mb-4">
                       时间设置
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -458,7 +458,7 @@ export function EditSubscribe({
                         name="fromTime"
                         render={({field}) => (
                           <FormItem>
-                            <FormLabel className="text-gray-700 font-medium">
+                            <FormLabel className="text-white font-medium">
                               起始处理时间
                             </FormLabel>
                             <FormControl>
@@ -478,7 +478,7 @@ export function EditSubscribe({
                         name="toTime"
                         render={({field}) => (
                           <FormItem>
-                            <FormLabel className="text-gray-700 font-medium">
+                            <FormLabel className="text-white font-medium">
                               截止处理时间
                             </FormLabel>
                             <FormControl>
@@ -498,7 +498,7 @@ export function EditSubscribe({
                         name="processTime"
                         render={({field}) => (
                           <FormItem className="col-span-2">
-                            <FormLabel className="text-gray-700 font-medium">
+                            <FormLabel className="text-white font-medium">
                               上次检测时间
                             </FormLabel>
                             <FormControl>
@@ -515,10 +515,10 @@ export function EditSubscribe({
                     </div>
                   </div>
 
-                  <Separator className="my-6 bg-gray-100"/>
+                  <Separator className="my-6 bg-slate-900/50"/>
 
                   <div>
-                    <h3 className="text-lg font-medium text-gray-800 mb-4">
+                    <h3 className="text-lg font-medium text-gray-50 mb-4">
                       其他选项
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -527,7 +527,7 @@ export function EditSubscribe({
                         name="useVideoCover"
                         render={({field}) => (
                           <FormItem
-                            className="flex items-center space-x-3 p-3 rounded-lg border border-gray-100 hover:bg-gray-50 transition-all">
+                            className="flex items-center space-x-3 p-3 rounded-lg border border-gray-100 hover: transition-all">
                             <FormControl>
                               <Checkbox
                                 checked={
@@ -558,7 +558,7 @@ export function EditSubscribe({
                         name="checkPart"
                         render={({field}) => (
                           <FormItem
-                            className="flex items-center space-x-3 p-3 rounded-lg border border-gray-100 hover:bg-gray-50 transition-all">
+                            className="flex items-center space-x-3 p-3 rounded-lg border border-gray-100 hover: transition-all">
                             <FormControl>
                               <Checkbox
                                 checked={

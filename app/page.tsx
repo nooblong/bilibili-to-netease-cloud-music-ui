@@ -47,7 +47,7 @@ export default async function Page(props: any) {
               orientation="vertical"
               className="mr-2 h-4"
             />
-            <Breadcrumb>
+            <Breadcrumb className="h-4">
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
                   <BreadcrumbLink href="/">/</BreadcrumbLink>

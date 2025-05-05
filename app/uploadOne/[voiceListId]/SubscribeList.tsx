@@ -48,7 +48,7 @@ async function deleteSubscribe(formData: FormData): Promise<any> {
 }
 
 // 科幻风格的按钮组件
-export const SciFiButton = ({
+const SciFiButton = ({
                               children,
                               className,
                               variant = "primary",

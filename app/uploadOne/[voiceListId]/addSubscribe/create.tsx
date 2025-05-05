@@ -220,8 +220,8 @@ export function AddSubscribe({
 
         {/* 步骤1: UP主信息 */}
         {currentStep === 0 && (
-          <Card className="border-purple-200 shadow-lg animate-fadeIn">
-            <CardHeader className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-t-lg">
+          <Card className="border-purple-200 shadow-lg animate-fadeIn bg-slate-900/50">
+            <CardHeader className="from-purple-50 to-indigo-50 rounded-t-lg">
               <CardTitle className="text-xl text-purple-800">
                 第一步：选择UP主
               </CardTitle>
@@ -261,7 +261,7 @@ export function AddSubscribe({
                 />
 
                 {upInfo && (
-                  <div className="mt-4 p-4 bg-purple-50 rounded-lg">
+                  <div className="mt-4 p-4 border rounded-lg">
                     <div className="flex items-center space-x-4">
                       {upInfo.face && (
                         <div
@@ -285,19 +285,13 @@ export function AddSubscribe({
                         <h3 className="text-lg font-semibold text-purple-800">
                           {upInfo.name}
                         </h3>
-                        <p className="text-gray-500 text-sm">
-                          粉丝数:{" "}
-                          {upInfo.follower
-                            ? upInfo.follower.toLocaleString()
-                            : "未知"}
-                        </p>
                       </div>
                     </div>
                   </div>
                 )}
               </div>
             </CardContent>
-            <CardFooter className="bg-gray-50 p-4 flex justify-end">
+            <CardFooter className="p-4 flex justify-end">
               <PurpleButton
                 type="button"
                 onClick={nextStep}
@@ -311,13 +305,13 @@ export function AddSubscribe({
 
         {/* 步骤2: 合集过滤和筛选 */}
         {currentStep === 1 && (
-          <Card className="border-purple-200 shadow-lg animate-fadeIn">
-            <CardHeader className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-t-lg">
+          <Card className="border-purple-200 shadow-lg animate-fadeIn bg-slate-900/50">
+            <CardHeader className="from-purple-50 to-indigo-50 rounded-t-lg">
               <CardTitle className="text-xl text-purple-800">
-                第二步：合集设置
+                第二步：是否仅上传合集内容，可跳过
               </CardTitle>
               <CardDescription>
-                选择是否过滤合集及其他设置
+                不过滤合集内容可直接下一步
               </CardDescription>
             </CardHeader>
             <CardContent className="p-6">
@@ -442,7 +436,7 @@ export function AddSubscribe({
                 />
               </div>
             </CardContent>
-            <CardFooter className="bg-gray-50 p-4 flex justify-between">
+            <CardFooter className="p-4 flex justify-between">
               <Button
                 type="button"
                 variant="outline"
@@ -460,8 +454,8 @@ export function AddSubscribe({
 
         {/* 步骤3: 高级设置 */}
         {currentStep === 2 && (
-          <Card className="border-purple-200 shadow-lg animate-fadeIn">
-            <CardHeader className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-t-lg">
+          <Card className="border-purple-200 shadow-lg animate-fadeIn bg-slate-900/50">
+            <CardHeader className="from-purple-50 to-indigo-50 rounded-t-lg">
               <CardTitle className="text-xl text-purple-800">
                 第三步：高级设置
               </CardTitle>
@@ -659,7 +653,7 @@ export function AddSubscribe({
                   </div>
 
                   <div
-                    className="flex items-center space-x-3 p-3 mt-4 rounded-lg border border-purple-200 bg-purple-50">
+                    className="flex items-center space-x-3 p-3 mt-4 rounded-lg border border-purple-200">
                     <div className="flex items-center space-x-2">
                       <Switch
                         id="airplane-mode"
@@ -722,7 +716,7 @@ export function AddSubscribe({
                       name="useVideoCover"
                       render={({field}) => (
                         <FormItem
-                          className="flex items-center space-x-3 p-3 rounded-lg border border-purple-100 hover:bg-purple-50 transition-all">
+                          className="flex items-center space-x-3 p-3 rounded-lg border border-purple-100 hover:bg-gray-700 transition-all">
                           <FormControl>
                             <Checkbox
                               checked={
@@ -753,7 +747,7 @@ export function AddSubscribe({
                       name="checkPart"
                       render={({field}) => (
                         <FormItem
-                          className="flex items-center space-x-3 p-3 rounded-lg border border-purple-100 hover:bg-purple-50 transition-all">
+                          className="flex items-center space-x-3 p-3 rounded-lg border border-purple-100 hover:bg-gray-700 transition-all">
                           <FormControl>
                             <Checkbox
                               checked={
@@ -784,7 +778,7 @@ export function AddSubscribe({
                       name="crack"
                       render={({field}) => (
                         <FormItem
-                          className="flex items-center space-x-3 p-3 rounded-lg border border-purple-100 hover:bg-purple-50 transition-all">
+                          className="flex items-center space-x-3 p-3 rounded-lg border border-purple-100 hover:bg-gray-700 transition-all">
                           <FormControl>
                             <Checkbox
                               checked={
@@ -822,7 +816,7 @@ export function AddSubscribe({
                       name="enable"
                       render={({field}) => (
                         <FormItem
-                          className="flex items-center space-x-3 p-3 rounded-lg border border-purple-100 hover:bg-purple-50 transition-all">
+                          className="flex items-center space-x-3 p-3 rounded-lg border border-purple-100 hover:bg-gray-700 transition-all">
                           <FormControl>
                             <Checkbox
                               checked={
@@ -851,7 +845,7 @@ export function AddSubscribe({
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="bg-gray-50 p-4 flex justify-between">
+            <CardFooter className="p-4 flex justify-between">
               <Button
                 type="button"
                 variant="outline"

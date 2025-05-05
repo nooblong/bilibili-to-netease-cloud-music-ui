@@ -56,7 +56,7 @@ export default async function EditSubscribePage(props: PageProps) {
               orientation="vertical"
               className="mr-2 h-4 bg-cyan-500/50"
             />
-            <Breadcrumb>
+            <Breadcrumb className="h-4">
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
                   <BreadcrumbLink
