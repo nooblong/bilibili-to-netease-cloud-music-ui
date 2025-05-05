@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { Subscribe } from "@/app/uploadOne/[voiceListId]/columnsUploadDetail";
 
 export async function submit(val: any) {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const token = cookieStore.get("token")?.value ?? "";
 
     const json = await fetch(api + `/subscribe/edit`, {

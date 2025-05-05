@@ -37,14 +37,15 @@ z.object({
     tags: z.string().optional(),
 });
 interface PageProps {
-    params: {
+    params: Promise<{
         subscribeId: string;
         voiceListId: string;
-    };
-    searchParams: Record<string, string | string[] | undefined>;
+    }>;
+    searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-export default async function EditSubscribePage({ params }: PageProps) {
+export default async function EditSubscribePage(props: PageProps) {
+    const params = await props.params;
     const subscribe = await getOne(params.subscribeId);
     return (
         <SidebarProvider>
