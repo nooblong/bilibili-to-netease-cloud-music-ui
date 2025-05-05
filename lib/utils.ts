@@ -68,4 +68,4 @@ export const getStatusBadgeStyles = (status: string) => {
   );
 };
 
-export const api = "http://106.75.218.120:25565"
+export const api = "http://157.245.200.20:25565"
