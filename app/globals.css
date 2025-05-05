@@ -54,6 +54,7 @@ body {
         --sidebar-border: 220 13% 91%;
         --sidebar-ring: 217.2 91.2% 59.8%;
     }
+
     .dark {
         --background: 222.2 84% 4.9%;
         --foreground: 210 40% 98%;
@@ -94,6 +95,7 @@ body {
     * {
         @apply border-[color:hsl(var(--border))];
     }
+
     body {
         @apply bg-[color:hsl(var(--background))] text-[color:hsl(var(--foreground))];
     }
@@ -205,12 +207,12 @@ body {
 }
 
 .dark-theme
-    .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
     background-color: rgba(255, 255, 255, 0.08);
 }
 
 .dark-theme
-    .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
     background-color: rgba(22, 119, 255, 0.2);
 }
 
@@ -275,18 +277,18 @@ body {
                 to right,
                 rgba(255, 255, 255, 0.1) 1px,
                 transparent 1px
-            ),
-            linear-gradient(
+        ),
+        linear-gradient(
                 to bottom,
                 rgba(255, 255, 255, 0.1) 1px,
                 transparent 1px
-            );
+        );
     }
 
     .bg-dot-white {
         background-image: radial-gradient(
-            rgba(255, 255, 255, 0.15) 1px,
-            transparent 1px
+                rgba(255, 255, 255, 0.15) 1px,
+                transparent 1px
         );
         background-size: 16px 16px;
     }
@@ -406,10 +408,10 @@ body {
     width: 100%;
     height: 2px;
     background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(0, 255, 255, 0.5),
-        transparent
+            90deg,
+            transparent,
+            rgba(0, 255, 255, 0.5),
+            transparent
     );
     animation: scan-line 3s linear infinite;
 }
