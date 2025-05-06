@@ -1,102 +1,52 @@
-import {AppSidebar} from "@/components/app-sidebar";
-import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList,
-    BreadcrumbPage,
-    BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import {Separator} from "@/components/ui/separator";
-import {SidebarInset, SidebarProvider, SidebarTrigger,} from "@/components/ui/sidebar";
-import {api} from "@/lib/utils";
-import {cookies} from "next/headers";
-import Link from "next/link";
-import {Button} from "@/components/ui/button";
-import {redirect} from "next/navigation";
-import {Suspense} from "react";
-import VoiceList from "@/app/VoiceList";
-import AnimatedLoader from "@/app/components/AnimatedLoader";
+'use client';
 
-async function syncVoicelist(): Promise<any> {
-  "use server";
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token");
-  await fetch(api + `/uploadDetail/refreshVoiceList`, {
-    method: "GET",
-    headers: {
-      "Access-Token": token ? token.value : "",
-    },
-  }).then((res) => res.json());
-  redirect("/");
-}
+// https://frp-oil.com:58050/
+// https://frp-dad.com:24700/
 
-export default async function Page(props: any) {
-  const searchParams = await props.searchParams;
-  const seeOther = searchParams.seeOther === "1";
+import { useEffect, useState } from 'react';
+
+export default function Home() {
+  const [countdown, setCountdown] = useState(3);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCountdown((prev) => prev - 1);
+    }, 1000);
+
+    if (countdown <= 0) {
+      clearInterval(timer);
+      window.location.href = 'https://frp-oil.com:58050/';
+    }
+
+    return () => clearInterval(timer);
+  }, [countdown]);
 
   return (
-    <SidebarProvider>
-      <AppSidebar/>
-      <SidebarInset>
-        <header
-          className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1"/>
-            <Separator
-              orientation="vertical"
-              className="mr-2 h-4"
-            />
-            <Breadcrumb className="h-4">
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="/">/</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block"/>
-                <BreadcrumbItem>
-                  <BreadcrumbPage>播客列表</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-          </div>
-        </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="grid grid-cols-2 gap-4">
-            {/*<Link href="https://frp-dad.com:24700/"><Button variant="outline"*/}
-            {/*                                                className="w-full">超高速访问域名(移动)</Button></Link>*/}
-            {/*<Link href="https://frp-oil.com:58050/"><Button variant="outline"*/}
-            {/*                                                className="w-full">超高速访问域名(电信)</Button></Link>*/}
-            {/*<h1 className="text-3xl">已从nooblong.tech转移到<a className="text-blue-300" href="https://nooblong.me">nooblong.me</a></h1>*/}
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <form action={syncVoicelist}>
-              <Button type="submit" className="w-full">
-                刷新播客数据
-              </Button>
-            </form>
-            <div hidden={seeOther}>
-              <Link href="/?seeOther=1" shallow={false}>
-                <Button className="w-full">
-                  {" "}
-                  窥探其他播客
-                </Button>
-              </Link>
-            </div>
-            <div hidden={!seeOther}>
-              <Link href="/" shallow={false} prefetch={false}>
-                <Button className="w-full">返回我的播客</Button>
-              </Link>
-            </div>
-          </div>
+    <main className="flex flex-col items-center justify-center min-h-screen w-full px-4
+      bg-gradient-to-b from-black via-[#0b0f2a] to-[#1a0a2d] text-white font-mono">
 
-          <Suspense
-            key={crypto.randomUUID()}
-            fallback={<AnimatedLoader/>}
-          >
-            <VoiceList seeOther={seeOther}/>
-          </Suspense>
-        </div>
-      </SidebarInset>
-    </SidebarProvider>
+      <h1 className="text-2xl mb-6 text-cyan-400">🚀 即将跳转到主站</h1>
+
+      <div className="text-6xl font-bold mb-6 text-cyan-300 drop-shadow-[0_0_20px_#00ffff]">
+        {countdown > 0 ? countdown : '跳转中...'}
+      </div>
+
+      <div className="flex flex-col gap-4 w-full max-w-xs">
+        <button
+          onClick={() => window.location.href = 'https://frp-oil.com:58050/'}
+          className="py-3 px-6 rounded-md text-lg font-bold uppercase bg-gradient-to-br
+          from-green-400 to-green-600 text-black shadow-lg shadow-green-500/50 hover:scale-105 transition"
+        >
+          去主站（电信）
+        </button>
+        <button
+          onClick={() => window.location.href = 'https://frp-dad.com:24700/'}
+          className="py-3 px-6 rounded-md text-lg font-bold uppercase bg-gradient-to-br
+          from-blue-400 to-blue-600 text-black shadow-lg shadow-blue-500/50 hover:scale-105 transition"
+        >
+          去主站（移动）
+        </button>
+      </div>
+    </main>
   );
 }
