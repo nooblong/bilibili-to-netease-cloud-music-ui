@@ -206,7 +206,12 @@ const LoginNetMusicQr = () => {
                   >
                     <DialogTrigger asChild>
                       <Button
-                        onClick={() => {
+                        onClick={(event) => {
+                          if (!Cookies.get("token") || Cookies.get("token") === "") {
+                            toast({description: "请先左下角登录/注册"})
+                            event.preventDefault();
+                            return;
+                          }
                           login(
                             setImg,
                             setChecking,
