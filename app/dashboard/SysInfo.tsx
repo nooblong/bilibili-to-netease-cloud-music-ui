@@ -1,12 +1,12 @@
 import {api} from "@/lib/utils";
 import {redirect} from "next/navigation";
-import {cookies} from "next/headers";
 import {Card, CardContent, CardHeader} from "@/components/ui/card";
 
 interface SysInfo {
-  regNum: number;
-  annoVisitNum: number;
-  userVisitNum: number;
+  login163Num: number;
+  visitTimes: number;
+  visitToday: number;
+  visitTodayTimes: number;
 }
 
 async function fetchSysInfo(): Promise<SysInfo | null> {
@@ -48,32 +48,41 @@ export default async function SysInfo() {
         </CardHeader>
         <CardContent className="pt-6">
           {sysInfo ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div
                 className="stats-card p-4 rounded-lg bg-zinc-800/50 border border-zinc-700/30 flex flex-col items-center justify-center backdrop-blur-sm hover:bg-zinc-800/70 transition-colors animate-in fade-in slide-in-from-bottom-5 duration-500 delay-100">
                 <h3 className="text-zinc-400 text-sm font-medium mb-1">
-                  注册用户数
+                  注册且已登录网易云用户数
                 </h3>
                 <p className="text-2xl font-bold text-primary">
-                  {sysInfo.regNum}
+                  {sysInfo.login163Num}
                 </p>
               </div>
               <div
                 className="stats-card p-4 rounded-lg bg-zinc-800/50 border border-zinc-700/30 flex flex-col items-center justify-center backdrop-blur-sm hover:bg-zinc-800/70 transition-colors animate-in fade-in slide-in-from-bottom-5 duration-500 delay-200">
                 <h3 className="text-zinc-400 text-sm font-medium mb-1">
-                  游客访问数
+                  今日访问用户数
                 </h3>
                 <p className="text-2xl font-bold text-primary">
-                  {sysInfo.annoVisitNum}
+                  {sysInfo.visitToday}
                 </p>
               </div>
               <div
                 className="stats-card p-4 rounded-lg bg-zinc-800/50 border border-zinc-700/30 flex flex-col items-center justify-center backdrop-blur-sm hover:bg-zinc-800/70 transition-colors animate-in fade-in slide-in-from-bottom-5 duration-500 delay-300">
                 <h3 className="text-zinc-400 text-sm font-medium mb-1">
-                  用户访问数
+                  今日总访问数
                 </h3>
                 <p className="text-2xl font-bold text-primary">
-                  {sysInfo.userVisitNum}
+                  {sysInfo.visitTodayTimes}
+                </p>
+              </div>
+              <div
+                className="stats-card p-4 rounded-lg bg-zinc-800/50 border border-zinc-700/30 flex flex-col items-center justify-center backdrop-blur-sm hover:bg-zinc-800/70 transition-colors animate-in fade-in slide-in-from-bottom-5 duration-500 delay-200">
+                <h3 className="text-zinc-400 text-sm font-medium mb-1">
+                  总访问数
+                </h3>
+                <p className="text-2xl font-bold text-primary">
+                  {sysInfo.visitTimes}
                 </p>
               </div>
             </div>
