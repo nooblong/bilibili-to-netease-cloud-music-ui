@@ -34,7 +34,11 @@ async function syncVoicelist(): Promise<any> {
 export default async function Page(props: any) {
   const searchParams = await props.searchParams;
   const seeOther = searchParams.seeOther === "1";
-
+  await fetch(api + "/sys/log", {
+    headers: {
+      "Access-Token": (await cookies()).get("token")?.value ?? "",
+    },
+  });
   return (
     <SidebarProvider>
       <AppSidebar/>

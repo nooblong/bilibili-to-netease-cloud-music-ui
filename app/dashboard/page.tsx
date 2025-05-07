@@ -9,7 +9,6 @@ import {api} from "@/lib/utils";
 import LoaderSmall from "@/app/components/LoaderSmall";
 
 export default async function Page(props: any) {
-  fetch(api + "/sys/log");
   return (
     <SidebarProvider>
       <AppSidebar/>

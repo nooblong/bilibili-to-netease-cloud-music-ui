@@ -19,11 +19,6 @@ async function fetchSysInfo(): Promise<SysInfo | null> {
       `/customError?msg=${encodeURIComponent(JSON.stringify(response))}`
     );
   }
-  await fetch(api + "/sys/log", {
-    headers: {
-      "Access-Token": (await cookies()).get("token")?.value ?? "",
-    },
-  });
   return new Promise((resolve) => {
     return setTimeout(() => resolve(response.data), 0);
   });
