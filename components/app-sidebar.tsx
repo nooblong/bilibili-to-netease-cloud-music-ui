@@ -36,6 +36,10 @@ const data = {
             title: "登录bilibili",
             url: "/loginBilibili",
         },
+        {
+           title: "阿梓我嘞个豆",
+           url: "/ciallo/index.html"
+        },
     ],
 };
 
