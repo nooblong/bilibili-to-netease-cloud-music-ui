@@ -46,13 +46,13 @@ export default function Home() {
         >
           去主站（移动）
         </button>
-        <button
-          onClick={() => window.location.href = '/ciallo/index.html'}
-          className="py-3 px-6 rounded-md text-lg font-bold uppercase bg-gradient-to-br
-          from-blue-400 to-blue-600 text-black shadow-lg shadow-blue-500/50 hover:scale-105 transition"
-        >
-          我嘞个豆
-        </button>
+        {/*<button*/}
+        {/*  onClick={() => window.location.href = '/ciallo/index.html'}*/}
+        {/*  className="py-3 px-6 rounded-md text-lg font-bold uppercase bg-gradient-to-br*/}
+        {/*  from-blue-400 to-blue-600 text-black shadow-lg shadow-blue-500/50 hover:scale-105 transition"*/}
+        {/*>*/}
+        {/*  我嘞个豆*/}
+        {/*</button>*/}
       </div>
     </main>
   );
