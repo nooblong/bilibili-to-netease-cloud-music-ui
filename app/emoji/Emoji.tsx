@@ -45,6 +45,7 @@ export default function Emoji() {
                     return {
                         label: <div className="flex items-center space-x-2">
                             <Image
+                                preview={false}
                                 src={replaceImageUrl(i.url)}
                                 alt="Emoji Image"
                                 width={44}
@@ -70,7 +71,7 @@ export default function Emoji() {
     return (
         <div className="p-8 max-w-4xl mx-auto w-full">
             <h1 className="text-3xl font-bold mb-6 text-center">b站表情包大全</h1>
-            <h1 className="text-xl font-bold mb-6 text-center">点击图片前往原链接（清晰度一样）</h1>
+            <h1 className="text-xl font-bold mb-6 text-center">点击图片前往原链接跳过加载（清晰度一样）</h1>
 
             <div className="flex gap-4 mb-8">
                 <Select
