@@ -37,6 +37,10 @@ const data = {
             url: "/loginBilibili",
         },
         {
+            title: "搜索并下载b站表情包",
+            url: "/emoji",
+        },
+        {
            title: "阿梓我嘞个豆",
            url: "/ciallo/index.html"
         },
