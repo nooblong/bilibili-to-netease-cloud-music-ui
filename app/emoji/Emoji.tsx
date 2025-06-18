@@ -112,8 +112,8 @@ export default function Emoji() {
                   className="w-full h-auto object-contain aspect-square bg-[length:16px_16px] bg-[repeating-conic-gradient(#ccc_0_25%,#fff_0_50%)]"
                   preview={false}
                 />
-                <p className="text-black text-center text-sm mt-1 truncate">{emoji.meta.alias}</p>
               </div>
+              <p className="text-center text-sm mt-1 truncate">{emoji.meta.alias}</p>
             </Col>
           ))}
         </Row>
