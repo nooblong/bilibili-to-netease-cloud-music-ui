@@ -2,7 +2,7 @@
 
 import {useState, useEffect} from 'react';
 import {Select, Spin, Image, Row, Col} from 'antd';
-import {replaceImageUrl} from "@/lib/utils";
+import {replaceGifUrl, replaceImageUrl} from "@/lib/utils";
 
 export interface EmojiCategory {
   id: string;
@@ -16,6 +16,7 @@ export interface Emoji {
   text: string;
   url: string;
   meta: any;
+  gif_url: string;
 }
 
 export default function Emoji() {
@@ -103,11 +104,11 @@ export default function Emoji() {
               <div
                 className="relative p-2 rounded-lg shadow-sm cursor-pointer transition hover:shadow-md"
                 onClick={() => {
-                  window.open(emoji.url, '_blank', 'noreferrer');
+                  window.open(emoji.gif_url ?? emoji.url, '_blank', 'noreferrer');
                 }}
               >
                 <Image
-                  src={replaceImageUrl(emoji.url)}
+                  src={emoji.gif_url != null ? replaceGifUrl(emoji.gif_url) : replaceImageUrl(emoji.url)}
                   alt={emoji.text}
                   className="w-full h-auto object-contain aspect-square bg-[length:16px_16px] bg-[repeating-conic-gradient(#ccc_0_25%,#fff_0_50%)]"
                   preview={false}

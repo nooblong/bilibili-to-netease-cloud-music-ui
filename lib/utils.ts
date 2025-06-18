@@ -30,6 +30,18 @@ export const replaceImageUrl = (url: string): string => {
   );
 }
 
+export const replaceGifUrl = (url: string): string => {
+  if (url === null || url === undefined || url === "") {
+    return "https://github.com/shadcn.png"
+  }
+  let s = url.replace(
+    /^(http)s*(:\/\/)/,
+    "https://images.weserv.nl/?url="
+  );
+  s += "&output=gif&n=-1"
+  return s;
+}
+
 export const handleRes = (json: any, redirectUrl: string) => {
   if (json.code === 0) {
     redirect(redirectUrl)
