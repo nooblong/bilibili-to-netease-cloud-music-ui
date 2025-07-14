@@ -15,7 +15,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ path: s
 
   const data = await backendResponse.text();
   const respHeader = backendResponse.headers;
-  respHeader.set("Cache-Control", "no-store");
+  // respHeader.set("Cache-Control", "no-store");
   return new NextResponse(data, {status: backendResponse.status, headers: respHeader});
 }
 
@@ -34,6 +34,6 @@ export async function POST(req: NextRequest, context: { params: Promise<{ path: 
   });
   const data = await backendResponse.text();
   const respHeader = backendResponse.headers;
-  respHeader.set("Cache-Control", "no-store");
+  // respHeader.set("Cache-Control", "no-store");
   return new NextResponse(data, {status: backendResponse.status, headers: respHeader});
 }
