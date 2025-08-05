@@ -2,6 +2,7 @@ import type {AuthProvider} from "@refinedev/core";
 import {Api} from "./App";
 
 export const TOKEN_KEY = "token";
+export const USERNAME_KEY = "username";
 
 export const authProvider: AuthProvider = {
   register: async ({username, password}) => {
@@ -44,6 +45,7 @@ export const authProvider: AuthProvider = {
 
       if (response.code === 0) {
         localStorage.setItem(TOKEN_KEY, response.data);
+        localStorage.setItem(USERNAME_KEY, username);
         return {
           success: true,
           redirectTo: "/",
@@ -61,6 +63,7 @@ export const authProvider: AuthProvider = {
   },
   logout: async () => {
     localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USERNAME_KEY);
     return {
       success: true,
       redirectTo: "/login",
@@ -82,10 +85,11 @@ export const authProvider: AuthProvider = {
   getPermissions: async () => null,
   getIdentity: async () => {
     const token = localStorage.getItem(TOKEN_KEY);
+    const username = localStorage.getItem(USERNAME_KEY);
     if (token) {
       return {
         id: 1,
-        name: "John Doe",
+        name: username,
         avatar: "https://i.pravatar.cc/300",
       };
     }

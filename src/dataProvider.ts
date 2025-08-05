@@ -19,8 +19,14 @@ export const dataProvider = (url: string): DataProvider => ({
     deleteOne: async () => {
         throw new Error("Not implemented");
     },
-    getList: async () => {
-        throw new Error("Not implemented");
+    getList: async ({ resource, pagination }) => {
+        const { current = 1, pageSize = 10 } = pagination ?? {};
+        const response = await fetch(`${url}/${resource}?page=${current}&size=${pageSize}`);
+        const json = await response.json();
+        return {
+            data: json.data.records,
+            total: json.data.total,
+        };
     },
     getApiUrl: () => url,
 });

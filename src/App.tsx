@@ -16,11 +16,10 @@ import routerBindings, {
   NavigateToResource,
   UnsavedChangesNotifier,
 } from "@refinedev/react-router";
-import dataProvider from "@refinedev/simple-rest";
 import { App as AntdApp } from "antd";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 import { authProvider } from "./authProvider";
-import { Header } from "./components/header";
+import { Header } from "./components";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 import {
   BlogPostCreate,
@@ -37,13 +36,14 @@ import {
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
+import {ListVoicelistList, ListVoicelistShow} from "./pages/voicelistlist";
+import {dataProvider} from "./rest-data-provider";
 
 export const Api = "http://127.0.0.1:25565"
 
 function App() {
   return (
     <BrowserRouter>
-      <GitHubBanner />
       <RefineKbarProvider>
         <ColorModeContextProvider>
           <AntdApp>
@@ -54,6 +54,14 @@ function App() {
                 routerProvider={routerBindings}
                 authProvider={authProvider}
                 resources={[
+                  {
+                    name: "我的播客",
+                    list: "/listVoicelist",
+                    show: "/listVoicelist/show/:id",
+                    meta: {
+                      canDelete: true,
+                    },
+                  },
                   {
                     name: "blog_posts",
                     list: "/blog-posts",
@@ -102,6 +110,10 @@ function App() {
                       index
                       element={<NavigateToResource resource="blog_posts" />}
                     />
+                    <Route path="/listVoicelist">
+                      <Route index element={<ListVoicelistList />} />
+                      <Route path="show/:id" element={<ListVoicelistShow />} />
+                    </Route>
                     <Route path="/blog-posts">
                       <Route index element={<BlogPostList />} />
                       <Route path="create" element={<BlogPostCreate />} />
