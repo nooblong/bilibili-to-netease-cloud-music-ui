@@ -3,15 +3,12 @@ import {
   MarkdownField,
   useTable,
 } from "@refinedev/antd";
-import {useParsed} from "@refinedev/core";
+import {useGo, useNotification, useParsed} from "@refinedev/core";
 import {Button, Input, Modal, Space, Table, Tooltip} from "antd";
 import {useEffect, useState} from "react";
 
 export const UploadList = () => {
-  type MyParams = {
-    voiceListId?: number;
-  };
-  const parsed = useParsed<MyParams>();
+  const parsed = useParsed();
   const voiceListIdFromUrl = parsed.params?.voiceListId;
 
   const {tableProps} = useTable({
@@ -41,8 +38,39 @@ export const UploadList = () => {
     }
   }, [voiceListIdFromUrl]);
 
+  const go = useGo();
+  const { open } = useNotification();
+
   return (
-    <List>
+    <List canCreate={false}>
+      <Space style={{marginBottom: 16}}>
+        <Button
+          onClick={() => {
+            console.log(voiceListIdFromUrl)
+            if (voiceListIdFromUrl != null && voiceListIdFromUrl !== "") {
+              go({
+                to: {
+                  resource: "upload",
+                  action: "create",
+                },
+                type: "push",
+                query: {
+                  voiceListId: voiceListIdFromUrl,
+                },
+              })
+            } else {
+              open?.({
+                type: "error",
+                message: "没有播客id，或许应该从【我的播客】进入",
+                description: "出错了",
+              });
+            }
+          }}
+        >
+          单曲上传
+        </Button>
+      </Space>
+      <br/>
       <Space style={{marginBottom: 16}}>
         <span>播客id:</span>
         <Input

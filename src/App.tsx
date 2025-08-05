@@ -68,6 +68,7 @@ function App() {
                   {
                     name: "upload",
                     list: "/uploadList",
+                    create: "/uploadList/create",
                     show: "/uploadList/show/:id",
                     meta: {
                       label: "上传列表",
@@ -77,6 +78,7 @@ function App() {
                   {
                     name: "subscribe",
                     list: "/subscribeList",
+                    create: "/subscribeList/create",
                     show: "/subscribeList/show/:id",
                     meta: {
                       label: "订阅列表",
@@ -214,4 +216,13 @@ export const replaceGifUrl = (url: string): string => {
   );
   s += "&output=gif&n=-1"
   return s;
+}
+
+export function extractUrl(text: string): string | null {
+  if (text.startsWith("BV")) {
+    return text;
+  }
+  const urlRegex = /(https?:\/\/[^\s]+)/;
+  const match = text.match(urlRegex);
+  return match ? match[0] : null;
 }
