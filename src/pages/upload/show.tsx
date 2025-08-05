@@ -4,7 +4,7 @@ import { Typography } from "antd";
 
 const { Title } = Typography;
 
-export const ListVoicelistShow = () => {
+export const UploadShow = () => {
   const { queryResult } = useShow({});
   const { data, isLoading } = queryResult;
 
