@@ -1,4 +1,5 @@
 import {
+  DeleteButton,
   ImageField,
   List,
   useTable,
@@ -6,15 +7,13 @@ import {
 import {Button, Input, Modal, Space, Table, Tooltip} from "antd";
 import {useEffect, useState} from "react";
 import {replaceImageUrl} from "../../App";
-import {CrudFilters, useParsed} from "@refinedev/core";
+import {CrudFilters, useGo, useNotification, useParsed} from "@refinedev/core";
 
 export const SubscribeList = () => {
-  type MyParams = {
-    voiceListId?: number;
-  };
-  const parsed = useParsed<MyParams>();
+  const parsed = useParsed();
   const voiceListIdFromUrl = parsed.params?.voiceListId;
-  const [filterVoiceListId, setFilterVoiceListId] = useState<string>("");
+  console.log(voiceListIdFromUrl)
+  const [filterVoiceListId, setFilterVoiceListId] = useState<string | null>(voiceListIdFromUrl ? String(voiceListIdFromUrl) : null);
 
   const [logModal, setLogModal] = useState<{
     open: boolean;
@@ -38,7 +37,7 @@ export const SubscribeList = () => {
   }
 
   const {tableProps, setFilters} = useTable({
-    resource: "subscribe/list",
+    resource: "subscribe",
     syncWithLocation: true,
     filters: {
       initial: filters,
@@ -50,7 +49,10 @@ export const SubscribeList = () => {
     if (localStorage.getItem("username")) {
       setUsername(String(localStorage.getItem("username")));
     }
-  }, []);
+    if (voiceListIdFromUrl) {
+      setFilterVoiceListId(String(voiceListIdFromUrl));
+    }
+  }, [voiceListIdFromUrl]);
 
   // 点击“查看自己播客”
   const handleSelf = () => {
@@ -75,11 +77,14 @@ export const SubscribeList = () => {
     }]);
   };
 
+  const go = useGo();
+  const {open} = useNotification();
+
   return (
-    <List>
+    <List canCreate={false}>
       <Space style={{marginBottom: 16}}>
         <Input
-          value={filterVoiceListId}
+          value={filterVoiceListId ?? ""}
           onChange={(e) => setFilterVoiceListId(e.target.value)}
           style={{width: 200}}
           disabled
@@ -96,16 +101,88 @@ export const SubscribeList = () => {
         <Button onClick={handleOthers}>查看他人订阅</Button>
         <Button onClick={handleSelf}>查看自己订阅</Button>
       </Space>
+      <br/>
+      <Space style={{marginBottom: 16}}>
+        <Button
+          onClick={() => {
+            if (voiceListIdFromUrl != null && voiceListIdFromUrl !== "") {
+              go({
+                to: {
+                  resource: "subscribe",
+                  action: "create",
+                },
+                type: "push",
+                query: {
+                  voiceListId: voiceListIdFromUrl,
+                },
+              })
+            } else {
+              open?.({
+                type: "error",
+                message: "没有播客id，或许应该从【我的播客】进入",
+                description: "出错了",
+              });
+            }
+          }}
+        >
+          创建订阅
+        </Button>
+      </Space>
 
       <Table {...tableProps} rowKey="id" scroll={{x: "max-content"}}>
+        <Table.Column
+          title="操作"
+          render={(_, record) => (
+            <DeleteButton
+              resource="subscribe" // 替换成你的 resource 名字
+              recordItemId={record.id}
+              onSuccess={() => {
+                open?.({
+                  type: "success",
+                  message: "删除成功",
+                  description: "成功",
+                });
+              }}
+              onError={() => {
+                open?.({
+                  type: "error",
+                  message: "删除失败",
+                  description: "出错了",
+                });
+              }}
+            />
+          )}
+        />
         <Table.Column
           title="UP头像"
           dataIndex="upImage"
           render={(url: string) => <ImageField value={replaceImageUrl(url)} width={100}/>}
         />
         <Table.Column title="类型" dataIndex="type"/>
-        <Table.Column title="UP主名称" dataIndex="upName"/>
-        <Table.Column title="合集/收藏id" dataIndex="channelIds"/>
+        <Table.Column
+          dataIndex="upName"
+          title="up主名称"
+          render={(value: string) => {
+            const shortText = value?.length > 10 ? value.slice(0, 10) + "…" : value;
+            return (
+              <Tooltip title={value}>
+                <span>{shortText}</span>
+              </Tooltip>
+            );
+          }}
+        />
+        <Table.Column
+          dataIndex="channelIds"
+          title="合集/收藏id"
+          render={(value: string) => {
+            const shortText = value?.length > 10 ? value.slice(0, 10) + "…" : value;
+            return (
+              <Tooltip title={value}>
+                <span>{shortText}</span>
+              </Tooltip>
+            );
+          }}
+        />
         <Table.Column title="用户名" dataIndex="userName"/>
         <Table.Column title="启用" dataIndex="enable"/>
         <Table.Column

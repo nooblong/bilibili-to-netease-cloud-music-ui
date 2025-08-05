@@ -10,30 +10,22 @@ export const UploadCreate = () => {
   const voiceListId = String(parsed.params?.voiceListId);
   const [isLoading, setIsLoading] = useState(false);
   const [videoInfo, setVideoInfo] = useState<any>(null);
-  const [cids, setCids] = useState<any[]>([]);
   const {open} = useNotification();
 
-  const {formProps, saveButtonProps, form} = useForm({});
+  const {formProps, saveButtonProps, form, onFinish} = useForm({
+    redirect: false
+  });
+
+  const handleOnFinish = (values: any) => {
+    onFinish({
+      ...values,
+      useVideoCover: values.useVideoCover ? 1 : 0,
+    });
+  };
 
   return (
     <Create saveButtonProps={saveButtonProps}>
-      {videoInfo && (
-        <Space style={{marginBottom: 16}}>
-          {videoInfo.title}
-        </Space>
-      )}
-      {videoInfo && videoInfo.image && (
-        <Space style={{marginBottom: 16}}>
-          <ImageField
-            width={100}
-            value={replaceImageUrl(
-              videoInfo.image
-            )}
-            alt=""
-          />
-        </Space>
-      )}
-      <Form {...formProps} layout="vertical">
+      <div className="flex items-center justify-between">
         <p className="text-xs text-cyan-100/70">
           支持:
           https://www.bilibili.com/video/BV1p5N6esEcM/
@@ -48,11 +40,29 @@ export const UploadCreate = () => {
           <br/>
           支持: BV1p5N6esEcM
         </p>
+        {videoInfo && (
+          <Space style={{marginBottom: 16}}>
+            {videoInfo.title}
+          </Space>
+        )}
+        {videoInfo && videoInfo.image && (
+          <Space style={{marginBottom: 16}}>
+            <ImageField
+              width={100}
+              value={replaceImageUrl(
+                videoInfo.image
+              )}
+              alt=""
+            />
+          </Space>
+        )}
+      </div>
+      <Form {...formProps} layout="vertical" onFinish={handleOnFinish}>
         <Form.Item name="bvid" label="bvid" rules={[{required: true}]} initialValue={"BV1vQ4y1Y7h2"}>
           <Input placeholder="输入 bvid 或含 bvid 的地址"/>
         </Form.Item>
         <Button
-          className="w-full relative group mt-3"
+          className="mb-10"
           loading={isLoading}
           onClick={async (event) => {
             event.preventDefault();
@@ -95,13 +105,42 @@ export const UploadCreate = () => {
           解析视频
         </Button>
 
-        <Form.Item
-          label="上传名称"
-          name="uploadName"
-          rules={[{required: true}]}
-        >
-          <Input maxLength={100}/>
-        </Form.Item>
+        <Form.List name="cidNames">
+          {(fields, {remove}) => (
+            <div className="w-full">
+              <label className="block mb-2">编辑名称</label>
+              {fields.map(({key, name, ...restField}) => (
+                <div
+                  key={key}
+                  className="flex flex-row gap-2 mb-2 items-center w-full"
+                >
+                  <span>CID</span>
+
+                  <Form.Item
+                    {...restField}
+                    name={[name, "cid"]}
+                    noStyle
+                  >
+                    <Input placeholder="CID"/>
+                  </Form.Item>
+
+                  <Form.Item
+                    {...restField}
+                    name={[name, "name"]}
+                    noStyle
+                  >
+                    <Input placeholder="名称"/>
+                  </Form.Item>
+
+                  <MinusCircleOutlined
+                    className="text-red-500 cursor-pointer"
+                    onClick={() => remove(name)}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </Form.List>
 
         <Form.Item label="音量提高（db）" name="offset" initialValue={0}>
           <InputNumber min={0} step={0.1} style={{width: "100%"}}/>
@@ -115,7 +154,7 @@ export const UploadCreate = () => {
           <InputNumber min={0} step={0.1} style={{width: "100%"}}/>
         </Form.Item>
 
-        <Form.Item label="码率320k" name="bitrate" initialValue={320000}>
+        <Form.Item label="比特率：默认320k" name="bitrate" initialValue={320000}>
           <InputNumber min={0} step={1000} style={{width: "100%"}}/>
         </Form.Item>
 
@@ -127,50 +166,6 @@ export const UploadCreate = () => {
         >
           <InputNumber disabled style={{width: "100%"}}/>
         </Form.Item>
-
-        <Form.Item label="BVID" name="bvid">
-          <Input/>
-        </Form.Item>
-
-        <Form.List name="cidNames">
-          {(fields, {add, remove}) => (
-            <>
-              <label>分p名称列表</label>
-              {fields.map(({key, name, ...restField}) => (
-                <Space
-                  key={key}
-                  style={{display: "flex", marginBottom: 8}}
-                  align="baseline"
-                >
-                  cid
-                  <Form.Item
-                    {...restField}
-                    name={[name, "cid"]}
-                  >
-                    <Input placeholder="CID"/>
-                  </Form.Item>
-                  <Form.Item
-                    {...restField}
-                    name={[name, "name"]}
-                  >
-                    <Input placeholder="名称"/>
-                  </Form.Item>
-                  <MinusCircleOutlined onClick={() => remove(name)}/>
-                </Space>
-              ))}
-              <Form.Item>
-                <Button
-                  type="dashed"
-                  onClick={() => add()}
-                  block
-                  icon={<PlusOutlined/>}
-                >
-                  添加CID
-                </Button>
-              </Form.Item>
-            </>
-          )}
-        </Form.List>
 
         <Form.Item
           label="使用视频封面"

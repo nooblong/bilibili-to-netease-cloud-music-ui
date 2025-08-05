@@ -12,7 +12,7 @@ export const UploadList = () => {
   const voiceListIdFromUrl = parsed.params?.voiceListId;
 
   const {tableProps} = useTable({
-    resource: "uploadDetail/list",
+    resource: "upload",
     syncWithLocation: true,
     filters: {
       initial: voiceListIdFromUrl
@@ -46,7 +46,6 @@ export const UploadList = () => {
       <Space style={{marginBottom: 16}}>
         <Button
           onClick={() => {
-            console.log(voiceListIdFromUrl)
             if (voiceListIdFromUrl != null && voiceListIdFromUrl !== "") {
               go({
                 to: {

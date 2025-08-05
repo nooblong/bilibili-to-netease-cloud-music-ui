@@ -17,7 +17,7 @@ export const VoicelistList = () => {
   const [username, setUsername] = useState<string | null>(null);
 
   const {tableProps, setFilters} = useTable({
-    resource: "uploadDetail/listVoicelist",
+    resource: "upload/listVoicelist",
     syncWithLocation: true,
     filters: {
       initial: localStorage.getItem("username")
