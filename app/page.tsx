@@ -15,7 +15,7 @@ export default function Home() {
 
     if (countdown <= 0) {
       clearInterval(timer);
-      window.location.href = 'https://frp-oil.com:58050/';
+      window.location.href = 'https://frp-dad.com:24700/';
     }
 
     return () => clearInterval(timer);
@@ -25,7 +25,7 @@ export default function Home() {
     <main className="flex flex-col items-center justify-center min-h-screen w-full px-4
       bg-gradient-to-b from-black via-[#0b0f2a] to-[#1a0a2d] text-white font-mono">
 
-      <h1 className="text-2xl mb-6 text-cyan-400">🚀 即将跳转到主站</h1>
+      <h1 className="text-2xl mb-6 text-cyan-400">🚀 即将跳转到移动</h1>
 
       <div className="text-6xl font-bold mb-6 text-cyan-300 drop-shadow-[0_0_20px_#00ffff]">
         {countdown > 0 ? countdown : '跳转中...'}
