@@ -32,7 +32,7 @@ import {LoginBiliShow} from "./pages/loginBili";
 import {ThemedLayoutV2} from "./components/layout";
 import {ThemedSiderV2} from "./components/layout/sider";
 import {ThemedTitleV2} from "./components/layout/title";
-import {GithubOutlined} from "@ant-design/icons";
+import {Emoji} from "./pages/emoji";
 
 export const Api = "http://127.0.0.1:25565"
 
@@ -42,7 +42,7 @@ function App() {
       <RefineKbarProvider>
         <ColorModeContextProvider>
           <AntdApp>
-            <DevtoolsProvider>
+            {/*<DevtoolsProvider>*/}
               <Refine
                 dataProvider={dataProvider(Api)}
                 notificationProvider={useNotificationProvider}
@@ -91,6 +91,14 @@ function App() {
                     list: "/loginBili",
                     meta: {
                       label: "登录b站(可选)",
+                      canDelete: false,
+                    },
+                  },
+                  {
+                    name: "emoji",
+                    list: "/emoji",
+                    meta: {
+                      label: "b站表情大全",
                       canDelete: false,
                     },
                   },
@@ -146,10 +154,13 @@ function App() {
                       <Route path="show/:id" element={<SubscribeShow/>}/>
                     </Route>
                     <Route path="/loginNetease"
-                           element={<Authenticated key={"loginNetease"}><LoginNeteaseShow/></Authenticated>}>
+                           element={<LoginNeteaseShow/>}>
                     </Route>
                     <Route path="/loginBili"
-                           element={<Authenticated key={"loginBili"}><LoginBiliShow/></Authenticated>}>
+                           element={<LoginBiliShow/>}>
+                    </Route>
+                    <Route path="/emoji"
+                           element={<Emoji/>}>
                     </Route>
                     <Route path="*" element={<ErrorComponent/>}/>
                   </Route>
@@ -176,8 +187,8 @@ function App() {
                 <UnsavedChangesNotifier/>
                 <DocumentTitleHandler/>
               </Refine>
-              <DevtoolsPanel/>
-            </DevtoolsProvider>
+              {/*<DevtoolsPanel/>*/}
+            {/*</DevtoolsProvider>*/}
           </AntdApp>
         </ColorModeContextProvider>
       </RefineKbarProvider>

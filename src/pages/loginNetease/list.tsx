@@ -1,4 +1,4 @@
-import {useCustom, useNotification, useOne} from "@refinedev/core";
+import {Authenticated, useCustom, useNotification, useOne} from "@refinedev/core";
 import {Api} from "../../App";
 import {useEffect, useState} from "react";
 import {ImageField, Show, Title} from "@refinedev/antd";
@@ -16,19 +16,6 @@ import {
 
 export const LoginNeteaseShow = () => {
 
-  // const {data, isLoading} = useCustom({
-  //   url: `${Api}/netmusic/loginStatus`,
-  //   method: "get",
-  //   config: {
-  //     headers: {
-  //       "x-custom-header": "foo-bar",
-  //     },
-  //     query: {
-  //       title: "Foo bar",
-  //     },
-  //   },
-  // });
-
   return (
     <div>
       <LoginNetMusicQr/>
@@ -41,7 +28,7 @@ const LoginNetMusicQr = () => {
   const [userInfo, setUserInfo] = useState<any>(null);
   const [checking, setChecking] = useState(false);
   const [key, setKey] = useState("");
-  const { open } = useNotification();
+  const {open} = useNotification();
   const [scanVisible, setScanVisible] = useState(false);
   const [cookieVisible, setCookieVisible] = useState(false);
 
@@ -55,15 +42,15 @@ const LoginNetMusicQr = () => {
         }
       }).then(res => res.json());
 
-      open?.({ type: "success", message: json.message });
+      open?.({type: "success", message: json.message});
 
       if (json.code === 800) {
-        open?.({ message: "二维码已过期,请重新获取", type: "success" });
+        open?.({message: "二维码已过期,请重新获取", type: "success"});
         clearInterval(timer);
       }
       if (json.code === 803) {
         clearInterval(timer);
-        open?.({ message: "登录成功", type: "success" });
+        open?.({message: "登录成功", type: "success"});
         window.location.reload();
       }
     }, 3000);
@@ -92,13 +79,13 @@ const LoginNetMusicQr = () => {
   };
 
   return (
-    <div style={{ padding: 24, maxWidth: 800, margin: "0 auto" }}>
+    <div style={{padding: 24, maxWidth: 800, margin: "0 auto"}}>
       <Row justify="center">
         <Col>
           {userInfo?.data?.profile ? (
             <>
-              <Image width={104} height={104} src={userInfo.data.profile.avatarUrl} />
-              <div style={{ marginTop: 8, textAlign: "center", fontSize: 18 }}>
+              <Image width={104} height={104} src={userInfo.data.profile.avatarUrl}/>
+              <div style={{marginTop: 8, textAlign: "center", fontSize: 18}}>
                 {userInfo.data.profile.nickname}
               </div>
             </>
@@ -108,7 +95,7 @@ const LoginNetMusicQr = () => {
         </Col>
       </Row>
 
-      <Divider />
+      <Divider/>
 
       <Row justify="center" gutter={[16, 16]}>
         <Col>
@@ -123,9 +110,9 @@ const LoginNetMusicQr = () => {
         </Col>
       </Row>
 
-      <Divider />
+      <Divider/>
 
-      <MusicForm />
+      <MusicForm/>
 
       {/* 扫码登录 Modal */}
       <Modal
@@ -140,9 +127,9 @@ const LoginNetMusicQr = () => {
         centered
       >
         {img ? (
-          <Image src={img} width={300} height={300} alt="二维码" />
+          <Image src={img} width={300} height={300} alt="二维码"/>
         ) : (
-          <div style={{ textAlign: "center", padding: "2rem" }}>
+          <div style={{textAlign: "center", padding: "2rem"}}>
             正在生成二维码...
           </div>
         )}
@@ -155,10 +142,10 @@ const LoginNetMusicQr = () => {
         onCancel={() => setCookieVisible(false)}
         footer={null}
         width="80vw"
-        style={{ top: 40 }}
+        style={{top: 40}}
         centered
       >
-        <Image src="/how.png" width="100%" alt="Cookie 获取教程" />
+        <Image src="/how.png" width="100%" alt="Cookie 获取教程"/>
       </Modal>
     </div>
   );
@@ -211,19 +198,19 @@ const MusicForm = () => {
   };
 
   return (
-    <div style={{ maxWidth: 500, margin: "0 auto" }}>
+    <div style={{maxWidth: 500, margin: "0 auto"}}>
       手动粘贴 Cookie
       <Form form={form} layout="vertical" onFinish={onFinish}>
         <Form.Item label="MUSIC_A_T" name="MUSIC_A_T">
-          <Input placeholder="请输入 MUSIC_A_T" />
+          <Input placeholder="请输入 MUSIC_A_T"/>
         </Form.Item>
 
         <Form.Item label="MUSIC_U" name="MUSIC_U">
-          <Input placeholder="请输入 MUSIC_U" />
+          <Input placeholder="请输入 MUSIC_U"/>
         </Form.Item>
 
         <Form.Item label="MUSIC_R_T" name="MUSIC_R_T">
-          <Input placeholder="请输入 MUSIC_R_T" />
+          <Input placeholder="请输入 MUSIC_R_T"/>
         </Form.Item>
 
         <Form.Item>

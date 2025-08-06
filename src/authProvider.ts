@@ -75,7 +75,6 @@ export const authProvider: AuthProvider = {
     if (allowedPublicRoutes.includes(currentPath)) {
       return {
         authenticated: true, // 即使未登录也允许访问
-        redirectTo: undefined,
       };
     }
 
@@ -88,7 +87,6 @@ export const authProvider: AuthProvider = {
 
     return {
       authenticated: false,
-      redirectTo: "/login",
     };
   },
   getPermissions: async () => null,

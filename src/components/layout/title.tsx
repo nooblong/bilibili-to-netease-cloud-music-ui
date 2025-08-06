@@ -18,7 +18,7 @@ export const ThemedTitleV2: React.FC<RefineLayoutThemedTitleProps> = ({
   const { title: { icon: defaultIcon, text: defaultText } = {} } = {
     title: {
       icon: <></>,
-      text: "bilibili-to-netease-cloud-music",
+      text: "bilibili-to-netease-cloud-music(点击返回主页)",
     }
   }
   const icon =
