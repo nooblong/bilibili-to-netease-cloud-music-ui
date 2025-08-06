@@ -82,6 +82,7 @@ function App() {
                   name: "subscribe",
                   list: "/subscribeList",
                   create: "/subscribeList/create",
+                  edit: "/subscribeList/edit/:id",
                   show: "/subscribeList/show/:id",
                   meta: {
                     label: "订阅列表",

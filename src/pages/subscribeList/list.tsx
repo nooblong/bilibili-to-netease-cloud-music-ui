@@ -1,12 +1,12 @@
 import {
-  DeleteButton,
+  DeleteButton, EditButton,
   ImageField,
   List,
   useTable,
 } from "@refinedev/antd";
-import {Button, Input, Modal, Space, Table, Tooltip} from "antd";
+import {Button, Input, Modal, Popconfirm, Space, Table, Tooltip} from "antd";
 import {useEffect, useState} from "react";
-import {replaceImageUrl} from "../../App";
+import {Api, replaceImageUrl} from "../../App";
 import {CrudFilters, useGo, useNotification, useParsed} from "@refinedev/core";
 
 export const SubscribeList = () => {
@@ -132,24 +132,56 @@ export const SubscribeList = () => {
         <Table.Column
           title="操作"
           render={(_, record) => (
-            <DeleteButton
-              resource="subscribe" // 替换成你的 resource 名字
-              recordItemId={record.id}
-              onSuccess={() => {
-                open?.({
-                  type: "success",
-                  message: "删除成功",
-                  description: "成功",
-                });
-              }}
-              onError={() => {
-                open?.({
-                  type: "error",
-                  message: "删除失败",
-                  description: "出错了",
-                });
-              }}
-            />
+            <Space className={"flex flex-col flex-wrap gap-2 mb-4"}>
+              <DeleteButton
+                size={"small"}
+                resource="subscribe"
+                recordItemId={record.id}
+                onSuccess={() => {
+                  open?.({
+                    type: "success",
+                    message: "删除成功",
+                    description: "成功",
+                  });
+                }}
+                onError={() => {
+                  open?.({
+                    type: "error",
+                    message: "删除失败",
+                    description: "出错了",
+                  });
+                }}
+              />
+              <EditButton resource={"subscribe"} recordItemId={record.id}/>
+              <Popconfirm
+                title="预览上传名字"
+                onConfirm={async () => {
+                  const resp = await fetch(`${Api}/subscribe/test?subscribeId=${record.id}`,
+                    {
+                      headers: {
+                        "Access-Token": localStorage.getItem("token") ?? ""
+                      }
+                    })
+                    .then(res => res.json());
+                  if (resp.code === 0) {
+                    open?.({
+                      type: "success",
+                      message: "成功",
+                    })
+                    setLogModal({open: true, log: resp.data.join("\n")})
+                  } else {
+                    open?.({
+                      type: "error",
+                      message: "失败",
+                    })
+                  }
+                }}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button size={"middle"}>预览上传名字</Button>
+              </Popconfirm>
+            </Space>
           )}
         />
         <Table.Column
@@ -183,7 +215,28 @@ export const SubscribeList = () => {
           }}
         />
         <Table.Column title="用户名" dataIndex="userName"/>
-        <Table.Column title="启用" dataIndex="enable"/>
+        <Table.Column
+          dataIndex="enable"
+          title="状态"
+          render={(value: string) => {
+            const isSuccess = String(value) === "1";
+            return (
+              <span
+                style={{
+                  backgroundColor: isSuccess ? "#d3f9d8" : "#ffe0e0",
+                  color: isSuccess ? "#389e0d" : "#cf1322",
+                  padding: "2px 8px",
+                  borderRadius: "999px",
+                  fontWeight: 500,
+                  fontSize: "12px",
+                  display: "inline-block",
+                }}
+              >
+        {String(value) === "1" ? "启用" : "禁用"}
+      </span>
+            );
+          }}
+        />
         <Table.Column
           title="日志"
           dataIndex="log"
@@ -197,12 +250,12 @@ export const SubscribeList = () => {
           )}
         />
         <Table.Column title="播客id" dataIndex="voiceListId"/>
-        <Table.Column title="Reg名称" dataIndex="regName"/>
+        <Table.Column title="正则名称" dataIndex="regName"/>
         <Table.Column title="用户ID" dataIndex="userId"/>
         <Table.Column title="ID" dataIndex="id"/>
         <Table.Column title="UP ID" dataIndex="upId"/>
         <Table.Column title="类型描述" dataIndex="typeDesc"/>
-        <Table.Column title="处理时间" dataIndex="processTime"/>
+        <Table.Column title="上次检查时间" dataIndex="processTime"/>
         <Table.Column title="更新时间" dataIndex="updateTime"/>
         <Table.Column title="起始时间" dataIndex="fromTime"/>
         <Table.Column title="结束时间" dataIndex="toTime"/>

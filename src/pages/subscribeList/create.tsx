@@ -187,7 +187,7 @@ export const SubscribeCreate = () => {
             )
           }
 
-          <Form.Item name="regName" label="正则名称" initialValue="{title}">
+          <Form.Item name="regName" label="正则名称，双大括号内输入正则会对整个标题进行匹配" initialValue="{title}">
             <Input/>
           </Form.Item>
 
@@ -216,11 +216,11 @@ export const SubscribeCreate = () => {
             <Input/>
           </Form.Item>
 
-          <Form.Item name="processTime" label="处理时间" initialValue={formatDate(new Date())}>
+          <Form.Item name="processTime" label="上次检查时间" initialValue={formatDate(new Date())}>
             <Input/>
           </Form.Item>
 
-          <Form.Item name="keyWord" label="关键词">
+          <Form.Item name="keyWord" label="关键词，标题存在此内容才上传">
             <Input/>
           </Form.Item>
 
@@ -428,11 +428,11 @@ export const SubscribeCreate = () => {
             <Input/>
           </Form.Item>
 
-          <Form.Item name="processTime" label="处理时间" initialValue={formatDate(new Date())}>
+          <Form.Item name="processTime" label="上次检查时间" initialValue={formatDate(new Date())}>
             <Input/>
           </Form.Item>
 
-          <Form.Item name="keyWord" label="关键词">
+          <Form.Item name="keyWord" label="关键词，标题存在此内容才上传">
             <Input/>
           </Form.Item>
 

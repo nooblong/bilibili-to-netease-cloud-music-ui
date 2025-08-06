@@ -90,7 +90,7 @@ export const VoicelistList = () => {
         <Table.Column title="上传数" dataIndex="uploadCount"/>
         <Table.Column title="订阅数" dataIndex="subscribeNum"/>
         <Table.Column
-          title={"Actions"}
+          title={"操作"}
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
             <Space className={"flex flex-wrap gap-2 mb-4"}>

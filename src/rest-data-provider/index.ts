@@ -92,7 +92,7 @@ export const dataProvider = (
     const url = `${apiUrl}/${resource}/${id}`;
 
     const { headers, method } = meta ?? {};
-    const requestMethod = (method as MethodTypesWithBody) ?? "patch";
+    const requestMethod = (method as MethodTypesWithBody) ?? "put";
 
     const { data } = await httpClient[requestMethod](url, variables, {
       headers,
@@ -112,7 +112,7 @@ export const dataProvider = (
     const { data } = await httpClient[requestMethod](url, { headers });
 
     return {
-      data,
+      data: data.data,
     };
   },
 

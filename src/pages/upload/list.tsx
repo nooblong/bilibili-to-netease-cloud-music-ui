@@ -82,7 +82,10 @@ export const UploadList = () => {
       </Space>
 
       <Table {...tableProps} rowKey="id" scroll={{x: "max-content"}}>
-        <Table.Column render={(record) => {
+        <Table.Column
+          title={"操作"}
+          dataIndex="actions"
+          render={(record) => {
           return (<Popconfirm
             title="重新上传"
             onConfirm={async () => {
@@ -132,7 +135,28 @@ export const UploadList = () => {
         />
         <Table.Column dataIndex="subscribeName" title="订阅名称"/>
         <Table.Column dataIndex="userName" title="用户名"/>
-        <Table.Column dataIndex="statusDesc" title="上传状态"/>
+        <Table.Column
+          dataIndex="statusDesc"
+          title="上传状态"
+          render={(value: string) => {
+            const isSuccess = value === "成功";
+            return (
+              <span
+                style={{
+                  backgroundColor: isSuccess ? "#d3f9d8" : "#ffe0e0",
+                  color: isSuccess ? "#389e0d" : "#cf1322",
+                  padding: "2px 8px",
+                  borderRadius: "999px",
+                  fontWeight: 500,
+                  fontSize: "12px",
+                  display: "inline-block",
+                }}
+              >
+        {value}
+      </span>
+            );
+          }}
+        />
         <Table.Column dataIndex="createTime" title="创建时间"/>
         <Table.Column
           title="日志"
@@ -149,8 +173,29 @@ export const UploadList = () => {
           )}
         />
 
-        <Table.Column dataIndex="uploadStatus" title="上传状态"/>
-        <Table.Column dataIndex="musicStatus" title="审核状态"/>
+        {/*<Table.Column dataIndex="uploadStatus" title="上传状态"/>*/}
+        <Table.Column
+          dataIndex="musicStatus"
+          title="审核状态"
+          render={(value: string) => {
+            const isSuccess = value === "ONLINE";
+            return (
+              <span
+                style={{
+                  backgroundColor: isSuccess ? "#d3f9d8" : "#ffe0e0",
+                  color: isSuccess ? "#389e0d" : "#cf1322",
+                  padding: "2px 8px",
+                  borderRadius: "999px",
+                  fontWeight: 500,
+                  fontSize: "12px",
+                  display: "inline-block",
+                }}
+              >
+        {value}
+      </span>
+            );
+          }}
+        />
         <Table.Column dataIndex="bvid" title="BVID"/>
         <Table.Column dataIndex="cid" title="CID"/>
         <Table.Column dataIndex="subscribeId" title="订阅ID"/>
