@@ -86,7 +86,7 @@ export const RegisterPage: React.FC<RegisterProps> = ({
         ...titleStyles,
       }}
     >
-      {translate("pages.register.title", "Sign up for your account")}
+      {translate("pages.register.title", "注册 for your account")}
     </Typography.Title>
   );
 
