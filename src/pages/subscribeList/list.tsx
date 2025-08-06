@@ -12,7 +12,6 @@ import {CrudFilters, useGo, useNotification, useParsed} from "@refinedev/core";
 export const SubscribeList = () => {
   const parsed = useParsed();
   const voiceListIdFromUrl = parsed.params?.voiceListId;
-  console.log(voiceListIdFromUrl)
   const [filterVoiceListId, setFilterVoiceListId] = useState<string | null>(voiceListIdFromUrl ? String(voiceListIdFromUrl) : null);
 
   const [logModal, setLogModal] = useState<{

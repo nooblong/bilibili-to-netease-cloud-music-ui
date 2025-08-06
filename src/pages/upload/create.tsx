@@ -69,7 +69,6 @@ export const UploadCreate = () => {
 
             setIsLoading(true);
             const bvidValue = form.getFieldValue("bvid");
-            console.log(bvidValue)
             const urlValue = extractUrl(bvidValue);
             const res = await fetch(`${Api}/bilibili/getVideoInfo?bvid=${urlValue}`)
               .then((res) => res.json());

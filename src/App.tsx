@@ -33,6 +33,8 @@ import {ThemedLayoutV2} from "./components/layout";
 import {ThemedSiderV2} from "./components/layout/sider";
 import {ThemedTitleV2} from "./components/layout/title";
 import {Emoji} from "./pages/emoji";
+import {GithubOutlined} from "@ant-design/icons";
+import {Statistics} from "./pages/statistics";
 
 export const Api = "/api"
 
@@ -55,6 +57,14 @@ function App() {
                   show: "/listVoicelist/show/:id",
                   meta: {
                     label: "我的播客",
+                    canDelete: false,
+                  },
+                },
+                {
+                  name: "statistics",
+                  list: "/statistics",
+                  meta: {
+                    label: "统计信息",
                     canDelete: false,
                   },
                 },
@@ -123,7 +133,7 @@ function App() {
                                                        Title={({collapsed}) => (
                                                          <ThemedTitleV2
                                                            collapsed={collapsed}
-                                                           icon={<></>}
+                                                           icon={null}
                                                            text="bilibili-to-netease-cloud-music"
                                                          />
                                                        )}
@@ -140,6 +150,9 @@ function App() {
                   />
                   <Route path="/voicelistList">
                     <Route index element={<VoicelistList/>}/>
+                  </Route>
+                  <Route path="/statistics">
+                    <Route index element={<Statistics/>}/>
                   </Route>
                   <Route path="/uploadList">
                     <Route index element={<UploadList/>}/>

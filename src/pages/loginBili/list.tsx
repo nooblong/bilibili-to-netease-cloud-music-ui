@@ -87,7 +87,6 @@ const LoginBiliQr = () => {
     login(setImg, setChecking, setKey);
   };
 
-  console.log(userInfo)
   return (
     <div style={{padding: 24, maxWidth: 800, margin: "0 auto"}}>
       <Row justify="center">

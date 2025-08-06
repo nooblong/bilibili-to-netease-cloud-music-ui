@@ -200,15 +200,15 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
     }
     return (
       <>
-        {dashboard}
-        {items}
-        {logout}
         <Menu.Item key="github" icon={<GithubOutlined/>}>
           <Link to="https://github.com/nooblong/bilibili-to-netease-cloud-music">{"jump to github"}</Link>
         </Menu.Item>
+        {dashboard}
+        {items}
         <Menu.Item key="ciallo" icon={<UnorderedListOutlined/>}>
           <a href="/ciallo/index.html">{"我勒个豆！！"}</a>
         </Menu.Item>
+        {logout}
       </>
     );
   };

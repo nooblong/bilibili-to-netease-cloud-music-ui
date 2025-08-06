@@ -1,15 +1,12 @@
 import {
-  DateField,
-  DeleteButton,
-  EditButton, ImageField,
+  ImageField,
   List,
-  MarkdownField,
-  ShowButton,
   useTable,
 } from "@refinedev/antd";
-import {type BaseRecord, useGo, useMany} from "@refinedev/core";
-import {Button, Input, Space, Table} from "antd";
+import {type BaseRecord, useGo, useNotification} from "@refinedev/core";
+import {Button, Input, Popconfirm, Space, Table} from "antd";
 import {useEffect, useState} from "react";
+import {Api} from "../../App";
 
 export const VoicelistList = () => {
   const go = useGo();
@@ -36,6 +33,11 @@ export const VoicelistList = () => {
     if (localStorage.getItem("username")) {
       setUsername(String(localStorage.getItem("username")));
     }
+    fetch(`${Api}/sys/log`, {
+      headers: {
+        "Access-Token": localStorage.getItem("token") ?? "",
+      },
+    });
   }, []);
 
   // 点击“查看自己播客”
@@ -60,6 +62,8 @@ export const VoicelistList = () => {
       value: null,
     }]);
   };
+
+  const {open} = useNotification();
 
   return (
     <List>
@@ -114,6 +118,45 @@ export const VoicelistList = () => {
                   type: "push",
                 });
               }}>订阅列表</Button>
+              <Popconfirm
+                title="立即检查订阅"
+                onConfirm={async () => {
+                  const resp = await fetch(`${Api}/subscribe/checkMyUpJob?voicelistId=${record.voicelistId}`,
+                    {
+                      headers: {
+                        "Access-Token": localStorage.getItem("token") ?? ""
+                      }
+                    })
+                    .then(res => res.json());
+                  if (resp.code === 0) {
+                    open?.({
+                      type: "success",
+                      message: "成功，3秒后跳转...",
+                    })
+                    setTimeout(() => {
+                      go({
+                        to: {
+                          resource: "upload", // 目标 resource 名
+                          action: "list",
+                        },
+                        query: {
+                          "voiceListId": record.voicelistId,
+                        },
+                        type: "push",
+                      });
+                    }, 3000);
+                  } else {
+                    open?.({
+                      type: "error",
+                      message: "失败",
+                    })
+                  }
+                }}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button size={"large"}>立即检查订阅</Button>
+              </Popconfirm>
             </Space>
           )}
         />

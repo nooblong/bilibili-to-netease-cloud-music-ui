@@ -29,7 +29,6 @@ export const Emoji = () => {
   const fetchEmoji = async (id: string) => {
     let emoji = await fetch(`${Api}/bilibili/emojiDetail?id=${id}`).then(res => res.json());
     emoji = emoji.data.packages[0].emote;
-    console.log(emoji)
     setEmoji(emoji)
   }
 

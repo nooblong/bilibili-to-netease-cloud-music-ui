@@ -1,21 +1,21 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
   useRouterContext,
   useRouterType,
   useLink,
   useRefineOptions,
 } from "@refinedev/core";
-import { Typography, theme, Space } from "antd";
-import type { RefineLayoutThemedTitleProps } from "@refinedev/antd";
+import {Typography, theme, Space} from "antd";
+import type {RefineLayoutThemedTitleProps} from "@refinedev/antd";
 import {GithubOutlined} from "@ant-design/icons";
 
 export const ThemedTitleV2: React.FC<RefineLayoutThemedTitleProps> = ({
-  collapsed,
-  icon: iconFromProps,
-  text: textFromProps,
-  wrapperStyles,
-}) => {
-  const { title: { icon: defaultIcon, text: defaultText } = {} } = {
+                                                                        collapsed,
+                                                                        icon: iconFromProps,
+                                                                        text: textFromProps,
+                                                                        wrapperStyles,
+                                                                      }) => {
+  const {title: {icon: defaultIcon, text: defaultText} = {}} = {
     title: {
       icon: <></>,
       text: "bilibili-to-netease-cloud-music(点击返回主页)",
@@ -25,10 +25,10 @@ export const ThemedTitleV2: React.FC<RefineLayoutThemedTitleProps> = ({
     typeof iconFromProps === "undefined" ? defaultIcon : iconFromProps;
   const text =
     typeof textFromProps === "undefined" ? defaultText : textFromProps;
-  const { token } = theme.useToken();
+  const {token} = theme.useToken();
   const routerType = useRouterType();
   const Link = useLink();
-  const { Link: LegacyLink } = useRouterContext();
+  const {Link: LegacyLink} = useRouterContext();
 
   const ActiveLink = routerType === "legacy" ? LegacyLink : Link;
 

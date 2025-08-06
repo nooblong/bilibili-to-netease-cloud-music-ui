@@ -339,7 +339,6 @@ export const SubscribeCreate = () => {
                   description: "获取up的收藏夹失败",
                 })
               } else {
-                console.log(favInfo)
                 setFav(favInfo.data.data.list);
                 const idNames: {
                   id: string,
