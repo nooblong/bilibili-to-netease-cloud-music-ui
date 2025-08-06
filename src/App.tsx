@@ -34,7 +34,7 @@ import {ThemedSiderV2} from "./components/layout/sider";
 import {ThemedTitleV2} from "./components/layout/title";
 import {Emoji} from "./pages/emoji";
 
-export const Api = "http://127.0.0.1:25565"
+export const Api = "http://107.75.218.120:25565"
 
 function App() {
   return (
