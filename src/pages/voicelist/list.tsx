@@ -105,7 +105,7 @@ export const VoicelistList = () => {
                   },
                   type: "push",
                 });
-              }}>上传列表</Button>
+              }}>上传操作</Button>
               <Button size="large" onClick={() => {
                 go({
                   to: {
@@ -117,7 +117,7 @@ export const VoicelistList = () => {
                   },
                   type: "push",
                 });
-              }}>订阅列表</Button>
+              }}>订阅操作</Button>
               <Popconfirm
                 title="立即检查订阅"
                 onConfirm={async () => {

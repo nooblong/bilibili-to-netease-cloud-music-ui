@@ -9,7 +9,7 @@ export const Statistics = () => {
   const [info, setInfo] = useState<any>(null);
 
   const {tableProps, tableQueryResult} = useTable({
-    resource: "upload",
+    resource: "sys/queueInfo",
     syncWithLocation: true,
   });
 
@@ -63,7 +63,7 @@ export const Statistics = () => {
         </div>
       </div>
       <br/>
-      <List title={`上传队列: 剩余(${tableQueryResult.data?.total})`}>
+      <List title={`上传队列: 剩余(${tableQueryResult.data?.total ?? 0})`}>
         <Table {...tableProps} rowKey="id">
           <Table.Column title="id" dataIndex="id"/>
           <Table.Column
