@@ -26,7 +26,7 @@ export const UploadCreate = () => {
   return (
     <Create saveButtonProps={saveButtonProps}>
       <div className="flex items-center justify-between">
-        <p className="text-xs text-cyan-100/70">
+        <p className="text-xs">
           支持:
           https://www.bilibili.com/video/BV1p5N6esEcM/
           <br/>

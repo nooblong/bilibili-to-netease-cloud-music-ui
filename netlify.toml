@@ -1,5 +1,5 @@
 [[redirects]]
 from = "/api/*"
-to = "https://frp-dad.com:24700/:splat"
+to = "http://106.75.218.120:25565/:splat"
 status = 200
 force = false

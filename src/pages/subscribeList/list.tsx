@@ -91,7 +91,7 @@ export const SubscribeList = () => {
         />
       </Space>
       <br/>
-      <Space style={{marginBottom: 16}}>
+      <Space style={{marginBottom: 16}} className={"flex flex-wrap gap-2 mb-4"}>
         <Input
           placeholder="用户名"
           value={username ?? ""}

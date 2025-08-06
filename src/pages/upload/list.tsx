@@ -96,8 +96,7 @@ export const UploadList = () => {
         />
         <Table.Column dataIndex="subscribeName" title="订阅名称"/>
         <Table.Column dataIndex="userName" title="用户名"/>
-        <Table.Column dataIndex="statusDesc" title="状态描述"/>
-        <Table.Column dataIndex="musicStatus" title="音乐状态"/>
+        <Table.Column dataIndex="statusDesc" title="上传状态"/>
         <Table.Column dataIndex="createTime" title="创建时间"/>
         <Table.Column
           title="日志"
@@ -114,9 +113,10 @@ export const UploadList = () => {
           )}
         />
 
+        <Table.Column dataIndex="uploadStatus" title="上传状态"/>
+        <Table.Column dataIndex="musicStatus" title="审核状态"/>
         <Table.Column dataIndex="bvid" title="BVID"/>
         <Table.Column dataIndex="cid" title="CID"/>
-        <Table.Column dataIndex="uploadStatus" title="上传状态"/>
         <Table.Column dataIndex="subscribeId" title="订阅ID"/>
         <Table.Column dataIndex="userId" title="用户ID"/>
         <Table.Column dataIndex="voiceListId" title="播客id"/>

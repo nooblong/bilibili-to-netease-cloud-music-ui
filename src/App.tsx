@@ -34,7 +34,7 @@ import {ThemedSiderV2} from "./components/layout/sider";
 import {ThemedTitleV2} from "./components/layout/title";
 import {Emoji} from "./pages/emoji";
 
-export const Api = "api"
+export const Api = "/api"
 
 function App() {
   return (
@@ -136,7 +136,7 @@ function App() {
                 >
                   <Route
                     index
-                    element={<NavigateToResource resource="blog_posts"/>}
+                    element={<NavigateToResource resource="voicelist"/>}
                   />
                   <Route path="/voicelistList">
                     <Route index element={<VoicelistList/>}/>

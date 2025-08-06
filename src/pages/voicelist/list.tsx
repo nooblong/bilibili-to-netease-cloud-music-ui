@@ -64,14 +64,16 @@ export const VoicelistList = () => {
   return (
     <List>
       <Space style={{marginBottom: 16}}>
-        <Input
-          placeholder="用户名"
-          value={username ?? ""}
-          style={{width: 200}}
-          disabled
-        />
-        <Button onClick={handleOthers}>查看他人播客</Button>
-        <Button onClick={handleSelf}>查看自己播客</Button>
+        <div className={"flex flex-wrap gap-2 mb-4"}>
+          <Input
+            placeholder="用户名"
+            value={username ?? ""}
+            style={{width: 200}}
+            disabled
+          />
+          <Button onClick={handleOthers}>查看他人播客</Button>
+          <Button onClick={handleSelf}>查看自己播客</Button>
+        </div>
       </Space>
 
       <Table {...tableProps} rowKey="id">
@@ -87,7 +89,7 @@ export const VoicelistList = () => {
           title={"Actions"}
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
-            <Space>
+            <Space className={"flex flex-wrap gap-2 mb-4"}>
               <Button size="large" onClick={() => {
                 go({
                   to: {
