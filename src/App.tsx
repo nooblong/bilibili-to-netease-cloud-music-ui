@@ -43,151 +43,151 @@ function App() {
         <ColorModeContextProvider>
           <AntdApp>
             {/*<DevtoolsProvider>*/}
-              <Refine
-                dataProvider={dataProvider(Api)}
-                notificationProvider={useNotificationProvider}
-                routerProvider={routerBindings}
-                authProvider={authProvider}
-                resources={[
-                  {
-                    name: "voicelist",
-                    list: "/voicelistList",
-                    show: "/listVoicelist/show/:id",
-                    meta: {
-                      label: "我的播客",
-                      canDelete: false,
-                    },
+            <Refine
+              dataProvider={dataProvider(Api)}
+              notificationProvider={useNotificationProvider}
+              routerProvider={routerBindings}
+              authProvider={authProvider}
+              resources={[
+                {
+                  name: "voicelist",
+                  list: "/voicelistList",
+                  show: "/listVoicelist/show/:id",
+                  meta: {
+                    label: "我的播客",
+                    canDelete: false,
                   },
-                  {
-                    name: "upload",
-                    list: "/uploadList",
-                    create: "/uploadList/create",
-                    show: "/uploadList/show/:id",
-                    meta: {
-                      label: "上传列表",
-                      canDelete: false,
-                    },
+                },
+                {
+                  name: "upload",
+                  list: "/uploadList",
+                  create: "/uploadList/create",
+                  show: "/uploadList/show/:id",
+                  meta: {
+                    label: "上传列表",
+                    canDelete: false,
                   },
-                  {
-                    name: "subscribe",
-                    list: "/subscribeList",
-                    create: "/subscribeList/create",
-                    show: "/subscribeList/show/:id",
-                    meta: {
-                      label: "订阅列表",
-                      canDelete: false,
-                    },
+                },
+                {
+                  name: "subscribe",
+                  list: "/subscribeList",
+                  create: "/subscribeList/create",
+                  show: "/subscribeList/show/:id",
+                  meta: {
+                    label: "订阅列表",
+                    canDelete: false,
                   },
-                  {
-                    name: "loginNetease",
-                    list: "/loginNetease",
-                    meta: {
-                      label: "登录网易云",
-                      canDelete: false,
-                    },
+                },
+                {
+                  name: "loginNetease",
+                  list: "/loginNetease",
+                  meta: {
+                    label: "登录网易云",
+                    canDelete: false,
                   },
-                  {
-                    name: "loginBili",
-                    list: "/loginBili",
-                    meta: {
-                      label: "登录b站(可选)",
-                      canDelete: false,
-                    },
+                },
+                {
+                  name: "loginBili",
+                  list: "/loginBili",
+                  meta: {
+                    label: "登录b站(可选)",
+                    canDelete: false,
                   },
-                  {
-                    name: "emoji",
-                    list: "/emoji",
-                    meta: {
-                      label: "b站表情大全",
-                      canDelete: false,
-                    },
+                },
+                {
+                  name: "emoji",
+                  list: "/emoji",
+                  meta: {
+                    label: "b站表情大全",
+                    canDelete: false,
                   },
-                ]}
-                options={{
-                  syncWithLocation: true,
-                  warnWhenUnsavedChanges: true,
-                  useNewQueryKeys: true,
-                  projectId: "zBSJqL-0s5pZ5-LlR5fw",
-                }}
-              >
-                <Routes>
+                },
+              ]}
+              options={{
+                syncWithLocation: true,
+                warnWhenUnsavedChanges: true,
+                useNewQueryKeys: true,
+                projectId: "zBSJqL-0s5pZ5-LlR5fw",
+              }}
+            >
+              <Routes>
+                <Route
+                  element={
+                    // <Authenticated
+                    //   key="authenticated-inner"
+                    //   fallback={<CatchAllNavigate to="/login"/>}
+                    // >
+                    <ThemedLayoutV2
+                      Header={Header}
+                      Sider={(props) => <ThemedSiderV2 {...props}
+                                                       Title={({collapsed}) => (
+                                                         <ThemedTitleV2
+                                                           collapsed={collapsed}
+                                                           icon={<></>}
+                                                           text="bilibili-to-netease-cloud-music"
+                                                         />
+                                                       )}
+                                                       fixed/>}
+                    >
+                      <Outlet/>
+                    </ThemedLayoutV2>
+                    // </Authenticated>
+                  }
+                >
                   <Route
-                    element={
-                      <Authenticated
-                        key="authenticated-inner"
-                        fallback={<CatchAllNavigate to="/login"/>}
-                      >
-                        <ThemedLayoutV2
-                          Header={Header}
-                          Sider={(props) => <ThemedSiderV2 {...props}
-                                                           Title={({collapsed}) => (
-                                                             <ThemedTitleV2
-                                                               collapsed={collapsed}
-                                                               icon={<></>}
-                                                               text="bilibili-to-netease-cloud-music"
-                                                             />
-                                                           )}
-                                                           fixed/>}
-                        >
-                          <Outlet/>
-                        </ThemedLayoutV2>
-                      </Authenticated>
-                    }
-                  >
-                    <Route
-                      index
-                      element={<NavigateToResource resource="blog_posts"/>}
-                    />
-                    <Route path="/voicelistList">
-                      <Route index element={<VoicelistList/>}/>
-                    </Route>
-                    <Route path="/uploadList">
-                      <Route index element={<UploadList/>}/>
-                      <Route path="create" element={<UploadCreate/>}/>
-                      <Route path="edit/:id" element={<UploadEdit/>}/>
-                      <Route path="show/:id" element={<UploadShow/>}/>
-                    </Route>
-                    <Route path="/subscribeList">
-                      <Route index element={<SubscribeList/>}/>
-                      <Route path="create" element={<SubscribeCreate/>}/>
-                      <Route path="edit/:id" element={<SubscribeEdit/>}/>
-                      <Route path="show/:id" element={<SubscribeShow/>}/>
-                    </Route>
-                    <Route path="/loginNetease"
-                           element={<LoginNeteaseShow/>}>
-                    </Route>
-                    <Route path="/loginBili"
-                           element={<LoginBiliShow/>}>
-                    </Route>
-                    <Route path="/emoji"
-                           element={<Emoji/>}>
-                    </Route>
-                    <Route path="*" element={<ErrorComponent/>}/>
+                    index
+                    element={<NavigateToResource resource="blog_posts"/>}
+                  />
+                  <Route path="/voicelistList">
+                    <Route index element={<VoicelistList/>}/>
                   </Route>
+                  <Route path="/uploadList">
+                    <Route index element={<UploadList/>}/>
+                    <Route path="create" element={<UploadCreate/>}/>
+                    <Route path="edit/:id" element={<UploadEdit/>}/>
+                    <Route path="show/:id" element={<UploadShow/>}/>
+                  </Route>
+                  <Route path="/subscribeList">
+                    <Route index element={<SubscribeList/>}/>
+                    <Route path="create" element={<SubscribeCreate/>}/>
+                    <Route path="edit/:id" element={<SubscribeEdit/>}/>
+                    <Route path="show/:id" element={<SubscribeShow/>}/>
+                  </Route>
+                  <Route path="/loginNetease"
+                         element={<Authenticated key={"loginNetease"}><LoginNeteaseShow/></Authenticated>}>
+                  </Route>
+                  <Route path="/loginBili"
+                         element={<Authenticated key={"loginNetease"}><LoginBiliShow/></Authenticated>}>
+                  </Route>
+                  <Route path="/emoji"
+                         element={<Emoji/>}>
+                  </Route>
+                  <Route path="*" element={<ErrorComponent/>}/>
+                </Route>
+                <Route
+                  element={
+                    <Authenticated
+                      key="authenticated-outer"
+                      fallback={<Outlet/>}
+                    >
+                      <NavigateToResource/>
+                    </Authenticated>
+                  }
+                >
+                  <Route path="/login" element={<Login/>}/>
+                  <Route path="/register" element={<Register/>}/>
                   <Route
-                    element={
-                      <Authenticated
-                        key="authenticated-outer"
-                        fallback={<Outlet/>}
-                      >
-                        <NavigateToResource/>
-                      </Authenticated>
-                    }
-                  >
-                    <Route path="/login" element={<Login/>}/>
-                    <Route path="/register" element={<Register/>}/>
-                    <Route
-                      path="/forgot-password"
-                      element={<ForgotPassword/>}
-                    />
-                  </Route>
-                </Routes>
+                    path="/forgot-password"
+                    element={<ForgotPassword/>}
+                  />
+                </Route>
+              </Routes>
 
-                <RefineKbar/>
-                <UnsavedChangesNotifier/>
-                <DocumentTitleHandler/>
-              </Refine>
-              {/*<DevtoolsPanel/>*/}
+              <RefineKbar/>
+              <UnsavedChangesNotifier/>
+              <DocumentTitleHandler/>
+            </Refine>
+            {/*<DevtoolsPanel/>*/}
             {/*</DevtoolsProvider>*/}
           </AntdApp>
         </ColorModeContextProvider>

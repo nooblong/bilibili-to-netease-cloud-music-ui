@@ -70,13 +70,13 @@ export const authProvider: AuthProvider = {
     };
   },
   check: async () => {
-    const allowedPublicRoutes = ["/", "/public"];
-    const currentPath = window.location.pathname;
-    if (allowedPublicRoutes.includes(currentPath)) {
-      return {
-        authenticated: true, // 即使未登录也允许访问
-      };
-    }
+    // const allowedPublicRoutes = ["/", "/public"];
+    // const currentPath = window.location.pathname;
+    // if (allowedPublicRoutes.includes(currentPath)) {
+    //   return {
+    //     authenticated: true, // 即使未登录也允许访问
+    //   };
+    // }
 
     const token = localStorage.getItem(TOKEN_KEY);
     if (token) {
@@ -87,6 +87,7 @@ export const authProvider: AuthProvider = {
 
     return {
       authenticated: false,
+      redirectTo: "/login",
     };
   },
   getPermissions: async () => null,
