@@ -9,7 +9,6 @@ import {
   useTranslate,
   useRouterContext,
 } from "@refinedev/core";
-import { ThemedTitleV2 } from "@refinedev/antd";
 import {
   bodyStyles,
   containerStyles,
@@ -33,6 +32,7 @@ import {
   type FormProps,
   theme,
 } from "antd";
+import {ThemedTitleV2} from "../../../layout/title";
 
 type LoginProps = LoginPageProps<LayoutProps, CardProps, FormProps>;
 /**
@@ -89,7 +89,7 @@ export const LoginPage: React.FC<LoginProps> = ({
         ...titleStyles,
       }}
     >
-      {translate("pages.login.title", "Sign in to your account")}
+      {translate("pages.login.title", "登录 to your account")}
     </Typography.Title>
   );
 
@@ -250,7 +250,7 @@ export const LoginPage: React.FC<LoginProps> = ({
                 loading={isLoading}
                 block
               >
-                {translate("pages.login.signin", "Sign in")}
+                {translate("pages.login.signin", "登录")}
               </Button>
             </Form.Item>
           )}
@@ -275,7 +275,7 @@ export const LoginPage: React.FC<LoginProps> = ({
                 color: token.colorPrimaryTextHover,
               }}
             >
-              {translate("pages.login.signup", "Sign up")}
+              {translate("pages.login.signup", "注册")}
             </ActiveLink>
           </Typography.Text>
         </div>

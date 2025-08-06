@@ -70,6 +70,15 @@ export const authProvider: AuthProvider = {
     };
   },
   check: async () => {
+    const allowedPublicRoutes = ["/", "/public"];
+    const currentPath = window.location.pathname;
+    if (allowedPublicRoutes.includes(currentPath)) {
+      return {
+        authenticated: true, // 即使未登录也允许访问
+        redirectTo: undefined,
+      };
+    }
+
     const token = localStorage.getItem(TOKEN_KEY);
     if (token) {
       return {
@@ -90,7 +99,7 @@ export const authProvider: AuthProvider = {
       return {
         id: 1,
         name: username,
-        avatar: "https://i.pravatar.cc/300",
+        avatar: "sss.jpeg",
       };
     }
     return null;

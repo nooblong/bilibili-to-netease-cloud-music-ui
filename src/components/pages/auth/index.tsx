@@ -32,7 +32,7 @@ export const AuthPage: React.FC<AuthProps> = (props) => {
       case "updatePassword":
         return <UpdatePasswordPage {...props} />;
       default:
-        return <LoginPage {...props} />;
+        return <LoginPage {...props} rememberMe={false} forgotPasswordLink={false} />;
     }
   };
 

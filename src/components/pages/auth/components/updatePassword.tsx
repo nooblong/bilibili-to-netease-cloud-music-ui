@@ -6,7 +6,6 @@ import {
   useTranslate,
   useUpdatePassword,
 } from "@refinedev/core";
-import { ThemedTitleV2 } from "@refinedev/antd";
 import {
   layoutStyles,
   containerStyles,
@@ -28,6 +27,7 @@ import {
   type FormProps,
   theme,
 } from "antd";
+import {ThemedTitleV2} from "../../../layout/title";
 
 type UpdatePasswordProps = UpdatePasswordPageProps<
   LayoutProps,

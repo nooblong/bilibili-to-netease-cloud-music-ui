@@ -9,7 +9,6 @@ import {
   useRouterContext,
   useRegister,
 } from "@refinedev/core";
-import { ThemedTitleV2 } from "@refinedev/antd";
 import {
   layoutStyles,
   containerStyles,
@@ -32,6 +31,7 @@ import {
   Divider,
   theme,
 } from "antd";
+import {ThemedTitleV2} from "../../../layout/title";
 
 type RegisterProps = RegisterPageProps<LayoutProps, CardProps, FormProps>;
 /**
