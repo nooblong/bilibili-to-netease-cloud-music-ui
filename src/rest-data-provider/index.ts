@@ -32,7 +32,7 @@ export const dataProvider = (
 
     if (mode === "server") {
       query.pageNo = current;
-      query.pageSize = current * pageSize;
+      query.pageSize = pageSize;
     }
 
     const generatedSort = generateSort(sorters);
