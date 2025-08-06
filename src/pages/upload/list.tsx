@@ -4,14 +4,15 @@ import {
   useTable,
 } from "@refinedev/antd";
 import {useGo, useNotification, useParsed} from "@refinedev/core";
-import {Button, Input, Modal, Space, Table, Tooltip} from "antd";
+import {Button, Input, Modal, Popconfirm, Space, Table, Tooltip} from "antd";
 import {useEffect, useState} from "react";
+import {Api} from "../../App";
 
 export const UploadList = () => {
   const parsed = useParsed();
   const voiceListIdFromUrl = parsed.params?.voiceListId;
 
-  const {tableProps} = useTable({
+  const {tableProps, tableQueryResult} = useTable({
     resource: "upload",
     syncWithLocation: true,
     filters: {
@@ -39,7 +40,7 @@ export const UploadList = () => {
   }, [voiceListIdFromUrl]);
 
   const go = useGo();
-  const { open } = useNotification();
+  const {open} = useNotification();
 
   return (
     <List canCreate={false}>
@@ -81,6 +82,41 @@ export const UploadList = () => {
       </Space>
 
       <Table {...tableProps} rowKey="id" scroll={{x: "max-content"}}>
+        <Table.Column render={(record) => {
+          return (<Popconfirm
+            title="重新上传"
+            onConfirm={async () => {
+              const resp = await fetch(`${Api}/upload/restartJob?id=${record.id}`,
+                {
+                  headers: {
+                    "Access-Token": localStorage.getItem("token") ?? ""
+                  }
+                })
+                .then(res => res.json());
+              if (resp.code === 0) {
+                open?.({
+                  type: "success",
+                  message: "成功，1秒后刷新...",
+                })
+                setTimeout(() => {
+                  tableQueryResult.refetch();
+                }, 1000);
+              } else {
+                open?.({
+                  type: "error",
+                  message: "失败",
+                  description: resp.message,
+                })
+              }
+            }}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button size={"small"}>重新上传</Button>
+          </Popconfirm>)
+        }}>
+
+        </Table.Column>
         <Table.Column dataIndex="id" title="ID"/>
         <Table.Column
           dataIndex="mergeTitle"
