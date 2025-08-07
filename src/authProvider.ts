@@ -98,7 +98,7 @@ export const authProvider: AuthProvider = {
       return {
         id: 1,
         name: username,
-        avatar: "sss.jpeg",
+        avatar: "/sss.jpeg",
       };
     }
     return null;

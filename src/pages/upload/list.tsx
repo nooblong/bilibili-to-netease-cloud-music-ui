@@ -84,7 +84,6 @@ export const UploadList = () => {
       <Table {...tableProps} rowKey="id" scroll={{x: "max-content"}}>
         <Table.Column
           title={"操作"}
-          dataIndex="actions"
           render={(record) => {
           return (<Popconfirm
             title="重新上传"
