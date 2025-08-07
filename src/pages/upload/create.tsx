@@ -1,5 +1,5 @@
 import {Create, ImageField, useForm, useSelect} from "@refinedev/antd";
-import {Button, Form, Input, InputNumber, Select, Space, Switch} from "antd";
+import {Button, Divider, Form, Input, InputNumber, Modal, Select, Space, Switch} from "antd";
 import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
 import {useCustom, useNotification, useParsed} from "@refinedev/core";
 import {useState} from "react";
@@ -11,6 +11,9 @@ export const UploadCreate = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [videoInfo, setVideoInfo] = useState<any>(null);
   const {open} = useNotification();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [prefix, setPrefix] = useState("【阿梓歌】《")
+  const [suffix, setSuffix] = useState("》（2025.1.1）")
 
   const {formProps, saveButtonProps, form, onFinish} = useForm({
     redirect: false
@@ -58,7 +61,7 @@ export const UploadCreate = () => {
         )}
       </div>
       <Form {...formProps} layout="vertical" onFinish={handleOnFinish}>
-        <Form.Item name="bvid" label="bvid" rules={[{required: true}]} initialValue={"BV1vQ4y1Y7h2"}>
+        <Form.Item name="bvid" label="bvid" rules={[{required: true}]} initialValue={"BV1VAkmYvEre"}>
           <Input placeholder="输入 bvid 或含 bvid 的地址"/>
         </Form.Item>
         <Button
@@ -103,6 +106,10 @@ export const UploadCreate = () => {
         >
           解析视频
         </Button>
+
+        <Button className={"ml-3"} onClick={() => {
+          setIsModalOpen(true)
+        }}>编辑名字前后缀</Button>
 
         <Form.List name="cidNames">
           {(fields, {remove}) => (
@@ -184,6 +191,66 @@ export const UploadCreate = () => {
         </Form.Item>
 
       </Form>
+      <>
+        <Modal
+          title="编辑名字"
+          open={isModalOpen}
+          footer={null}
+          onCancel={() => setIsModalOpen(false)}
+        >
+          <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+            <div>
+              <p>从前面开始删除到第一个空格</p>
+              <Button
+                danger
+                onClick={() => {
+                  const cidNames = form.getFieldValue("cidNames");
+                  if (cidNames != null) {
+                    const newCidNames = cidNames.map((i: any) => {
+                      const firstSpaceIndex = i.name.indexOf(" ");
+                      if (firstSpaceIndex !== -1) {
+                        i.name = i.name.slice(firstSpaceIndex + 1);
+                      }
+                      return i;
+                    });
+                    form.setFieldValue("cidNames", newCidNames);
+                  }
+                }}
+              >
+                删除
+              </Button>
+            </div>
+
+            <Divider />
+
+            <div>
+              <p>添加名字前缀</p>
+              <Input value={prefix} onChange={(event) => setPrefix(event.target.value)} />
+            </div>
+
+            <div>
+              <p>添加名字后缀</p>
+              <Input value={suffix} onChange={(event) => setSuffix(event.target.value)} />
+            </div>
+
+            <Button
+              type="primary"
+              onClick={() => {
+                const cidNames = form.getFieldValue("cidNames");
+                if (cidNames != null) {
+                  const newCidNames = cidNames.map((i: any) => {
+                    i.name = prefix + i.name + suffix;
+                    return i;
+                  });
+                  form.setFieldValue("cidNames", newCidNames);
+                }
+              }}
+            >
+              确认
+            </Button>
+          </Space>
+        </Modal>
+      </>
     </Create>
   );
 };
