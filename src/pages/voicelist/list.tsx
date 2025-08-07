@@ -13,7 +13,7 @@ export const VoicelistList = () => {
 
   const [username, setUsername] = useState<string | null>(null);
 
-  const {tableProps, setFilters} = useTable({
+  const {tableProps, setFilters, tableQueryResult} = useTable({
     resource: "upload/listVoicelist",
     syncWithLocation: true,
     filters: {
@@ -77,6 +77,27 @@ export const VoicelistList = () => {
           />
           <Button onClick={handleOthers}>查看他人播客</Button>
           <Button onClick={handleSelf}>查看自己播客</Button>
+          <Button onClick={() => {
+            fetch(`${Api}/upload/refreshVoiceList`, {
+              headers: {
+                "Access-Token": localStorage.getItem("token") ?? "",
+              }
+            }).then(res => res.json()).then(
+              resp => {
+                if (resp.code === 0) {
+                  open?.({
+                    type: "success",
+                    message: resp.message,
+                  })
+                  tableQueryResult.refetch();
+                } else {
+                  open?.({
+                    type: "error",
+                    message: resp.msg,
+                  })
+                }
+              })
+          }}>刷新播客列表</Button>
         </div>
       </Space>
 
