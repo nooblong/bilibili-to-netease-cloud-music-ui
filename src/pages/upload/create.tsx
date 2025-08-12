@@ -148,7 +148,7 @@ export const UploadCreate = () => {
           )}
         </Form.List>
 
-        <Form.Item label="音量提高（db）" name="offset" initialValue={0}>
+        <Form.Item label="音量变为原来多少倍" name="offset" initialValue={0}>
           <InputNumber min={0} step={0.1} style={{width: "100%"}}/>
         </Form.Item>
 
