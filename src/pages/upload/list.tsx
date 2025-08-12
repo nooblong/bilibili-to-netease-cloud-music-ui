@@ -114,7 +114,7 @@ export const UploadList = () => {
             okText="Yes"
             cancelText="No"
           >
-            <Button size={"small"}>重新上传</Button>
+            <Button size={"middle"}>重新上传</Button>
           </Popconfirm>)
         }}>
 
@@ -162,8 +162,9 @@ export const UploadList = () => {
           render={(_, record: any) => (
             <Button
               type="link"
-              onClick={() => {
-                setLogContent(record.log || "无日志内容");
+              onClick={async () => {
+                const log = await fetch(`${Api}/upload/getLog?id=${record.id}`).then(res => res.json());
+                setLogContent(log.data || "无日志内容");
                 setLogModalOpen(true);
               }}
             >
@@ -200,13 +201,13 @@ export const UploadList = () => {
         <Table.Column dataIndex="subscribeId" title="订阅ID"/>
         <Table.Column dataIndex="userId" title="用户ID"/>
         <Table.Column dataIndex="voiceListId" title="播客id"/>
-        <Table.Column dataIndex="bitrate" title="码率"/>
+        {/*<Table.Column dataIndex="bitrate" title="码率"/>*/}
         <Table.Column dataIndex="offset" title="音量"/>
         <Table.Column dataIndex="beginSec" title="开始秒"/>
         <Table.Column dataIndex="endSec" title="结束秒"/>
         <Table.Column dataIndex="priority" title="优先级"/>
         <Table.Column dataIndex="useVideoCover" title="封面"/>
-        <Table.Column dataIndex="crack" title="破解"/>
+        {/*<Table.Column dataIndex="crack" title="破解"/>*/}
         <Table.Column dataIndex="privacy" title="隐私"/>
         <Table.Column dataIndex="uploadRetryTimes" title="上传次数"/>
         <Table.Column dataIndex="updateTime" title="更新时间"/>

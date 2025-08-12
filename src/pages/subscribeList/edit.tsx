@@ -113,7 +113,7 @@ export const SubscribeEdit = () => {
           <Input disabled/>
         </Form.Item>
 
-        <Form.Item label="比特率" name="bitrate">
+        <Form.Item hidden label="比特率" name="bitrate">
           <Input/>
         </Form.Item>
 

@@ -204,7 +204,7 @@ export const SubscribeCreate = () => {
             <Input type="number"/>
           </Form.Item>
 
-          <Form.Item name="bitrate" label="比特率：默认320k，非音乐请设置128000" initialValue={320000}>
+          <Form.Item hidden name="bitrate" label="比特率：默认320k，非音乐请设置128000" initialValue={320000}>
             <Input type="number"/>
           </Form.Item>
 

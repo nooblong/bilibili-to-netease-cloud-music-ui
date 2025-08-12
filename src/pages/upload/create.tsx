@@ -160,7 +160,7 @@ export const UploadCreate = () => {
           <InputNumber min={0} step={0.1} style={{width: "100%"}}/>
         </Form.Item>
 
-        <Form.Item label="比特率：默认320k" name="bitrate" initialValue={320000}>
+        <Form.Item hidden label="比特率：默认320k" name="bitrate" initialValue={320000}>
           <InputNumber min={0} step={1000} style={{width: "100%"}}/>
         </Form.Item>
 

@@ -132,9 +132,10 @@ export const SubscribeList = () => {
         <Table.Column
           title="操作"
           render={(_, record) => (
-            <Space className={"flex flex-col flex-wrap gap-2 mb-4"}>
+            <div className={"flex flex-col flex-wrap gap-2 mb-4"}>
               <DeleteButton
-                size={"small"}
+                block
+                size={"middle"}
                 resource="subscribe"
                 recordItemId={record.id}
                 onSuccess={() => {
@@ -152,7 +153,7 @@ export const SubscribeList = () => {
                   });
                 }}
               />
-              <EditButton resource={"subscribe"} recordItemId={record.id}/>
+              <EditButton block className={"w-full"} resource={"subscribe"} recordItemId={record.id}/>
               <Popconfirm
                 title="预览上传名字"
                 onConfirm={async () => {
@@ -179,9 +180,9 @@ export const SubscribeList = () => {
                 okText="Yes"
                 cancelText="No"
               >
-                <Button size={"middle"}>预览上传名字</Button>
+                <Button block size={"middle"}>预览上传名字</Button>
               </Popconfirm>
-            </Space>
+            </div>
           )}
         />
         <Table.Column
@@ -268,7 +269,7 @@ export const SubscribeList = () => {
         <Table.Column title="使用封面" dataIndex="useVideoCover"/>
         <Table.Column title="检查分p" dataIndex="checkPart"/>
         <Table.Column title="优先级" dataIndex="priority"/>
-        <Table.Column title="比特率" dataIndex="bitrate"/>
+        {/*<Table.Column title="比特率" dataIndex="bitrate"/>*/}
       </Table>
 
       <Modal
