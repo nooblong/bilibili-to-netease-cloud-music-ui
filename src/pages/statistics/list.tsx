@@ -9,6 +9,7 @@ export const Statistics = () => {
   const [info, setInfo] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [hasRefresh, setHasRefresh] = useState(false);
+  const [login, setLogin] = useState(false);
 
   const {open} = useNotification();
 
@@ -25,6 +26,7 @@ export const Statistics = () => {
     }).then((res) => res.json())
       .then(res => {
         setInfo(res.data);
+        setLogin(res.data.login);
       })
   }, []);
 
@@ -44,7 +46,7 @@ export const Statistics = () => {
       ),
       okText: "跳转",
       okButtonProps: {
-        loading: orderId === ""
+        disabled: !login
       },
       cancelText: "取消",
       onOk: () => {
@@ -194,6 +196,7 @@ export const Statistics = () => {
               <span className="ml-1">
         <Button
           loading={loading}
+          disabled={!login}
           className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
           onClick={() => {
             fetch(`${Api}/sys/generateOrder`, {
@@ -233,7 +236,7 @@ export const Statistics = () => {
           {/* 我的充值订单 */}
           <div>
             我的发电订单
-            <Button disabled={hasRefresh} type={"link"} onClick={async () => {
+            <Button disabled={hasRefresh || !login} type={"link"} onClick={async () => {
               setHasRefresh(true)
               await refresh()
             }}>手动刷新</Button>
@@ -247,7 +250,7 @@ export const Statistics = () => {
                 ))}
               </ul>
             ) : (
-              <p className="text-gray-500">暂无充值订单</p>
+              <p className="text-gray-500">暂无发电订单</p>
             )}
           </div>
         </div>
