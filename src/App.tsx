@@ -64,7 +64,7 @@ function App() {
                   name: "statistics",
                   list: "/statistics",
                   meta: {
-                    label: "统计信息",
+                    label: "账号详情",
                     canDelete: false,
                   },
                 },
@@ -147,7 +147,7 @@ function App() {
                 >
                   <Route
                     index
-                    element={<NavigateToResource resource="voicelist"/>}
+                    element={<NavigateToResource resource="statistics"/>}
                   />
                   <Route path="/voicelistList">
                     <Route index element={<VoicelistList/>}/>
