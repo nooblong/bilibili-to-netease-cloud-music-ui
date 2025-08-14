@@ -182,6 +182,12 @@ export const Statistics = () => {
         {isVip ? info?.expireTime : "-"}
       </span>
             </li>
+            <li>
+              <span className="font-medium">今日剩余上传次数：</span>
+              <span className="ml-1 font-semibold">
+        {info?.remaining}
+      </span>
+            </li>
 
             <li>
               <span className="font-medium">请作者喝杯奶茶(爱发电)：</span>

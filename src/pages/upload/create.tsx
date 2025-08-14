@@ -16,7 +16,6 @@ export const UploadCreate = () => {
   const [suffix, setSuffix] = useState("》（2025.1.1）")
 
   const {formProps, saveButtonProps, form, onFinish} = useForm({
-    redirect: false
   });
 
   const handleOnFinish = (values: any) => {
