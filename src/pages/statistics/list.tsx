@@ -24,6 +24,11 @@ export const Statistics = () => {
   });
 
   useEffect(() => {
+    fetch(`${Api}/sys/log`, {
+      headers: {
+        "Access-Token": localStorage.getItem("token") ?? "",
+      },
+    });
     fetch(`${Api}/sys/sysInfo`, {
       headers: {
         "Access-Token": localStorage.getItem("token") ?? ""
@@ -111,6 +116,8 @@ export const Statistics = () => {
           <h2 className="text-lg font-semibold border-b  pb-2">
             网站统计信息
           </h2>
+
+          <h2>qq群: 442092832</h2>
 
           <ul className="space-y-2">
             <li>

@@ -4,7 +4,7 @@ import {
   List,
   useTable,
 } from "@refinedev/antd";
-import {Button, Input, Modal, Popconfirm, Space, Table, Tooltip} from "antd";
+import {Button, Image, Input, Modal, Popconfirm, Select, Space, Table, Tooltip} from "antd";
 import {useEffect, useState} from "react";
 import {Api, replaceImageUrl} from "../../App";
 import {CrudFilters, useGo, useNotification, useParsed} from "@refinedev/core";
@@ -13,6 +13,7 @@ export const SubscribeList = () => {
   const parsed = useParsed();
   const voiceListIdFromUrl = parsed.params?.voiceListId;
   const [filterVoiceListId, setFilterVoiceListId] = useState<string | null>(voiceListIdFromUrl ? String(voiceListIdFromUrl) : null);
+  const [voiceListList, setVoiceListList] = useState([])
 
   const [logModal, setLogModal] = useState<{
     open: boolean;
@@ -50,6 +51,47 @@ export const SubscribeList = () => {
     }
     if (voiceListIdFromUrl) {
       setFilterVoiceListId(String(voiceListIdFromUrl));
+    }
+    if (localStorage.getItem("username")) {
+      fetch(`${Api}/upload/listVoicelist?username=${localStorage.getItem("username")}`,
+        {
+          method: "GET",
+          headers: {
+            "Access-Token": localStorage.getItem("token") ?? ""
+          }
+        })
+        .then(res => res.json())
+        .then(json => {
+          // @ts-ignore
+          const result = json.data.records.map(i => {
+            return {
+              ...i,
+              text: i.voicelistName,
+              id: i.voicelistId,
+              value: i.voicelistId,
+              label: <div className="flex items-center space-x-2">
+                <Image
+                  preview={false}
+                  src={i.voicelistImage}
+                  alt="Emoji Image"
+                  width={44}
+                  height={44}
+                  className="rounded"
+                />
+                <span>{i.voicelistName}</span>
+                <span>播客id:{i.voicelistId}</span>
+              </div>
+            }
+          })
+          result.unshift({
+            id: null,
+            value: null,
+            label: <div className="flex items-center space-x-2">
+              <span>未选择：查看所有播客</span>
+            </div>
+          });
+          setVoiceListList(result);
+        })
     }
   }, [voiceListIdFromUrl]);
 
@@ -101,10 +143,41 @@ export const SubscribeList = () => {
         <Button onClick={handleSelf}>查看自己订阅</Button>
       </Space>
       <br/>
+      <div style={{marginBottom: 16}}>
+        <span>选择播客:</span>
+        {voiceListList.length > 0 ?
+          <Select
+            labelInValue
+            defaultValue={filterVoiceListId === "" ? null : filterVoiceListId}
+            placeholder="选择播客"
+            className={"w-full h-16"}
+            options={voiceListList}
+            onChange={item => {
+              // @ts-ignore
+              setFilterVoiceListId(item.value)
+              setFilters([
+                {
+                  field: "voiceListId",
+                  operator: "eq",
+                  value: item.value,
+                },
+                {
+                  field: "username",
+                  operator: "eq",
+                  value: username ?? "",
+                }
+              ])
+            }}
+          >
+          </Select>
+          :
+          "未登录或未刷新播客列表"
+        }
+      </div>
       <Space style={{marginBottom: 16}}>
         <Button
           onClick={() => {
-            if (voiceListIdFromUrl != null && voiceListIdFromUrl !== "") {
+            if (filterVoiceListId != null && filterVoiceListId !== "") {
               go({
                 to: {
                   resource: "subscribe",
@@ -112,13 +185,13 @@ export const SubscribeList = () => {
                 },
                 type: "push",
                 query: {
-                  voiceListId: voiceListIdFromUrl,
+                  voiceListId: filterVoiceListId,
                 },
               })
             } else {
               open?.({
                 type: "error",
-                message: "没有播客id，或许应该从【我的播客】进入",
+                message: "没有播客id，【选择播客】或者从【我的播客】进入",
                 description: "出错了",
               });
             }

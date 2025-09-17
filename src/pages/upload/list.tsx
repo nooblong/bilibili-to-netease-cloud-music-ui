@@ -123,7 +123,7 @@ export const UploadList = () => {
       <Space style={{marginBottom: 16}}>
         <Button
           onClick={() => {
-            if (voiceListIdFromUrl != null && voiceListIdFromUrl !== "") {
+            if (filterVoiceListId != null && filterVoiceListId !== "") {
               go({
                 to: {
                   resource: "upload",
@@ -131,13 +131,13 @@ export const UploadList = () => {
                 },
                 type: "push",
                 query: {
-                  voiceListId: voiceListIdFromUrl,
+                  voiceListId: filterVoiceListId,
                 },
               })
             } else {
               open?.({
                 type: "error",
-                message: "没有播客id，或许应该从【我的播客】进入",
+                message: "没有播客id，【选择播客】或者从【我的播客】进入",
                 description: "出错了",
               });
             }
@@ -158,7 +158,7 @@ export const UploadList = () => {
       </Space>
       <br/>
       <div style={{marginBottom: 16}}>
-        {/*<span className={"flex-1"}>选择播客:</span>*/}
+        <span>选择播客:</span>
         {voiceListList.length > 0 ?
           <Select
             labelInValue
