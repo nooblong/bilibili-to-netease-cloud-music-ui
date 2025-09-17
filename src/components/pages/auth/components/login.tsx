@@ -275,7 +275,7 @@ export const LoginPage: React.FC<LoginProps> = ({
                 color: token.colorPrimaryTextHover,
               }}
             >
-              {translate("pages.login.signup", "注册")}
+              {translate("pages.login.signup", "去注册")}
             </ActiveLink>
           </Typography.Text>
         </div>

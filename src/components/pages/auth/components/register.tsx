@@ -229,7 +229,7 @@ export const RegisterPage: React.FC<RegisterProps> = ({
                 >
                   {translate(
                     "pages.register.signin",
-                    translate("pages.login.signin", "Sign in")
+                    translate("pages.login.signin", "去登录")
                   )}
                 </ActiveLink>
               </Typography.Text>

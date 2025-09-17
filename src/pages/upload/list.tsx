@@ -4,15 +4,16 @@ import {
   useTable,
 } from "@refinedev/antd";
 import {useGo, useNotification, useParsed} from "@refinedev/core";
-import {Button, Input, Modal, Popconfirm, Space, Table, Tooltip} from "antd";
+import {Button, Image, Input, Modal, Popconfirm, Select, Space, Table, Tooltip} from "antd";
 import {useEffect, useState} from "react";
-import {Api} from "../../App";
+import {Api, replaceImageUrl} from "../../App";
 
 export const UploadList = () => {
   const parsed = useParsed();
   const voiceListIdFromUrl = parsed.params?.voiceListId;
+  const [username, setUsername] = useState<string | null>(localStorage.getItem("username"));
 
-  const {tableProps, tableQueryResult} = useTable({
+  const {tableProps, tableQueryResult, setFilters} = useTable({
     resource: "upload",
     syncWithLocation: true,
     filters: {
@@ -23,24 +24,99 @@ export const UploadList = () => {
             operator: "eq",
             value: voiceListIdFromUrl,
           },
+          {
+            field: "username",
+            operator: "eq",
+            value: username ?? "",
+          }
         ]
-        : [],
+        : [{
+          field: "username",
+          operator: "eq",
+          value: username ?? "",
+        }],
     },
   });
 
   const [filterVoiceListId, setFilterVoiceListId] = useState<string>("");
   const [logModalOpen, setLogModalOpen] = useState(false);
   const [logContent, setLogContent] = useState("");
+  const [voiceListList, setVoiceListList] = useState([])
 
   // 初始化加载时自动填入输入框
   useEffect(() => {
     if (voiceListIdFromUrl) {
       setFilterVoiceListId(String(voiceListIdFromUrl));
     }
+    if (localStorage.getItem("username")) {
+      fetch(`${Api}/upload/listVoicelist?username=${localStorage.getItem("username")}`,
+        {
+          method: "GET",
+          headers: {
+            "Access-Token": localStorage.getItem("token") ?? ""
+          }
+        })
+        .then(res => res.json())
+        .then(json => {
+          // @ts-ignore
+          const result = json.data.records.map(i => {
+            return {
+              ...i,
+              text: i.voicelistName,
+              id: i.voicelistId,
+              value: i.voicelistId,
+              label: <div className="flex items-center space-x-2">
+                <Image
+                  preview={false}
+                  src={i.voicelistImage}
+                  alt="Emoji Image"
+                  width={44}
+                  height={44}
+                  className="rounded"
+                />
+                <span>{i.voicelistName}</span>
+                <span>播客id:{i.voicelistId}</span>
+              </div>
+            }
+          })
+          result.unshift({
+            id: null,
+            value: null,
+            label: <div className="flex items-center space-x-2">
+              <span>未选择：查看所有播客</span>
+            </div>
+          });
+          setVoiceListList(result);
+        })
+    }
   }, [voiceListIdFromUrl]);
 
   const go = useGo();
   const {open} = useNotification();
+
+  // 点击“查看自己播客”
+  const handleSelf = () => {
+    const self = localStorage.getItem("username") || "";
+    setUsername(self);
+    setFilters([
+      {
+        field: "username",
+        operator: "eq",
+        value: self,
+      },
+    ]);
+  };
+
+  // 点击“查看他人播客”
+  const handleOthers = () => {
+    setUsername(null);
+    setFilters([{
+      field: "username",
+      operator: "eq",
+      value: null,
+    }]);
+  };
+
 
   return (
     <List canCreate={false}>
@@ -70,53 +146,85 @@ export const UploadList = () => {
           单曲上传
         </Button>
       </Space>
-      <br/>
-      <Space style={{marginBottom: 16}}>
-        <span>播客id:</span>
+      <Space style={{marginBottom: 16}} className={"flex flex-wrap gap-2 mb-4"}>
         <Input
-          value={filterVoiceListId}
-          onChange={(e) => setFilterVoiceListId(e.target.value)}
+          placeholder="用户名"
+          value={username ?? ""}
           style={{width: 200}}
           disabled
         />
+        <Button onClick={handleOthers}>查看所有单曲</Button>
+        <Button onClick={handleSelf}>查看自己上传单曲</Button>
       </Space>
+      <br/>
+      <div style={{marginBottom: 16}}>
+        {/*<span className={"flex-1"}>选择播客:</span>*/}
+        {voiceListList.length > 0 ?
+          <Select
+            labelInValue
+            defaultValue={filterVoiceListId === "" ? null : filterVoiceListId}
+            placeholder="选择播客"
+            className={"w-full h-16"}
+            options={voiceListList}
+            onChange={item => {
+              // @ts-ignore
+              setFilterVoiceListId(item.value)
+              setFilters([
+                {
+                  field: "voiceListId",
+                  operator: "eq",
+                  value: item.value,
+                },
+                {
+                  field: "username",
+                  operator: "eq",
+                  value: username ?? "",
+                }
+              ])
+            }}
+          >
+          </Select>
+          :
+          "未登录或未刷新播客列表"
+        }
+      </div>
 
       <Table {...tableProps} rowKey="id" scroll={{x: "max-content"}}>
         <Table.Column
           title={"操作"}
           render={(record) => {
-          return (<Popconfirm
-            title="重新上传"
-            onConfirm={async () => {
-              const resp = await fetch(`${Api}/upload/restartJob?id=${record.id}`,
-                {
-                  headers: {
-                    "Access-Token": localStorage.getItem("token") ?? ""
-                  }
-                })
-                .then(res => res.json());
-              if (resp.code === 0) {
-                open?.({
-                  type: "success",
-                  message: "成功，1秒后刷新...",
-                })
-                setTimeout(() => {
-                  tableQueryResult.refetch();
-                }, 1000);
-              } else {
-                open?.({
-                  type: "error",
-                  message: "失败",
-                  description: resp.message,
-                })
-              }
-            }}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button size={"middle"}>重新上传</Button>
-          </Popconfirm>)
-        }}>
+            return (<Popconfirm
+              title="重新上传"
+              onConfirm={async () => {
+                const resp = await fetch(`${Api}/upload/restartJob?id=${record.id}`,
+                  {
+                    headers: {
+                      "Access-Token": localStorage.getItem("token") ?? ""
+                    }
+                  })
+                  .then(res => res.json());
+                if (resp.code === 0) {
+                  open?.({
+                    type: "success",
+                    message: "成功，1秒后刷新...",
+                  })
+                  setTimeout(() => {
+                    tableQueryResult.refetch();
+                  }, 1000);
+                } else {
+                  open?.({
+                    type: "error",
+                    message: "失败",
+                    description: resp.message,
+                  })
+                }
+              }}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button size={"middle"}>重新上传</Button>
+            </Popconfirm>)
+          }}>
 
         </Table.Column>
         <Table.Column dataIndex="id" title="ID"/>

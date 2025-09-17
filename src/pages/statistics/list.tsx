@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {Api} from "../../App";
 import {Button, Card, Input, Modal, Popconfirm, Space, Table, Tooltip} from "antd";
-import {ImageField, List, useTable} from "@refinedev/antd";
+import {DeleteButton, ImageField, List, useTable} from "@refinedev/antd";
 import {BaseRecord, useNotification} from "@refinedev/core";
 
 export const Statistics = () => {
@@ -10,6 +10,11 @@ export const Statistics = () => {
   const [loading, setLoading] = useState(false);
   const [hasRefresh, setHasRefresh] = useState(false);
   const [login, setLogin] = useState(false);
+
+  const [changeUserName, setChangeUserName] = useState("")
+  const [changePassword, setChangePassword] = useState("")
+
+  const [allUserByNetease, setAllUserByNetease] = useState([]);
 
   const {open} = useNotification();
 
@@ -97,6 +102,7 @@ export const Statistics = () => {
 
   const isVip = new Date(info?.expireTime.replace(" ", "T")).getTime() > now.getTime();
 
+  // @ts-ignore
   return (
     <div>
       <div className={"flex-row md:flex gap-2"}>
@@ -208,7 +214,7 @@ export const Statistics = () => {
             })
           }}
         >
-          5 RMB/月
+          去支付 5 RMB/月
         </Button>
       </span>
               <p className="text-sm text-gray-500 mt-1">
@@ -218,7 +224,10 @@ export const Statistics = () => {
                 2. 解锁每天50首限制
               </p>
               <p className="text-sm text-gray-500 mt-1">
-                3. 高优先级
+                3. 解锁订阅20个限制
+              </p>
+              <p className="text-sm text-gray-500 mt-1">
+                4. 高优先级
               </p>
               <p className="text-sm text-gray-500 mt-1">
                 同一个‘爱发电’账号过期时间可以叠加
@@ -228,7 +237,7 @@ export const Statistics = () => {
               </p>
               <p className="text-sm text-gray-500 mt-1">爱发电用户id：{info?.afdId}</p>
               <p className="text-sm text-gray-500 mt-1">
-                遇到问题联系我，微信：abs_ytech，qq：180128877
+                遇到问题/修改密码联系我，微信号：abs_ytech
               </p>
             </li>
           </ul>
@@ -252,6 +261,155 @@ export const Statistics = () => {
             ) : (
               <p className="text-gray-500">暂无发电订单</p>
             )}
+          </div>
+          <hr/>
+          <div>
+            <div><Button onClick={() => {
+              fetch(`${Api}/sys/listMyUser`, {
+                method: "GET",
+                headers: {
+                  "Access-Token": localStorage.getItem("token") ?? ""
+                }
+              }).then(res => res.json())
+                .then(json => {
+                  setAllUserByNetease(json.data)
+                })
+            }}>查看我网易云账号下所有的账号</Button> ( 不要注册多个登录相同网易云的账号！如果有请登录删除)
+            </div>
+            <ul>
+              {allUserByNetease.map(i => {
+                // @ts-ignore
+                return <li>
+                  <div className={"m-2"}>- {i.username}
+                    {localStorage.getItem("username") === i.username ? " 本账号" :
+                      ""}
+                  </div>
+                </li>
+              })}
+            </ul>
+          </div>
+          <hr/>
+          <div className={"flex flex-wrap gap-2"}>
+
+
+            <Space.Compact className={"flex w-full"}>
+              <Input value={changeUserName} onChange={(event) => {
+                setChangeUserName(event.target.value);
+              }} placeholder={"输入新用户名"}></Input>
+              <Popconfirm title="确认修改用户名"
+                          onConfirm={async () => {
+                            const resp = await fetch(`${Api}/sys/changeUsername`,
+                              {
+                                method: "POST",
+                                body: JSON.stringify({
+                                  username: changeUserName
+                                }),
+                                headers: {
+                                  "Access-Token": localStorage.getItem("token") ?? "",
+                                  "Content-Type": "application/json"
+                                }
+                              })
+                              .then(res => res.json());
+                            if (resp.code === 0) {
+                              open?.({
+                                type: "success",
+                                message: "成功，请重新登录",
+                              })
+                              localStorage.removeItem("token")
+                              localStorage.removeItem("username")
+                              setTimeout(() => {
+                                window.location.href = "/login"
+                              }, 1000);
+                            } else {
+                              open?.({
+                                type: "error",
+                                message: "失败",
+                                description: resp.message,
+                              })
+                            }
+                          }}
+                          okText="Yes"
+                          cancelText="No">
+                <Button>修改用户名</Button>
+              </Popconfirm>
+            </Space.Compact>
+
+
+            <Space.Compact className={"flex w-full"}>
+              <Input value={changePassword} onChange={(event) => {
+                setChangePassword(event.target.value);
+              }} placeholder={"输入新密码"}></Input>
+              <Popconfirm title="确认修改密码"
+                          onConfirm={async () => {
+                            const resp = await fetch(`${Api}/sys/changePassword`,
+                              {
+                                method: "POST",
+                                body: JSON.stringify({
+                                  password: changePassword
+                                }),
+                                headers: {
+                                  "Access-Token": localStorage.getItem("token") ?? "",
+                                  "Content-Type": "application/json"
+                                }
+                              })
+                              .then(res => res.json());
+                            if (resp.code === 0) {
+                              open?.({
+                                type: "success",
+                                message: "成功，请重新登录",
+                              })
+                              localStorage.removeItem("token")
+                              localStorage.removeItem("username")
+                              setTimeout(() => {
+                                window.open("/login")
+                              }, 1000);
+                            } else {
+                              open?.({
+                                type: "error",
+                                message: "失败",
+                                description: resp.message,
+                              })
+                            }
+                          }}
+                          okText="Yes"
+                          cancelText="No">
+                <Button>修改密码</Button>
+              </Popconfirm>
+            </Space.Compact>
+
+            <Popconfirm
+              title="永久删除此账号"
+              onConfirm={async () => {
+                const resp = await fetch(`${Api}/sys/deleteMyUser`,
+                  {
+                    headers: {
+                      "Access-Token": localStorage.getItem("token") ?? ""
+                    }
+                  })
+                  .then(res => res.json());
+                if (resp.code === 0) {
+                  open?.({
+                    type: "success",
+                    message: "成功，请重新登录",
+                  })
+                  localStorage.removeItem("token")
+                  localStorage.removeItem("username")
+                  setTimeout(() => {
+                    window.location.href = "/login"
+                  }, 1000);
+                } else {
+                  open?.({
+                    type: "error",
+                    message: "失败",
+                    description: resp.message,
+                  })
+                }
+              }}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button danger size={"middle"}>永久删除此账号(不包含已上传内容)</Button>
+            </Popconfirm>
           </div>
         </div>
       </div>
