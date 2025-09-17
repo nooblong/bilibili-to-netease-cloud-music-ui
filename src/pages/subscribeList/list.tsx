@@ -13,7 +13,7 @@ export const SubscribeList = () => {
   const parsed = useParsed();
   const voiceListIdFromUrl = parsed.params?.voiceListId;
   const [filterVoiceListId, setFilterVoiceListId] = useState<string | null>(voiceListIdFromUrl ? String(voiceListIdFromUrl) : null);
-  const [voiceListList, setVoiceListList] = useState([])
+  const [voiceListList, setVoiceListList] = useState<any[]>([])
 
   const [logModal, setLogModal] = useState<{
     open: boolean;
@@ -152,8 +152,7 @@ export const SubscribeList = () => {
             placeholder="选择播客"
             className={"w-full h-16"}
             options={voiceListList}
-            onChange={item => {
-              // @ts-ignore
+            onChange={(item: any) => {
               setFilterVoiceListId(item.value)
               setFilters([
                 {

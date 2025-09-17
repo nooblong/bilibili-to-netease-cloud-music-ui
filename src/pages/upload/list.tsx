@@ -166,8 +166,7 @@ export const UploadList = () => {
             placeholder="选择播客"
             className={"w-full h-16"}
             options={voiceListList}
-            onChange={item => {
-              // @ts-ignore
+            onChange={(item: any) => {
               setFilterVoiceListId(item.value)
               setFilters([
                 {

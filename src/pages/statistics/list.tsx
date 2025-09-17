@@ -14,7 +14,7 @@ export const Statistics = () => {
   const [changeUserName, setChangeUserName] = useState("")
   const [changePassword, setChangePassword] = useState("")
 
-  const [allUserByNetease, setAllUserByNetease] = useState([]);
+  const [allUserByNetease, setAllUserByNetease] = useState<any[]>([]);
 
   const {open} = useNotification();
 
@@ -285,7 +285,6 @@ export const Statistics = () => {
             </div>
             <ul>
               {allUserByNetease.map(i => {
-                // @ts-ignore
                 return <li>
                   <div className={"m-2"}>- {i.username}
                     {localStorage.getItem("username") === i.username ? " 本账号" :
