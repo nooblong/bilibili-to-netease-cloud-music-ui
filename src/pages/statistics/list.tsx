@@ -49,8 +49,7 @@ export const Statistics = () => {
         <div>
           <p>链接：{url}</p>
           <ul>
-            <li>1. 不要修改链接。</li>
-            <li>2. 不要点击其他元素。</li>
+            <li>不要修改链接。</li>
           </ul>
         </div>
       ),
