@@ -1,8 +1,8 @@
-import {useEffect, useState} from "react";
-import {Api} from "../../App";
-import {Button, Card, Input, Modal, Popconfirm, Space, Table, Tooltip} from "antd";
-import {DeleteButton, ImageField, List, useTable} from "@refinedev/antd";
-import {BaseRecord, useNotification} from "@refinedev/core";
+import { useEffect, useState } from "react";
+import { Api } from "../../App";
+import { Button, Card, Input, Modal, Popconfirm, Space, Table, Tooltip } from "antd";
+import { DeleteButton, ImageField, List, useTable } from "@refinedev/antd";
+import { BaseRecord, useNotification } from "@refinedev/core";
 
 export const Statistics = () => {
 
@@ -16,9 +16,9 @@ export const Statistics = () => {
 
   const [allUserByNetease, setAllUserByNetease] = useState<any[]>([]);
 
-  const {open} = useNotification();
+  const { open } = useNotification();
 
-  const {tableProps, tableQueryResult} = useTable({
+  const { tableProps, tableQueryResult } = useTable({
     resource: "sys/queueInfo",
     syncWithLocation: true,
   });
@@ -47,7 +47,7 @@ export const Statistics = () => {
       title: "订单号: " + orderId,
       content: (
         <div>
-          <p>链接：{url}</p>
+          <p>链接:{url}</p>
           <ul>
             <li>不要修改链接。</li>
           </ul>
@@ -72,12 +72,12 @@ export const Statistics = () => {
             window.location.reload();
           },
           onCancel: () => {
-            console.log("用户取消支付");
+            
           },
         });
       },
       onCancel: () => {
-        console.log("取消");
+        
       },
     });
     setLoading(false);
@@ -109,9 +109,9 @@ export const Statistics = () => {
   // @ts-ignore
   return (
     <div>
-      <div className={"flex-row md:flex gap-2"}>
+      <div className={"flex flex-col md:flex-row gap-2"}>
         <div
-          className="w-full animate-in fade-in zoom-in-98 duration-500 max-w-xl mx-auto p-6 rounded-lg shadow space-y-4">
+          className="w-full animate-in fade-in zoom-in-98 duration-500 max-w-xl mx-auto p-6 rounded-lg shadow border  space-y-4">
           <h2 className="text-lg font-semibold border-b  pb-2">
             网站统计信息
           </h2>
@@ -120,27 +120,27 @@ export const Statistics = () => {
 
           <ul className="space-y-2">
             <li>
-              <span className="font-medium">注册且已登录网易云用户数：</span>
+              <span className="font-medium">已登录网易云用户数:</span>
               <span className="ml-1 font-semibold">
-            {info?.login163Num ?? "-"}
-          </span>
+                {info?.login163Num ?? "-"}
+              </span>
             </li>
             <li>
-              <span className="font-medium">今日访问用户数：</span>
+              <span className="font-medium">今日访问用户数:</span>
               <span className="ml-1 font-semibold">
-            {info?.visitToday ?? "-"}
-          </span>
+                {info?.visitToday ?? "-"}
+              </span>
             </li>
             <li>
-              <span className="font-medium">今日总访问次数：</span>
+              <span className="font-medium">今日总访问次数:</span>
               <span className="ml-1 font-semibold">
-            {info?.visitTodayTimes ?? "-"}
-          </span>
+                {info?.visitTodayTimes ?? "-"}
+              </span>
             </li>
           </ul>
 
           <div className="pt-4 text-sm border-t">
-            反馈 Bug：
+            反馈 Bug:
             <a
               className="ml-1 underline hover:opacity-80 transition"
               href="https://github.com/nooblong/bilibili-to-netease-cloud-music/issues"
@@ -150,26 +150,6 @@ export const Statistics = () => {
               提交到 GitHub Issue
             </a>
           </div>
-
-          {/* 留言板 */}
-          <div>
-            <h2 className="font-bold mb-2">留言板</h2>
-            {info?.afdOrders?.length ? (
-              <ul className="space-y-2">
-                {info.afdOrders.map((order: any) => (
-                  <li
-                    key={order.id}
-                  >
-                    金额：{order.showAmount ?? "-"}
-                    {" "}
-                    留言：{order.remark || "（无）"}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-gray-500">暂无留言</p>
-            )}
-          </div>
         </div>
 
         <div
@@ -177,74 +157,59 @@ export const Statistics = () => {
           {/* 账号信息 */}
           <ul className="space-y-2">
             <li>
-              <span className="font-medium">是否登录：</span>
+              <span className="font-medium">是否登录:</span>
               <span className="ml-1 font-semibold">
-        {info?.login ? "已登录" : "未登录"}
-      </span>
+                {info?.login ? "已登录" : "未登录"}
+              </span>
             </li>
 
             <li>
-              <span className="font-medium">是否vip：</span>
+              <span className="font-medium">是否vip:</span>
               <span className="ml-1 font-semibold">
-        {isVip ? "是" : "否"}
-      </span>
+                {isVip ? "是" : "否"}
+              </span>
             </li>
 
             <li>
-              <span className="font-medium">vip过期时间：</span>
+              <span className="font-medium">vip过期时间:</span>
               <span className="ml-1 font-semibold">
-        {isVip ? info?.expireTime : "-"}
-      </span>
+                {isVip ? info?.expireTime : "-"}
+              </span>
             </li>
             <li>
-              <span className="font-medium">今日剩余上传次数：</span>
+              <span className="font-medium">今日剩余上传次数:</span>
               <span className="ml-1 font-semibold">
-        {info?.remaining}
-      </span>
+                {info?.remaining}
+              </span>
             </li>
 
             <li>
-              <span className="font-medium">请作者喝杯奶茶(爱发电)：</span>
+              <span className="font-medium">解锁每日限制:</span>
               <span className="ml-1">
-        <Button
-          loading={loading}
-          disabled={!login}
-          className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-          onClick={() => {
-            fetch(`${Api}/sys/generateOrder`, {
-              headers: {
-                "Access-Token": localStorage.getItem("token") ?? ""
-              }
-            }).then((res) => res.json()).then((res) => {
-              handleRecharge(res.data)
-            })
-          }}
-        >
-          去支付 5 RMB/月
-        </Button>
-      </span>
+                <Button
+                  loading={loading}
+                  disabled={!login}
+                  className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  onClick={() => {
+                    fetch(`${Api}/sys/generateOrder`, {
+                      headers: {
+                        "Access-Token": localStorage.getItem("token") ?? ""
+                      }
+                    }).then((res) => res.json()).then((res) => {
+                      handleRecharge(res.data)
+                    })
+                  }}
+                >
+                  去支付 5 RMB/月
+                </Button>
+              </span>
               <p className="text-sm text-gray-500 mt-1">
                 1. 解锁单曲2小时限制
               </p>
               <p className="text-sm text-gray-500 mt-1">
-                2. 解锁每天50首限制
+                2. 解锁每天100首限制
               </p>
-              <p className="text-sm text-gray-500 mt-1">
-                3. 解锁订阅20个限制
-              </p>
-              <p className="text-sm text-gray-500 mt-1">
-                4. 高优先级
-              </p>
-              <p className="text-sm text-gray-500 mt-1">
-                同一个‘爱发电’账号过期时间可以叠加
-              </p>
-              <p className="text-sm text-gray-500 mt-1">
-                在第一次支付后绑定爱发电账号
-              </p>
-              <p className="text-sm text-gray-500 mt-1">爱发电用户id：{info?.afdId}</p>
-              <p className="text-sm text-gray-500 mt-1">
-                遇到问题/修改密码联系我，微信号：abs_ytech
-              </p>
+              <p className="text-sm text-gray-500 mt-1">爱发电用户id:{info?.afdId}</p>
             </li>
           </ul>
 
@@ -259,8 +224,8 @@ export const Statistics = () => {
               <ul className="list-disc pl-5 space-y-1">
                 {info.myOrders.map((order: any) => (
                   <li key={order.id}>
-                    订单号：{order.orderId}，金额：{order.showAmount ?? "-"}，
-                    时间：{order.createTime}
+                    订单号:{order.orderId}，金额:{order.showAmount ?? "-"}，
+                    时间:{order.createTime}
                   </li>
                 ))}
               </ul>
@@ -268,9 +233,9 @@ export const Statistics = () => {
               <p className="text-gray-500">暂无发电订单</p>
             )}
           </div>
-          <hr/>
+          <hr />
           <div>
-            <div><Button onClick={() => {
+            <div><Button disabled={!login} onClick={() => {
               fetch(`${Api}/sys/listMyUser`, {
                 method: "GET",
                 headers: {
@@ -293,7 +258,7 @@ export const Statistics = () => {
               })}
             </ul>
           </div>
-          <hr/>
+          <hr />
           <div className={"flex flex-wrap gap-2"}>
 
 
@@ -302,40 +267,40 @@ export const Statistics = () => {
                 setChangeUserName(event.target.value);
               }} placeholder={"输入新用户名"}></Input>
               <Popconfirm title="确认修改用户名"
-                          onConfirm={async () => {
-                            const resp = await fetch(`${Api}/sys/changeUsername`,
-                              {
-                                method: "POST",
-                                body: JSON.stringify({
-                                  username: changeUserName
-                                }),
-                                headers: {
-                                  "Access-Token": localStorage.getItem("token") ?? "",
-                                  "Content-Type": "application/json"
-                                }
-                              })
-                              .then(res => res.json());
-                            if (resp.code === 0) {
-                              open?.({
-                                type: "success",
-                                message: "成功，请重新登录",
-                              })
-                              localStorage.removeItem("token")
-                              localStorage.removeItem("username")
-                              setTimeout(() => {
-                                window.location.href = "/login"
-                              }, 1000);
-                            } else {
-                              open?.({
-                                type: "error",
-                                message: "失败",
-                                description: resp.message,
-                              })
-                            }
-                          }}
-                          okText="Yes"
-                          cancelText="No">
-                <Button>修改用户名</Button>
+                onConfirm={async () => {
+                  const resp = await fetch(`${Api}/sys/changeUsername`,
+                    {
+                      method: "POST",
+                      body: JSON.stringify({
+                        username: changeUserName
+                      }),
+                      headers: {
+                        "Access-Token": localStorage.getItem("token") ?? "",
+                        "Content-Type": "application/json"
+                      }
+                    })
+                    .then(res => res.json());
+                  if (resp.code === 0) {
+                    open?.({
+                      type: "success",
+                      message: "成功，请重新登录",
+                    })
+                    localStorage.removeItem("token")
+                    localStorage.removeItem("username")
+                    setTimeout(() => {
+                      window.location.href = "/login"
+                    }, 1000);
+                  } else {
+                    open?.({
+                      type: "error",
+                      message: "失败",
+                      description: resp.message,
+                    })
+                  }
+                }}
+                okText="Yes"
+                cancelText="No">
+                <Button disabled={!login}>修改用户名</Button>
               </Popconfirm>
             </Space.Compact>
 
@@ -345,40 +310,40 @@ export const Statistics = () => {
                 setChangePassword(event.target.value);
               }} placeholder={"输入新密码"}></Input>
               <Popconfirm title="确认修改密码"
-                          onConfirm={async () => {
-                            const resp = await fetch(`${Api}/sys/changePassword`,
-                              {
-                                method: "POST",
-                                body: JSON.stringify({
-                                  password: changePassword
-                                }),
-                                headers: {
-                                  "Access-Token": localStorage.getItem("token") ?? "",
-                                  "Content-Type": "application/json"
-                                }
-                              })
-                              .then(res => res.json());
-                            if (resp.code === 0) {
-                              open?.({
-                                type: "success",
-                                message: "成功，请重新登录",
-                              })
-                              localStorage.removeItem("token")
-                              localStorage.removeItem("username")
-                              setTimeout(() => {
-                                window.open("/login")
-                              }, 1000);
-                            } else {
-                              open?.({
-                                type: "error",
-                                message: "失败",
-                                description: resp.message,
-                              })
-                            }
-                          }}
-                          okText="Yes"
-                          cancelText="No">
-                <Button>修改密码</Button>
+                onConfirm={async () => {
+                  const resp = await fetch(`${Api}/sys/changePassword`,
+                    {
+                      method: "POST",
+                      body: JSON.stringify({
+                        password: changePassword
+                      }),
+                      headers: {
+                        "Access-Token": localStorage.getItem("token") ?? "",
+                        "Content-Type": "application/json"
+                      }
+                    })
+                    .then(res => res.json());
+                  if (resp.code === 0) {
+                    open?.({
+                      type: "success",
+                      message: "成功，请重新登录",
+                    })
+                    localStorage.removeItem("token")
+                    localStorage.removeItem("username")
+                    setTimeout(() => {
+                      window.open("/login")
+                    }, 1000);
+                  } else {
+                    open?.({
+                      type: "error",
+                      message: "失败",
+                      description: resp.message,
+                    })
+                  }
+                }}
+                okText="Yes"
+                cancelText="No">
+                <Button disabled={!login}>修改密码</Button>
               </Popconfirm>
             </Space.Compact>
 
@@ -413,32 +378,32 @@ export const Statistics = () => {
               okText="Yes"
               cancelText="No"
             >
-              <Button danger size={"middle"}>永久删除此账号(不包含已上传内容)</Button>
+              <Button disabled={!login} danger size={"middle"}>永久删除此账号(不包含已上传内容)</Button>
             </Popconfirm>
           </div>
         </div>
+
+        <div className="w-full animate-in fade-in zoom-in-98 duration-500 max-w-4xl mx-auto p-6 rounded-lg shadow border">
+          <List title={`上传队列: 剩余(${tableQueryResult.data?.total ?? 0})`}>
+            <Table {...tableProps} rowKey="id">
+              <Table.Column title="id" dataIndex="id" />
+              <Table.Column
+                dataIndex="mergeTitle"
+                title="合并名称"
+                render={(value: string) => {
+                  const shortText = value?.length > 20 ? value.slice(0, 20) + "…" : value;
+                  return (
+                    <Tooltip title={value}>
+                      <span>{shortText}</span>
+                    </Tooltip>
+                  );
+                }}
+              />
+              <Table.Column title="优先级" dataIndex="priority" />
+            </Table>
+          </List>
+        </div>
       </div>
-
-      <br/>
-
-      <List title={`上传队列: 剩余(${tableQueryResult.data?.total ?? 0})`}>
-        <Table {...tableProps} rowKey="id">
-          <Table.Column title="id" dataIndex="id"/>
-          <Table.Column
-            dataIndex="mergeTitle"
-            title="合并名称"
-            render={(value: string) => {
-              const shortText = value?.length > 20 ? value.slice(0, 20) + "…" : value;
-              return (
-                <Tooltip title={value}>
-                  <span>{shortText}</span>
-                </Tooltip>
-              );
-            }}
-          />
-          <Table.Column title="优先级" dataIndex="priority"/>
-        </Table>
-      </List>
     </div>
   );
 }

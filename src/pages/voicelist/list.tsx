@@ -3,17 +3,17 @@ import {
   List,
   useTable,
 } from "@refinedev/antd";
-import {type BaseRecord, useGo, useNotification} from "@refinedev/core";
-import {Button, Input, Popconfirm, Space, Table} from "antd";
-import {useEffect, useState} from "react";
-import {Api} from "../../App";
+import { type BaseRecord, useGo, useNotification } from "@refinedev/core";
+import { Button, Input, Popconfirm, Space, Table } from "antd";
+import { useEffect, useState } from "react";
+import { Api } from "../../App";
 
 export const VoicelistList = () => {
   const go = useGo();
 
   const [username, setUsername] = useState<string | null>(null);
 
-  const {tableProps, setFilters, tableQueryResult} = useTable({
+  const { tableProps, setFilters, tableQueryResult } = useTable({
     resource: "upload/listVoicelist",
     syncWithLocation: true,
     filters: {
@@ -25,13 +25,19 @@ export const VoicelistList = () => {
             value: localStorage.getItem("username"),
           },
         ]
-        : [],
+        : [{
+          field: "username",
+          operator: "eq",
+          value: "nousername",
+        },],
     },
   });
 
   useEffect(() => {
     if (localStorage.getItem("username")) {
       setUsername(String(localStorage.getItem("username")));
+    } else {
+      setUsername("未登录");
     }
     fetch(`${Api}/sys/log`, {
       headers: {
@@ -40,43 +46,12 @@ export const VoicelistList = () => {
     });
   }, []);
 
-  // 点击“查看自己播客”
-  const handleSelf = () => {
-    const self = localStorage.getItem("username") || "";
-    setUsername(self);
-    setFilters([
-      {
-        field: "username",
-        operator: "eq",
-        value: self,
-      },
-    ]);
-  };
-
-  // 点击“查看他人播客”
-  const handleOthers = () => {
-    setUsername(null);
-    setFilters([{
-      field: "username",
-      operator: "eq",
-      value: null,
-    }]);
-  };
-
-  const {open} = useNotification();
+  const { open } = useNotification();
 
   return (
     <List>
-      <Space style={{marginBottom: 16}}>
+      <Space style={{ marginBottom: 16 }}>
         <div className={"flex flex-wrap gap-2 mb-4"}>
-          <Input
-            placeholder="用户名"
-            value={username ?? ""}
-            style={{width: 200}}
-            disabled
-          />
-          <Button onClick={handleOthers}>查看他人播客</Button>
-          <Button onClick={handleSelf}>查看自己播客</Button>
           <Button onClick={() => {
             fetch(`${Api}/upload/refreshVoiceList`, {
               headers: {
@@ -93,7 +68,8 @@ export const VoicelistList = () => {
                 } else {
                   open?.({
                     type: "error",
-                    message: resp.msg,
+                    message: "失败",
+                    description: resp.message,
                   })
                 }
               })
@@ -105,11 +81,11 @@ export const VoicelistList = () => {
         <Table.Column
           title="封面"
           dataIndex="voicelistImage"
-          render={(url: string) => <ImageField value={url} width={100}/>}
+          render={(url: string) => <ImageField value={url} width={100} />}
         />
-        <Table.Column title="名称" dataIndex="voicelistName"/>
-        <Table.Column title="上传数" dataIndex="uploadCount"/>
-        <Table.Column title="订阅数" dataIndex="subscribeNum"/>
+        <Table.Column title="名称" dataIndex="voicelistName" />
+        <Table.Column title="上传数" dataIndex="uploadCount" />
+        <Table.Column title="订阅数" dataIndex="subscribeNum" />
         <Table.Column
           title={"操作"}
           render={(_, record: BaseRecord) => (

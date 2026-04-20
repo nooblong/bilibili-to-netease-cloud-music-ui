@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import {
   useTranslate,
   useLogout,
@@ -14,8 +14,9 @@ import {
   useActiveAuthProvider,
   pickNotDeprecated,
   useWarnAboutChange,
+  useIsAuthenticated,
 } from "@refinedev/core";
-import {ThemedTitleV2, useThemedLayoutContext} from "@refinedev/antd";
+import { ThemedTitleV2, useThemedLayoutContext } from "@refinedev/antd";
 import {
   DashboardOutlined,
   LogoutOutlined,
@@ -33,8 +34,8 @@ import {
   theme,
   ConfigProvider,
 } from "antd";
-import type {RefineThemedLayoutV2SiderProps} from "@refinedev/antd";
-import type {CSSProperties} from "react";
+import type { RefineThemedLayoutV2SiderProps } from "@refinedev/antd";
+import type { CSSProperties } from "react";
 
 const drawerButtonStyles: CSSProperties = {
   borderStartStartRadius: 0,
@@ -45,13 +46,14 @@ const drawerButtonStyles: CSSProperties = {
 };
 
 export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
-                                                                          Title: TitleFromProps,
-                                                                          render,
-                                                                          meta,
-                                                                          fixed,
-                                                                          activeItemDisabled = false,
-                                                                        }) => {
-  const {token} = theme.useToken();
+  Title: TitleFromProps,
+  render,
+  meta,
+  fixed,
+  activeItemDisabled = false,
+}) => {
+  const authStatus = useIsAuthenticated();
+  const { token } = theme.useToken();
   const {
     siderCollapsed,
     setSiderCollapsed,
@@ -63,16 +65,16 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
   const direction = useContext(ConfigProvider.ConfigContext)?.direction;
   const routerType = useRouterType();
   const NewLink = useLink();
-  const {warnWhen, setWarnWhen} = useWarnAboutChange();
-  const {Link: LegacyLink} = useRouterContext();
+  const { warnWhen, setWarnWhen } = useWarnAboutChange();
+  const { Link: LegacyLink } = useRouterContext();
   const Link = routerType === "legacy" ? LegacyLink : NewLink;
   const TitleFromContext = useTitle();
   const translate = useTranslate();
-  const {menuItems, selectedKey, defaultOpenKeys} = useMenu({meta});
+  const { menuItems, selectedKey, defaultOpenKeys } = useMenu({ meta });
   const breakpoint = Grid.useBreakpoint();
-  const {hasDashboard} = useRefineContext();
+  const { hasDashboard } = useRefineContext();
   const authProvider = useActiveAuthProvider();
-  const {mutate: mutateLogout} = useLogout({
+  const { mutate: mutateLogout } = useLogout({
     v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
   });
 
@@ -82,7 +84,13 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
   const RenderToTitle = TitleFromProps ?? TitleFromContext ?? ThemedTitleV2;
 
   const renderTreeView = (tree: ITreeMenu[], selectedKey?: string) => {
-    return tree.map((item: ITreeMenu) => {
+    return tree.filter((item: ITreeMenu) => {
+        // 未登录时隐藏登录网易云和登录b站菜单项
+        if (!authStatus.data?.authenticated && (item.name === "loginNetease" || item.name === "loginBili")) {
+          return false;
+        }
+        return true;
+      }).map((item: ITreeMenu) => {
       const {
         icon,
         label,
@@ -107,7 +115,7 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
           >
             <Menu.SubMenu
               key={item.key}
-              icon={icon ?? <UnorderedListOutlined/>}
+              icon={icon ?? <UnorderedListOutlined />}
               title={label}
             >
               {renderTreeView(children, selectedKey)}
@@ -122,7 +130,7 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
       );
 
       const linkStyle: React.CSSProperties =
-        activeItemDisabled && isSelected ? {pointerEvents: "none"} : {};
+        activeItemDisabled && isSelected ? { pointerEvents: "none" } : {};
 
       return (
         <CanAccess
@@ -135,14 +143,14 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
         >
           <Menu.Item
             key={item.key}
-            icon={icon ?? (isRoute && <UnorderedListOutlined/>)}
+            icon={icon ?? (isRoute && <UnorderedListOutlined />)}
             style={linkStyle}
           >
             <Link to={route ?? ""} style={linkStyle}>
               {label}
             </Link>
             {!siderCollapsed && isSelected && (
-              <div className="ant-menu-tree-arrow"/>
+              <div className="ant-menu-tree-arrow" />
             )}
           </Menu.Item>
         </CanAccess>
@@ -168,21 +176,27 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
     }
   };
 
-  const logout = isExistAuthentication && (
+  const logout = authStatus.data?.authenticated ? (
     <Menu.Item
       key="logout"
       onClick={() => handleLogout()}
       icon={<LogoutOutlined/>}
     >
-      {translate("buttons.logout", "退出/登录账号！")}
+      {translate("buttons.logout", "退出账号！")}
     </Menu.Item>
-  );
+  ) : <Menu.Item
+      key="logout"
+      onClick={() => handleLogout()}
+      icon={<LogoutOutlined/>}
+    >
+      {translate("buttons.logout", "登录账号！")}
+    </Menu.Item>;
 
   const dashboard = hasDashboard ? (
-    <Menu.Item key="dashboard" icon={<DashboardOutlined/>}>
+    <Menu.Item key="dashboard" icon={<DashboardOutlined />}>
       <Link to="/">{translate("dashboard.title", "Dashboard")}</Link>
       {!siderCollapsed && selectedKey === "/" && (
-        <div className="ant-menu-tree-arrow"/>
+        <div className="ant-menu-tree-arrow" />
       )}
     </Menu.Item>
   ) : null;
@@ -200,14 +214,11 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
     }
     return (
       <>
-        <Menu.Item key="github" icon={<GithubOutlined/>}>
+        <Menu.Item key="github" icon={<GithubOutlined />}>
           <Link to="https://github.com/nooblong/bilibili-to-netease-cloud-music">{"jump to github"}</Link>
         </Menu.Item>
         {dashboard}
         {items}
-        <Menu.Item key="ciallo" icon={<UnorderedListOutlined/>}>
-          <a href="/ciallo/index.html">{"我勒个豆！！"}</a>
-        </Menu.Item>
         {logout}
       </>
     );
@@ -268,7 +279,7 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
                   backgroundColor: token.colorBgElevated,
                 }}
               >
-                <RenderToTitle collapsed={false}/>
+                <RenderToTitle collapsed={false} />
               </div>
               {renderMenu()}
             </Layout.Sider>
@@ -278,7 +289,7 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
           style={drawerButtonStyles}
           size="large"
           onClick={() => setMobileSiderOpen(true)}
-          icon={<BarsOutlined/>}
+          icon={<BarsOutlined />}
         />
       </>
     );
@@ -300,7 +311,7 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
     siderStyles.zIndex = 999;
   }
   const renderClosingIcons = () => {
-    const iconProps = {style: {color: token.colorPrimary}};
+    const iconProps = { style: { color: token.colorPrimary } };
     const OpenIcon = direction === "rtl" ? RightOutlined : LeftOutlined;
     const CollapsedIcon = direction === "rtl" ? LeftOutlined : RightOutlined;
     const IconComponent = siderCollapsed ? CollapsedIcon : OpenIcon;
@@ -355,7 +366,7 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
             fontSize: "14px",
           }}
         >
-          <RenderToTitle collapsed={siderCollapsed}/>
+          <RenderToTitle collapsed={siderCollapsed} />
         </div>
         {renderMenu()}
       </Layout.Sider>

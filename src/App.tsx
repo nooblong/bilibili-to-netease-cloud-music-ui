@@ -93,7 +93,7 @@ function App() {
                   name: "loginNetease",
                   list: "/loginNetease",
                   meta: {
-                    label: "登录网易云",
+                    label: "链接网易云账号",
                     canDelete: false,
                   },
                 },
@@ -101,7 +101,7 @@ function App() {
                   name: "loginBili",
                   list: "/loginBili",
                   meta: {
-                    label: "登录b站(可选)",
+                    label: "链接b站账号(可选)",
                     canDelete: false,
                   },
                 },

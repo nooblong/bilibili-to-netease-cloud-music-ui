@@ -95,54 +95,12 @@ export const SubscribeList = () => {
     }
   }, [voiceListIdFromUrl]);
 
-  // 点击“查看自己播客”
-  const handleSelf = () => {
-    const self = localStorage.getItem("username") || "";
-    setUsername(self);
-    setFilters([
-      {
-        field: "username",
-        operator: "eq",
-        value: self,
-      },
-    ]);
-  };
-
-  // 点击“查看他人播客”
-  const handleOthers = () => {
-    setUsername(null);
-    setFilters([{
-      field: "username",
-      operator: "eq",
-      value: null,
-    }]);
-  };
-
   const go = useGo();
   const {open} = useNotification();
 
   return (
     <List canCreate={false}>
-      <Space style={{marginBottom: 16}}>
-        <Input
-          value={filterVoiceListId ?? ""}
-          onChange={(e) => setFilterVoiceListId(e.target.value)}
-          style={{width: 200}}
-          disabled
-        />
-      </Space>
-      <br/>
-      <Space style={{marginBottom: 16}} className={"flex flex-wrap gap-2 mb-4"}>
-        <Input
-          placeholder="用户名"
-          value={username ?? ""}
-          style={{width: 200}}
-          disabled
-        />
-        <Button onClick={handleOthers}>查看他人订阅</Button>
-        <Button onClick={handleSelf}>查看自己订阅</Button>
-      </Space>
-      <br/>
+      
       <div style={{marginBottom: 16}}>
         <span>选择播客:</span>
         {voiceListList.length > 0 ?

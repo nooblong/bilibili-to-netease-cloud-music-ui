@@ -70,14 +70,6 @@ export const authProvider: AuthProvider = {
     };
   },
   check: async () => {
-    // const allowedPublicRoutes = ["/", "/public"];
-    // const currentPath = window.location.pathname;
-    // if (allowedPublicRoutes.includes(currentPath)) {
-    //   return {
-    //     authenticated: true, // 即使未登录也允许访问
-    //   };
-    // }
-
     const token = localStorage.getItem(TOKEN_KEY);
     if (token) {
       return {
@@ -104,7 +96,14 @@ export const authProvider: AuthProvider = {
     return null;
   },
   onError: async (error) => {
-    console.error(error);
+    if (error.statusCode === 401 || error.statusCode === 403) {
+      return {
+        logout: true,
+        redirectTo: "/login",
+        error,
+      };
+    }
+
     return {error};
   },
 };
