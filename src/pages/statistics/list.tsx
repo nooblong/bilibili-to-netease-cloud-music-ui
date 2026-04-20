@@ -137,6 +137,48 @@ export const Statistics = () => {
                 {info?.visitTodayTimes ?? "-"}
               </span>
             </li>
+            <li>
+              <span className="font-medium">今日总上传次数:</span>
+              <span className="ml-1 font-semibold">
+                {info?.todayUploadNum ?? "-"}
+              </span>
+            </li>
+            <li>
+              <span className="font-medium">今日总上传成功次数:</span>
+              <span className="ml-1 font-semibold">
+                {info?.todayUploadSuccessNum ?? "-"}
+              </span>
+            </li>
+            <li>
+              <span className="font-medium">总上传次数:</span>
+              <span className="ml-1 font-semibold">
+                {info?.totalUploadNum ?? "-"}
+              </span>
+            </li>
+            <li>
+              <span className="font-medium">今日上传了的用户数:</span>
+              <span className="ml-1 font-semibold">
+                {info?.todayUploadUserNum ?? "-"}
+              </span>
+            </li>
+            <li>
+              <span className="font-medium">今日检查到新视频的订阅数:</span>
+              <span className="ml-1 font-semibold">
+                {info?.todayHasNewUploadSubscribe ?? "-"}
+              </span>
+            </li>
+            <li>
+              <span className="font-medium">活动中的订阅数:</span>
+              <span className="ml-1 font-semibold">
+                {info?.enabledSubscribeNum ?? "-"}
+              </span>
+            </li>
+            <li>
+              <span className="font-medium">有活动中订阅的用户数:</span>
+              <span className="ml-1 font-semibold">
+                {info?.enabledSubscribeUserNum ?? "-"}
+              </span>
+            </li>
           </ul>
 
           <div className="pt-4 text-sm border-t">
@@ -158,7 +200,7 @@ export const Statistics = () => {
           <ul className="space-y-2">
             <li>
               <span className="font-medium">是否登录:</span>
-              <span className="ml-1 font-semibold">
+              <span className={`ml-1 font-semibold ${info?.login ? 'text-green-600' : 'text-red-600'}`}>
                 {info?.login ? "已登录" : "未登录"}
               </span>
             </li>

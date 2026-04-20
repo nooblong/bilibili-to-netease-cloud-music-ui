@@ -27,13 +27,13 @@ export const UploadList = () => {
           {
             field: "username",
             operator: "eq",
-            value: username ?? "nousername",
+            value: username ?? "",
           }
         ]
         : [{
           field: "username",
           operator: "eq",
-          value: username ?? "nousername",
+          value: username ?? "",
         }],
     },
   });
