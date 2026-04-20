@@ -1,11 +1,13 @@
-import type {AuthProvider} from "@refinedev/core";
-import {Api} from "./App";
+import type { AuthProvider } from "@refinedev/core";
+import { Api } from "./App";
 
 export const TOKEN_KEY = "token";
 export const USERNAME_KEY = "username";
+export const LOGIN_NETEASE_KEY = "loginNetease";
+export const LOGIN_BILI_KEY = "loginBili";
 
 export const authProvider: AuthProvider = {
-  register: async ({username, password}) => {
+  register: async ({ username, password }) => {
     const body = {
       username: username,
       password: password,
@@ -29,7 +31,7 @@ export const authProvider: AuthProvider = {
       }
     }
   },
-  login: async ({username, password}) => {
+  login: async ({ username, password }) => {
     const body = {
       username: username,
       password: password,
@@ -46,6 +48,31 @@ export const authProvider: AuthProvider = {
       if (response.code === 0) {
         localStorage.setItem(TOKEN_KEY, response.data);
         localStorage.setItem(USERNAME_KEY, username);
+
+        await fetch(`${Api}/netmusic/loginStatus`, {
+          headers: {
+            "Access-Token": localStorage.getItem("token") ?? ""
+          }
+        })
+          .then(res => res.json())
+          .then(json => {
+            if (json.code === 0 && json.data.profile !== null) {
+              localStorage.setItem(LOGIN_NETEASE_KEY, "1");
+            }
+          });
+
+        await fetch(`${Api}/bilibili/getSelfInfo`, {
+          headers: {
+            "Access-Token": localStorage.getItem("token") ?? ""
+          }
+        })
+          .then(res => res.json())
+          .then(json => {
+            if (json.code === 0) {
+              localStorage.setItem(LOGIN_BILI_KEY, "1");
+            }
+          });
+        
         return {
           success: true,
           redirectTo: "/",
@@ -64,6 +91,8 @@ export const authProvider: AuthProvider = {
   logout: async () => {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USERNAME_KEY);
+    localStorage.removeItem(LOGIN_NETEASE_KEY);
+    localStorage.removeItem(LOGIN_BILI_KEY);
     return {
       success: true,
       redirectTo: "/login",
@@ -104,6 +133,6 @@ export const authProvider: AuthProvider = {
       };
     }
 
-    return {error};
+    return { error };
   },
 };

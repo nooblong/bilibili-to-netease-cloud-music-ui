@@ -130,7 +130,15 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
       );
 
       const linkStyle: React.CSSProperties =
-        activeItemDisabled && isSelected ? { pointerEvents: "none" } : {};
+        activeItemDisabled && isSelected ? { pointerEvents: "none"} : {};
+
+      // 根据 localStorage 设置菜单项背景色
+      let itemStyle = { ...linkStyle };
+      if (name === "loginBili") {
+        itemStyle.backgroundColor = localStorage.getItem("loginBili") === "1" ? "#52c41a" : "#ff4d4f";
+      } else if (name === "loginNetease") {
+        itemStyle.backgroundColor = localStorage.getItem("loginNetease") === "1" ? "#52c41a" : "#ff4d4f";
+      }
 
       return (
         <CanAccess
@@ -143,8 +151,8 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
         >
           <Menu.Item
             key={item.key}
-            icon={icon ?? (isRoute && <UnorderedListOutlined />)}
-            style={linkStyle}
+            // icon={icon ?? (isRoute && <UnorderedListOutlined />)}
+            style={itemStyle}
           >
             <Link to={route ?? ""} style={linkStyle}>
               {label}
@@ -180,14 +188,12 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
     <Menu.Item
       key="logout"
       onClick={() => handleLogout()}
-      icon={<LogoutOutlined/>}
     >
       {translate("buttons.logout", "退出账号！")}
     </Menu.Item>
   ) : <Menu.Item
       key="logout"
       onClick={() => handleLogout()}
-      icon={<LogoutOutlined/>}
     >
       {translate("buttons.logout", "登录账号！")}
     </Menu.Item>;
