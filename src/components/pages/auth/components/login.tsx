@@ -89,7 +89,7 @@ export const LoginPage: React.FC<LoginProps> = ({
         ...titleStyles,
       }}
     >
-      {translate("pages.login.title", "登录 to your account")}
+      {"登录"}
     </Typography.Title>
   );
 
@@ -164,7 +164,7 @@ export const LoginPage: React.FC<LoginProps> = ({
         >
           <Form.Item
             name="username"
-            label={translate("pages.login.fields.username", "Username")}
+            label={"用户名"}
             rules={[
               {
                 required: true,
@@ -189,7 +189,7 @@ export const LoginPage: React.FC<LoginProps> = ({
           </Form.Item>
           <Form.Item
             name="password"
-            label={translate("pages.login.fields.password", "Password")}
+            label={"密码"}
             rules={[
               {
                 required: true,
@@ -264,10 +264,7 @@ export const LoginPage: React.FC<LoginProps> = ({
           }}
         >
           <Typography.Text style={{ fontSize: 12 }}>
-            {translate(
-              "pages.login.buttons.noAccount",
-              "Don’t have an account?"
-            )}{" "}
+            {"没有账号?"}{" "}
             <ActiveLink
               to="/register"
               style={{

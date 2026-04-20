@@ -86,7 +86,7 @@ export const RegisterPage: React.FC<RegisterProps> = ({
         ...titleStyles,
       }}
     >
-      {translate("pages.register.title", "注册 for your account")}
+      {"注册"}
     </Typography.Title>
   );
 
@@ -161,7 +161,7 @@ export const RegisterPage: React.FC<RegisterProps> = ({
         >
           <Form.Item
             name="username"
-            label={translate("pages.register.username", "Username")}
+            label={"用户名"}
             rules={[
               {
                 required: true,
@@ -186,7 +186,7 @@ export const RegisterPage: React.FC<RegisterProps> = ({
           </Form.Item>
           <Form.Item
             name="password"
-            label={translate("pages.register.fields.password", "Password")}
+            label={"密码"}
             rules={[
               {
                 required: true,
@@ -213,13 +213,7 @@ export const RegisterPage: React.FC<RegisterProps> = ({
                   marginLeft: "auto",
                 }}
               >
-                {translate(
-                  "pages.register.buttons.haveAccount",
-                  translate(
-                    "pages.login.buttons.haveAccount",
-                    "Have an account?"
-                  )
-                )}{" "}
+                {"已有账号?"}{" "}
                 <ActiveLink
                   style={{
                     fontWeight: "bold",
