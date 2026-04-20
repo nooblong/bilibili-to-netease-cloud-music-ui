@@ -27,13 +27,13 @@ export const UploadList = () => {
           {
             field: "username",
             operator: "eq",
-            value: username ?? "",
+            value: username ?? "nousername",
           }
         ]
         : [{
           field: "username",
           operator: "eq",
-          value: username ?? "",
+          value: username ?? "nousername",
         }],
     },
   });
@@ -94,30 +94,6 @@ export const UploadList = () => {
   const go = useGo();
   const {open} = useNotification();
 
-  // 点击“查看自己播客”
-  const handleSelf = () => {
-    const self = localStorage.getItem("username") || "";
-    setUsername(self);
-    setFilters([
-      {
-        field: "username",
-        operator: "eq",
-        value: self,
-      },
-    ]);
-  };
-
-  // 点击“查看他人播客”
-  const handleOthers = () => {
-    setUsername(null);
-    setFilters([{
-      field: "username",
-      operator: "eq",
-      value: null,
-    }]);
-  };
-
-
   return (
     <List canCreate={false}>
       <Space style={{marginBottom: 16}}>
@@ -145,16 +121,6 @@ export const UploadList = () => {
         >
           单曲上传
         </Button>
-      </Space>
-      <Space style={{marginBottom: 16}} className={"flex flex-wrap gap-2 mb-4"}>
-        <Input
-          placeholder="用户名"
-          value={username ?? ""}
-          style={{width: 200}}
-          disabled
-        />
-        <Button onClick={handleOthers}>查看所有单曲</Button>
-        <Button onClick={handleSelf}>查看自己上传单曲</Button>
       </Space>
       <br/>
       <div style={{marginBottom: 16}}>
