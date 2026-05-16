@@ -13,7 +13,10 @@ export const UploadCreate = () => {
   const {open} = useNotification();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [prefix, setPrefix] = useState("【阿梓歌】《")
-  const [suffix, setSuffix] = useState("》（2025.1.1）")
+  const [suffix, setSuffix] = useState(() => {
+    const d = new Date();
+    return `》（${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()}）`;
+  })
 
   const {formProps, saveButtonProps, form, onFinish} = useForm({
   });

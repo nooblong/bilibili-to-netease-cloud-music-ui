@@ -212,7 +212,7 @@ export const SubscribeCreate = () => {
             <Input/>
           </Form.Item>
 
-          <Form.Item name="toTime" label="结束时间" initialValue={"2010-01-01 00:00:00"}>
+          <Form.Item name="toTime" label="结束时间" initialValue={"2077-01-01 00:00:00"}>
             <Input/>
           </Form.Item>
 
@@ -424,7 +424,7 @@ export const SubscribeCreate = () => {
             <Input/>
           </Form.Item>
 
-          <Form.Item name="toTime" label="结束时间" initialValue={"2010-01-01 00:00:00"}>
+          <Form.Item name="toTime" label="结束时间" initialValue={"2077-01-01 00:00:00"}>
             <Input/>
           </Form.Item>
 
