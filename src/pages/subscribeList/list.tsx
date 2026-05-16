@@ -308,7 +308,12 @@ export const SubscribeList = () => {
         onCancel={() => setLogModal({open: false, log: ""})}
         footer={null}
         width={800}
-        bodyStyle={{maxHeight: "70vh", overflowY: "auto", whiteSpace: "pre-wrap"}}
+        bodyStyle={{
+          maxHeight: "70vh",
+          overflow: "auto",
+          whiteSpace: "pre",
+          fontFamily: "monospace",
+        }}
       >
         {logModal.log}
       </Modal>

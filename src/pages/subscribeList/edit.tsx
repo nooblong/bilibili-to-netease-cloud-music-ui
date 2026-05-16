@@ -117,10 +117,6 @@ export const SubscribeEdit = () => {
           <Input/>
         </Form.Item>
 
-        <Form.Item label="日志" name="log">
-          <Input.TextArea disabled rows={5}/>
-        </Form.Item>
-
       </Form>
     </Edit>
   );

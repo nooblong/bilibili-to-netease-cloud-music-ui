@@ -121,6 +121,37 @@ export const UploadList = () => {
         >
           单曲上传
         </Button>
+        <Popconfirm
+          title="删除所有<等待>的单曲，该操作用于误上传"
+          onConfirm={async () => {
+            const resp = await fetch(`${Api}/upload/delAllWait`,
+              {
+                headers: {
+                  "Access-Token": localStorage.getItem("token") ?? ""
+                }
+              })
+              .then(res => res.json());
+            if (resp.code === 0) {
+              open?.({
+                type: "success",
+                message: "成功，1秒后刷新...",
+              })
+              setTimeout(() => {
+                tableQueryResult.refetch();
+              }, 1000);
+            } else {
+              open?.({
+                type: "error",
+                message: "失败",
+                description: resp.message,
+              })
+            }
+          }}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Button size={"middle"}>删除所有"等待"的单曲</Button>
+        </Popconfirm>
       </Space>
       <br/>
       <div style={{marginBottom: 16}}>
@@ -295,8 +326,8 @@ export const UploadList = () => {
         width={800}
         bodyStyle={{
           maxHeight: "70vh",
-          overflowY: "auto",
-          whiteSpace: "pre-wrap",
+          overflow: "auto",
+          whiteSpace: "pre",
           fontFamily: "monospace",
         }}
       >
