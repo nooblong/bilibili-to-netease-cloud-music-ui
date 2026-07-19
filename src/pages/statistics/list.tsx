@@ -25,19 +25,24 @@ export const Statistics = () => {
   });
 
   useEffect(() => {
-    fetch(`${Api}/sys/log`, {
-      headers: {
-        "Access-Token": localStorage.getItem("token") ?? "",
-      },
-    });
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const cached = sessionStorage.getItem("sysInfo");
+    if (cached) {
+      const data = JSON.parse(cached);
+      setInfo(data);
+      setLogin(data.login);
+      return;
+    }
+
     fetch(`${Api}/sys/sysInfo`, {
-      headers: {
-        "Access-Token": localStorage.getItem("token") ?? ""
-      }
+      headers: { "Access-Token": token }
     }).then((res) => res.json())
       .then(res => {
         setInfo(res.data);
         setLogin(res.data.login);
+        sessionStorage.setItem("sysInfo", JSON.stringify(res.data));
       })
   }, []);
 
