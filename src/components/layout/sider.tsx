@@ -191,12 +191,13 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
     >
       {translate("buttons.logout", "退出账号！")}
     </Menu.Item>
-  ) : <Menu.Item
-      key="logout"
-      onClick={() => handleLogout()}
-    >
-      {translate("buttons.logout", "登录账号！")}
-    </Menu.Item>;
+  ) : (
+    <Menu.Item key="logout">
+      <Link to="/login">
+        {translate("buttons.logout", "登录账号！")}
+      </Link>
+    </Menu.Item>
+  );
 
   const dashboard = hasDashboard ? (
     <Menu.Item key="dashboard" icon={<DashboardOutlined />}>

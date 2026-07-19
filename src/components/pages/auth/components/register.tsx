@@ -241,7 +241,7 @@ export const RegisterPage: React.FC<RegisterProps> = ({
               loading={isLoading}
               block
             >
-              {translate("pages.register.buttons.submit", "Sign up")}
+              {translate("pages.register.buttons.submit", "注册")}
             </Button>
           </Form.Item>
         </Form>

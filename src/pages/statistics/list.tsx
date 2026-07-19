@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Api } from "../../App";
 import { Button, Card, Input, Modal, Popconfirm, Space, Table, Tooltip } from "antd";
 import { DeleteButton, ImageField, List, useTable } from "@refinedev/antd";
-import { BaseRecord, useNotification } from "@refinedev/core";
+import { BaseRecord, useLogout, useNotification } from "@refinedev/core";
 
 export const Statistics = () => {
 
@@ -17,6 +17,7 @@ export const Statistics = () => {
   const [allUserByNetease, setAllUserByNetease] = useState<any[]>([]);
 
   const { open } = useNotification();
+  const { mutate: mutateLogout } = useLogout();
 
   const { tableProps, tableQueryResult } = useTable({
     resource: "sys/queueInfo",
@@ -327,11 +328,7 @@ export const Statistics = () => {
                       type: "success",
                       message: "成功，请重新登录",
                     })
-                    localStorage.removeItem("token")
-                    localStorage.removeItem("username")
-                    setTimeout(() => {
-                      window.location.href = "/login"
-                    }, 1000);
+                    mutateLogout();
                   } else {
                     open?.({
                       type: "error",
@@ -370,11 +367,7 @@ export const Statistics = () => {
                       type: "success",
                       message: "成功，请重新登录",
                     })
-                    localStorage.removeItem("token")
-                    localStorage.removeItem("username")
-                    setTimeout(() => {
-                      window.open("/login")
-                    }, 1000);
+                    mutateLogout();
                   } else {
                     open?.({
                       type: "error",
@@ -404,11 +397,7 @@ export const Statistics = () => {
                     type: "success",
                     message: "成功，请重新登录",
                   })
-                  localStorage.removeItem("token")
-                  localStorage.removeItem("username")
-                  setTimeout(() => {
-                    window.location.href = "/login"
-                  }, 1000);
+                  mutateLogout();
                 } else {
                   open?.({
                     type: "error",
