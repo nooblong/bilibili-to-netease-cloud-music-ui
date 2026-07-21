@@ -52,24 +52,36 @@ export const Azi = () => {
           render={(record) => {
             return (<Button
               size={"middle"}
-              onClick={async () => {
-                const resp = await fetch(`${Api}/bilibili/download?bvid=${record.bvid}&cid=${record.cid}&id=${record.id}`,
+              onClick={() => {
+                const newWindow = window.open("", "_blank");
+                fetch(`${Api}/bilibili/download?bvid=${record.bvid}&cid=${record.cid}&id=${record.id}`,
                   {
                     headers: {
                       "Access-Token": localStorage.getItem("token") ?? ""
                     }
                   })
-                  .then(res => res.json());
-                if (resp.code === 0 && resp.data) {
-                  const encodedUrl = encodeURIComponent(resp.data);
-                  window.open(`http://0721072.xyz/?url=${encodedUrl}`, "_blank");
-                } else {
-                  open?.({
-                    type: "error",
-                    message: "获取下载链接失败",
-                    description: resp.message,
+                  .then(res => res.json())
+                  .then(resp => {
+                    if (resp.code === 0 && resp.data) {
+                      const encodedUrl = encodeURIComponent(resp.data);
+                      if (newWindow) {
+                        newWindow.location.href = `http://0721072.xyz/?url=${encodedUrl}`;
+                      } else {
+                        window.open(`http://0721072.xyz/?url=${encodedUrl}`, "_blank");
+                      }
+                    } else {
+                      if (newWindow) newWindow.close();
+                      open?.({
+                        type: "error",
+                        message: "获取下载链接失败",
+                        description: resp.message,
+                      })
+                    }
                   })
-                }
+                  .catch(() => {
+                    if (newWindow) newWindow.close();
+                    open?.({ type: "error", message: "网络请求失败" });
+                  });
               }}
             >下载m4a</Button>)
           }}>
@@ -125,24 +137,36 @@ export const Azi = () => {
           render={(record) => {
             return (<Button
               size={"middle"}
-              onClick={async () => {
-                const resp = await fetch(`${Api}/bilibili/download?bvid=${record.bvid}&cid=${record.cid}`,
+              onClick={() => {
+                const newWindow = window.open("", "_blank");
+                fetch(`${Api}/bilibili/download?bvid=${record.bvid}&cid=${record.cid}`,
                   {
                     headers: {
                       "Access-Token": localStorage.getItem("token") ?? ""
                     }
                   })
-                  .then(res => res.json());
-                if (resp.code === 0 && resp.data) {
-                  const encodedUrl = encodeURIComponent(resp.data);
-                  window.open(`https://a.yjlyl345.workers.dev/?url=${encodedUrl}`, "_blank");
-                } else {
-                  open?.({
-                    type: "error",
-                    message: "获取下载链接失败",
-                    description: resp.message,
+                  .then(res => res.json())
+                  .then(resp => {
+                    if (resp.code === 0 && resp.data) {
+                      const encodedUrl = encodeURIComponent(resp.data);
+                      if (newWindow) {
+                        newWindow.location.href = `https://a.yjlyl345.workers.dev/?url=${encodedUrl}`;
+                      } else {
+                        window.open(`https://a.yjlyl345.workers.dev/?url=${encodedUrl}`, "_blank");
+                      }
+                    } else {
+                      if (newWindow) newWindow.close();
+                      open?.({
+                        type: "error",
+                        message: "获取下载链接失败",
+                        description: resp.message,
+                      })
+                    }
                   })
-                }
+                  .catch(() => {
+                    if (newWindow) newWindow.close();
+                    open?.({ type: "error", message: "网络请求失败" });
+                  });
               }}
             >备用下载</Button>)
           }}>
