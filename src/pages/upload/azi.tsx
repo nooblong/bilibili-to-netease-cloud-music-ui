@@ -45,7 +45,7 @@ export const Azi = () => {
   const {open} = useNotification();
 
   return (
-    <List canCreate={false} title="下载中转服务在cloudflare,访问不了的话可能需要科学上网">
+    <List canCreate={false} title="有用的话就来评论区支持一下吧，下载中转服务在cloudflare,访问不了的话可能需要科学上网">
       <Table {...tableProps} rowKey="id" scroll={{x: "max-content"}}>
         <Table.Column
           title={"操作"}
@@ -53,7 +53,7 @@ export const Azi = () => {
             return (<Button
               size={"middle"}
               onClick={async () => {
-                const resp = await fetch(`${Api}/bilibili/download?bvid=${record.bvid}&cid=${record.cid}`,
+                const resp = await fetch(`${Api}/bilibili/download?bvid=${record.bvid}&cid=${record.cid}&id=${record.id}`,
                   {
                     headers: {
                       "Access-Token": localStorage.getItem("token") ?? ""
@@ -83,6 +83,15 @@ export const Azi = () => {
               <Tooltip title={value}>
                 <span>{shortText}</span>
               </Tooltip>
+            );
+          }}
+        />
+        <Table.Column
+          dataIndex="instanceId"
+          title="下载次数"
+          render={(value: string) => {
+            return (
+              <span>{value}</span>
             );
           }}
         />
