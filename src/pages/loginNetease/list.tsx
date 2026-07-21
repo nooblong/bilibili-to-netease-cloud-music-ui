@@ -36,7 +36,7 @@ const LoginNetMusicQr = () => {
   useEffect(() => {
     if (!checking) return;
     const timer = setInterval(async () => {
-      const json = await fetch(`${Api}/direct/login/qr/check?key=${key}&timestamp=${Date.now()}`, {
+      const json = await fetch(`${Api}/direct/login/Qr/Check?key=${key}&timestamp=${Date.now()}`, {
         headers: {
           "Access-Token": localStorage.getItem("token") ?? ""
         }
@@ -99,8 +99,8 @@ const LoginNetMusicQr = () => {
 
       <Row justify="center" gutter={[16, 16]}>
         <Col>
-          <Button type="primary" onClick={handleScanLogin}>
-            扫码登录
+          <Button disabled type="primary" onClick={handleScanLogin}>
+            扫码登录(年久失修)
           </Button>
         </Col>
         <Col>
@@ -137,7 +137,7 @@ const LoginNetMusicQr = () => {
 
       {/* Cookie 教程 Modal */}
       <Modal
-        title="如何获取 Cookie"
+        title="前往music.163.com登录后按f12->选择应用->选择左侧Cookie,复制3个对应的值"
         open={cookieVisible}
         onCancel={() => setCookieVisible(false)}
         footer={null}

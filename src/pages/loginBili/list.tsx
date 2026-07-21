@@ -218,7 +218,7 @@ const MusicForm = () => {
           <Input placeholder="请输入 bili_jct"/>
         </Form.Item>
 
-        <Form.Item label="ac_time_value" name="ac_time_value">
+        <Form.Item label="ac_time_value(可不填)" name="ac_time_value">
           <Input placeholder="请输入 ac_time_value"/>
         </Form.Item>
 

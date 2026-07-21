@@ -26,15 +26,15 @@ export const Statistics = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) return;
-
-    const cached = sessionStorage.getItem("sysInfo");
-    if (cached) {
-      const data = JSON.parse(cached);
-      setInfo(data);
-      setLogin(data.login);
-      return;
-    }
+    // if (!token) return;
+    //
+    // const cached = sessionStorage.getItem("sysInfo");
+    // if (cached) {
+    //   const data = JSON.parse(cached);
+    //   setInfo(data);
+    //   setLogin(data.login);
+    //   return;
+    // }
 
     fetch(`${Api}/sys/sysInfo`, {
       headers: { "Access-Token": token }
@@ -126,6 +126,21 @@ export const Statistics = () => {
 
           <ul className="space-y-2">
             <li>
+              <span className="font-medium">（用户里需要一个b站登录来发送请求,没有会触发风控）</span>
+            </li>
+            <li>
+              <span className="font-medium">（没有时会停止检查订阅和上传）</span>
+            </li>
+            <li>
+              <span className="font-medium">（可以自己登录一个或@群主去登录）</span>
+            </li>
+            <li>
+              <span className="font-medium">所有人里是否存在一个b站登录：</span>
+              <span className={`ml-1 font-semibold ${info?.biliLogin ? 'text-green-600' : 'text-red-600'}`}>
+                {info?.biliLogin ? "存在" : "不存在"}
+              </span>
+            </li>
+            <li>
               <span className="font-medium">已登录网易云用户数:</span>
               <span className="ml-1 font-semibold">
                 {info?.login163Num ?? "-"}
@@ -212,14 +227,14 @@ export const Statistics = () => {
             </li>
 
             <li>
-              <span className="font-medium">是否vip:</span>
+              <span className="font-medium">是否打赏:</span>
               <span className="ml-1 font-semibold">
                 {isVip ? "是" : "否"}
               </span>
             </li>
 
             <li>
-              <span className="font-medium">vip过期时间:</span>
+              <span className="font-medium">打赏有效时间:</span>
               <span className="ml-1 font-semibold">
                 {isVip ? info?.expireTime : "-"}
               </span>
@@ -248,7 +263,7 @@ export const Statistics = () => {
                     })
                   }}
                 >
-                  去支付 5 RMB/月
+                  去打赏 5 RMB/月
                 </Button>
               </span>
               <p className="text-sm text-gray-500 mt-1">
