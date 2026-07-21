@@ -64,7 +64,7 @@ export const Azi = () => {
                     if (resp.code === 0 && resp.data) {
                       const encodedUrl = encodeURIComponent(resp.data);
                       const a = document.createElement("a");
-                      a.href = `http://0721072.xyz/?url=${encodedUrl}`;
+                      a.href = `https://0721072.xyz/?url=${encodedUrl}`;
                       a.download = "";
                       a.click();
                     } else {
