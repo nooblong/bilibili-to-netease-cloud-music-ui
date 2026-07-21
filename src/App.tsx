@@ -24,7 +24,7 @@ import {ForgotPassword} from "./pages/forgotPassword";
 import {Login} from "./pages/login";
 import {Register} from "./pages/register";
 import {dataProvider} from "./rest-data-provider";
-import {UploadCreate, UploadEdit, UploadList, UploadShow} from "./pages/upload";
+import {DownloadReviewList, UploadCreate, UploadEdit, UploadList, UploadShow} from "./pages/upload";
 import {SubscribeCreate, SubscribeEdit, SubscribeList, SubscribeShow} from "./pages/subscribeList";
 import {VoicelistList} from "./pages/voicelist";
 import {LoginNeteaseShow} from "./pages/loginNetease";
@@ -106,6 +106,14 @@ function App() {
                   },
                 },
                 {
+                  name: "downloadReview",
+                  list: "/downloadReviewList",
+                  meta: {
+                    label: "下载审核未通过",
+                    canDelete: false,
+                  },
+                },
+                {
                   name: "emoji",
                   list: "/emoji",
                   meta: {
@@ -160,6 +168,9 @@ function App() {
                     <Route path="create" element={<UploadCreate/>}/>
                     <Route path="edit/:id" element={<UploadEdit/>}/>
                     <Route path="show/:id" element={<UploadShow/>}/>
+                  </Route>
+                  <Route path="/downloadReviewList">
+                    <Route index element={<DownloadReviewList/>}/>
                   </Route>
                   <Route path="/subscribeList">
                     <Route index element={<SubscribeList/>}/>
