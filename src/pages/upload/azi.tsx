@@ -62,7 +62,7 @@ export const Azi = () => {
                   .then(res => res.json());
                 if (resp.code === 0 && resp.data) {
                   const encodedUrl = encodeURIComponent(resp.data);
-                  window.open(`https://a.yjlyl345.workers.dev/?url=${encodedUrl}`, "_blank");
+                  window.open(`http://0721072.xyz/?url=${encodedUrl}`, "_blank");
                 } else {
                   open?.({
                     type: "error",
@@ -78,7 +78,7 @@ export const Azi = () => {
           dataIndex="mergeTitle"
           title="合并名称"
           render={(value: string) => {
-            const shortText = value?.length > 20 ? value.slice(0, 20) + "…" : value;
+            const shortText = value?.length > 30 ? value.slice(0, 30) + "…" : value;
             return (
               <Tooltip title={value}>
                 <span>{shortText}</span>
@@ -111,6 +111,33 @@ export const Azi = () => {
         <Table.Column dataIndex="createTime" title="创建时间"/>
         <Table.Column dataIndex="bvid" title="BVID"/>
         <Table.Column dataIndex="cid" title="CID"/>
+        <Table.Column
+          title={"操作"}
+          render={(record) => {
+            return (<Button
+              size={"middle"}
+              onClick={async () => {
+                const resp = await fetch(`${Api}/bilibili/download?bvid=${record.bvid}&cid=${record.cid}`,
+                  {
+                    headers: {
+                      "Access-Token": localStorage.getItem("token") ?? ""
+                    }
+                  })
+                  .then(res => res.json());
+                if (resp.code === 0 && resp.data) {
+                  const encodedUrl = encodeURIComponent(resp.data);
+                  window.open(`https://a.yjlyl345.workers.dev/?url=${encodedUrl}`, "_blank");
+                } else {
+                  open?.({
+                    type: "error",
+                    message: "获取下载链接失败",
+                    description: resp.message,
+                  })
+                }
+              }}
+            >备用下载</Button>)
+          }}>
+        </Table.Column>
       </Table>
     </List>
   );
