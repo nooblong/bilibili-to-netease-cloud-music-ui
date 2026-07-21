@@ -19,7 +19,10 @@ export const ThemedLayoutV2: React.FC<RefineThemedLayoutV2Props> = ({
   const SiderToRender = Sider ?? DefaultSider;
   const HeaderToRender = Header ?? DefaultHeader;
   const isSmall = typeof breakpoint.sm === "undefined" ? true : breakpoint.sm;
-  const hasSider = !!SiderToRender({ Title });
+  const isMobile =
+    typeof breakpoint.lg === "undefined" ? false : !breakpoint.lg;
+  // 移动端 sider 只是 Drawer（portal），不是真正的布局 sider
+  const hasSider = isMobile ? false : !!SiderToRender({ Title });
 
   return (
     <ThemedLayoutContextProvider

@@ -21,7 +21,6 @@ import {
   DashboardOutlined,
   LogoutOutlined,
   UnorderedListOutlined,
-  BarsOutlined,
   LeftOutlined,
   RightOutlined, GithubOutlined,
 } from "@ant-design/icons";
@@ -36,14 +35,6 @@ import {
 } from "antd";
 import type { RefineThemedLayoutV2SiderProps } from "@refinedev/antd";
 import type { CSSProperties } from "react";
-
-const drawerButtonStyles: CSSProperties = {
-  borderStartStartRadius: 0,
-  borderEndStartRadius: 0,
-  position: "fixed",
-  top: 64,
-  zIndex: 999,
-};
 
 export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
   Title: TitleFromProps,
@@ -267,50 +258,42 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
 
   const renderDrawerSider = () => {
     return (
-      <>
-        <Drawer
-          open={mobileSiderOpen}
-          onClose={() => setMobileSiderOpen(false)}
-          placement={direction === "rtl" ? "right" : "left"}
-          closable={false}
-          width={200}
-          bodyStyle={{
-            padding: 0,
-          }}
-          maskClosable={true}
-        >
-          <Layout>
-            <Layout.Sider
+      <Drawer
+        open={mobileSiderOpen}
+        onClose={() => setMobileSiderOpen(false)}
+        placement={direction === "rtl" ? "right" : "left"}
+        closable={false}
+        width={200}
+        bodyStyle={{
+          padding: 0,
+        }}
+        maskClosable={true}
+      >
+        <Layout>
+          <Layout.Sider
+            style={{
+              height: "100vh",
+              backgroundColor: token.colorBgContainer,
+              borderRight: `1px solid ${token.colorBgElevated}`,
+            }}
+          >
+            <div
               style={{
-                height: "100vh",
-                backgroundColor: token.colorBgContainer,
-                borderRight: `1px solid ${token.colorBgElevated}`,
+                width: "200px",
+                padding: "0 16px",
+                display: "flex",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                height: "64px",
+                backgroundColor: token.colorBgElevated,
               }}
             >
-              <div
-                style={{
-                  width: "200px",
-                  padding: "0 16px",
-                  display: "flex",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                  height: "64px",
-                  backgroundColor: token.colorBgElevated,
-                }}
-              >
-                <RenderToTitle collapsed={false} />
-              </div>
-              {renderMenu()}
-            </Layout.Sider>
-          </Layout>
-        </Drawer>
-        <Button
-          style={drawerButtonStyles}
-          size="large"
-          onClick={() => setMobileSiderOpen(true)}
-          icon={<BarsOutlined />}
-        />
-      </>
+              <RenderToTitle collapsed={false} />
+            </div>
+            {renderMenu()}
+          </Layout.Sider>
+        </Layout>
+      </Drawer>
     );
   };
 

@@ -45,7 +45,8 @@ export const Azi = () => {
   const {open} = useNotification();
 
   return (
-    <List canCreate={false} title="有用的话就来评论区支持一下吧，下载中转服务在cloudflare,访问不了的话可能需要科学上网">
+    <List canCreate={false} title="AZI">
+      <span>下载中转服务在cloudflare,备用链接需要科学上网</span>
       <Table {...tableProps} rowKey="id" scroll={{x: "max-content"}}>
         <Table.Column
           title={"操作"}
@@ -160,7 +161,7 @@ export const Azi = () => {
                     open?.({ type: "error", message: "网络请求失败" });
                   });
               }}
-            >备用下载</Button>)
+            >备用链接</Button>)
           }}>
         </Table.Column>
       </Table>

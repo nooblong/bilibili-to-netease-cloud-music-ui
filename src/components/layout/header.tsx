@@ -4,7 +4,9 @@ import {
   useActiveAuthProvider,
   useGetIdentity,
 } from "@refinedev/core";
-import { Layout as AntdLayout, Typography, Avatar, Space, theme } from "antd";
+import { Layout as AntdLayout, Typography, Avatar, Space, theme, Grid, Button } from "antd";
+import { useThemedLayoutContext } from "@refinedev/antd";
+import { BarsOutlined } from "@ant-design/icons";
 import type { RefineThemedLayoutV2HeaderProps } from "@refinedev/antd";
 
 export const ThemedHeaderV2: React.FC<RefineThemedLayoutV2HeaderProps> = ({
@@ -12,13 +14,18 @@ export const ThemedHeaderV2: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   sticky,
 }) => {
   const { token } = theme.useToken();
+  const breakpoint = Grid.useBreakpoint();
+  const { setMobileSiderOpen } = useThemedLayoutContext();
+
+  const isMobile =
+    typeof breakpoint.lg === "undefined" ? false : !breakpoint.lg;
 
   const authProvider = useActiveAuthProvider();
   const { data: user } = useGetIdentity({
     v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
   });
 
-  const shouldRenderHeader = user && (user.name || user.avatar);
+  const shouldRenderHeader = isMobile || (user && (user.name || user.avatar));
 
   if (!shouldRenderHeader) {
     return null;
@@ -27,7 +34,7 @@ export const ThemedHeaderV2: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   const headerStyles: React.CSSProperties = {
     backgroundColor: token.colorBgElevated,
     display: "flex",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     alignItems: "center",
     padding: "0px 24px",
     height: "64px",
@@ -41,6 +48,16 @@ export const ThemedHeaderV2: React.FC<RefineThemedLayoutV2HeaderProps> = ({
 
   return (
     <AntdLayout.Header style={headerStyles}>
+      <div>
+        {isMobile && (
+          <Button
+            size="large"
+            onClick={() => setMobileSiderOpen(true)}
+            icon={<BarsOutlined />}
+            type="text"
+          />
+        )}
+      </div>
       <Space>
         <Space size="middle">
           {user?.name && <Typography.Text strong>{user.name}</Typography.Text>}

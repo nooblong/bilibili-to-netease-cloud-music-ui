@@ -6,10 +6,13 @@ import {
   Switch,
   theme,
   Typography,
+  Grid,
+  Button,
 } from "antd";
 import React, { useContext } from "react";
 import { ColorModeContext } from "../../contexts/color-mode";
-import {RefineThemedLayoutV2HeaderProps} from "@refinedev/antd";
+import { RefineThemedLayoutV2HeaderProps, useThemedLayoutContext } from "@refinedev/antd";
+import { BarsOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
 const { useToken } = theme;
@@ -26,11 +29,16 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   const { token } = useToken();
   const { data: user } = useGetIdentity<IUser>();
   const { mode, setMode } = useContext(ColorModeContext);
+  const breakpoint = Grid.useBreakpoint();
+  const { setMobileSiderOpen } = useThemedLayoutContext();
+
+  const isMobile =
+    typeof breakpoint.lg === "undefined" ? false : !breakpoint.lg;
 
   const headerStyles: React.CSSProperties = {
     backgroundColor: token.colorBgElevated,
     display: "flex",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     alignItems: "center",
     padding: "0px 24px",
     height: "64px",
@@ -44,6 +52,16 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
 
   return (
     <AntdLayout.Header style={headerStyles}>
+      <div>
+        {isMobile && (
+          <Button
+            size="large"
+            onClick={() => setMobileSiderOpen(true)}
+            icon={<BarsOutlined />}
+            type="text"
+          />
+        )}
+      </div>
       <Space>
         <Switch
           checkedChildren="🌛"
