@@ -25,7 +25,7 @@ export const Statistics = () => {
   });
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token") ?? "";
     // if (!token) return;
     //
     // const cached = sessionStorage.getItem("sysInfo");
