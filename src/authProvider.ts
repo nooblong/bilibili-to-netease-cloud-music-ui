@@ -82,7 +82,9 @@ export const authProvider: AuthProvider = {
         headers: { "Access-Token": token ?? "" },
       });
       if (!sessionStorage.getItem("sessionChecked")) {
-        await Promise.all([
+        sessionStorage.setItem("sessionChecked", "1");
+        // 后台检查网易云和B站登录状态，不阻塞页面渲染
+        Promise.all([
           fetch(`${Api}/netmusic/loginStatus`, {
             headers: { "Access-Token": token }
           }).then(res => res.json()).then(json => {
@@ -97,8 +99,9 @@ export const authProvider: AuthProvider = {
               localStorage.setItem(LOGIN_BILI_KEY, "1");
             }
           }),
-        ]);
-        sessionStorage.setItem("sessionChecked", "1");
+        ]).then(() => {
+          window.dispatchEvent(new Event("loginStatusChecked"));
+        });
       }
       return {
         authenticated: true,

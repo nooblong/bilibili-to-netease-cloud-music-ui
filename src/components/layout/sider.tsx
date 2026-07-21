@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   useTranslate,
   useLogout,
@@ -53,6 +53,18 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
   activeItemDisabled = false,
 }) => {
   const authStatus = useIsAuthenticated();
+  const [loginBili, setLoginBili] = useState(localStorage.getItem("loginBili"));
+  const [loginNetease, setLoginNetease] = useState(localStorage.getItem("loginNetease"));
+
+  useEffect(() => {
+    const handler = () => {
+      setLoginBili(localStorage.getItem("loginBili"));
+      setLoginNetease(localStorage.getItem("loginNetease"));
+    };
+    window.addEventListener("loginStatusChecked", handler);
+    return () => window.removeEventListener("loginStatusChecked", handler);
+  }, []);
+
   const { token } = theme.useToken();
   const {
     siderCollapsed,
@@ -132,12 +144,12 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
       const linkStyle: React.CSSProperties =
         activeItemDisabled && isSelected ? { pointerEvents: "none"} : {};
 
-      // 根据 localStorage 设置菜单项背景色
+      // 根据登录状态设置菜单项背景色
       let itemStyle = { ...linkStyle };
       if (name === "loginBili") {
-        itemStyle.backgroundColor = localStorage.getItem("loginBili") === "1" ? "#52c41a" : "#ff4d4f";
+        itemStyle.backgroundColor = loginBili === "1" ? "#52c41a" : "#ff4d4f";
       } else if (name === "loginNetease") {
-        itemStyle.backgroundColor = localStorage.getItem("loginNetease") === "1" ? "#52c41a" : "#ff4d4f";
+        itemStyle.backgroundColor = loginNetease === "1" ? "#52c41a" : "#ff4d4f";
       }
 
       return (
