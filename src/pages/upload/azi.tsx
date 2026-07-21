@@ -7,7 +7,7 @@ import {Button, Image, Modal, Select, Table, Tooltip} from "antd";
 import {useEffect, useState} from "react";
 import {Api} from "../../App";
 
-export const DownloadReviewList = () => {
+export const Azi = () => {
   const parsed = useParsed();
   const voiceListIdFromUrl = parsed.params?.voiceListId;
 

@@ -24,7 +24,7 @@ import {ForgotPassword} from "./pages/forgotPassword";
 import {Login} from "./pages/login";
 import {Register} from "./pages/register";
 import {dataProvider} from "./rest-data-provider";
-import {DownloadReviewList, UploadCreate, UploadEdit, UploadList, UploadShow} from "./pages/upload";
+import {Azi, UploadCreate, UploadEdit, UploadList, UploadShow} from "./pages/upload";
 import {SubscribeCreate, SubscribeEdit, SubscribeList, SubscribeShow} from "./pages/subscribeList";
 import {VoicelistList} from "./pages/voicelist";
 import {LoginNeteaseShow} from "./pages/loginNetease";
@@ -106,8 +106,8 @@ function App() {
                   },
                 },
                 {
-                  name: "downloadReview",
-                  list: "/downloadReviewList",
+                  name: "azi",
+                  list: "/azi",
                   meta: {
                     label: "下载审核未通过",
                     canDelete: false,
@@ -169,8 +169,8 @@ function App() {
                     <Route path="edit/:id" element={<UploadEdit/>}/>
                     <Route path="show/:id" element={<UploadShow/>}/>
                   </Route>
-                  <Route path="/downloadReviewList">
-                    <Route index element={<DownloadReviewList/>}/>
+                  <Route path="/azi">
+                    <Route index element={<Azi/>}/>
                   </Route>
                   <Route path="/subscribeList">
                     <Route index element={<SubscribeList/>}/>
