@@ -270,11 +270,13 @@ export const SubscribeList = () => {
         />
         <Table.Column
           title="日志"
-          dataIndex="log"
-          render={(value: string) => (
+          render={(_, record: any) => (
             <Button
               type="link"
-              onClick={() => setLogModal({open: true, log: value})}
+              onClick={async () => {
+                const log = await fetch(`${Api}/subscribe/getLog?id=${record.id}`).then(res => res.json());
+                setLogModal({open: true, log: log.data || "无日志内容"});
+              }}
             >
               查看日志
             </Button>
