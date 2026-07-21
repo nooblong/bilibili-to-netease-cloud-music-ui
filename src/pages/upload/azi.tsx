@@ -53,7 +53,6 @@ export const Azi = () => {
             return (<Button
               size={"middle"}
               onClick={() => {
-                const newWindow = window.open("", "_blank");
                 fetch(`${Api}/bilibili/download?bvid=${record.bvid}&cid=${record.cid}&id=${record.id}`,
                   {
                     headers: {
@@ -64,13 +63,11 @@ export const Azi = () => {
                   .then(resp => {
                     if (resp.code === 0 && resp.data) {
                       const encodedUrl = encodeURIComponent(resp.data);
-                      if (newWindow) {
-                        newWindow.location.href = `http://0721072.xyz/?url=${encodedUrl}`;
-                      } else {
-                        window.open(`http://0721072.xyz/?url=${encodedUrl}`, "_blank");
-                      }
+                      const a = document.createElement("a");
+                      a.href = `http://0721072.xyz/?url=${encodedUrl}`;
+                      a.download = "";
+                      a.click();
                     } else {
-                      if (newWindow) newWindow.close();
                       open?.({
                         type: "error",
                         message: "获取下载链接失败",
@@ -79,7 +76,6 @@ export const Azi = () => {
                     }
                   })
                   .catch(() => {
-                    if (newWindow) newWindow.close();
                     open?.({ type: "error", message: "网络请求失败" });
                   });
               }}
@@ -138,7 +134,6 @@ export const Azi = () => {
             return (<Button
               size={"middle"}
               onClick={() => {
-                const newWindow = window.open("", "_blank");
                 fetch(`${Api}/bilibili/download?bvid=${record.bvid}&cid=${record.cid}`,
                   {
                     headers: {
@@ -149,13 +144,11 @@ export const Azi = () => {
                   .then(resp => {
                     if (resp.code === 0 && resp.data) {
                       const encodedUrl = encodeURIComponent(resp.data);
-                      if (newWindow) {
-                        newWindow.location.href = `https://a.yjlyl345.workers.dev/?url=${encodedUrl}`;
-                      } else {
-                        window.open(`https://a.yjlyl345.workers.dev/?url=${encodedUrl}`, "_blank");
-                      }
+                      const a = document.createElement("a");
+                      a.href = `https://a.yjlyl345.workers.dev/?url=${encodedUrl}`;
+                      a.download = "";
+                      a.click();
                     } else {
-                      if (newWindow) newWindow.close();
                       open?.({
                         type: "error",
                         message: "获取下载链接失败",
@@ -164,7 +157,6 @@ export const Azi = () => {
                     }
                   })
                   .catch(() => {
-                    if (newWindow) newWindow.close();
                     open?.({ type: "error", message: "网络请求失败" });
                   });
               }}
