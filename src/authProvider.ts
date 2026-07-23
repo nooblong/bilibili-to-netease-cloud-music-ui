@@ -69,7 +69,6 @@ export const authProvider: AuthProvider = {
     localStorage.removeItem(USERNAME_KEY);
     localStorage.removeItem(LOGIN_NETEASE_KEY);
     localStorage.removeItem(LOGIN_BILI_KEY);
-    sessionStorage.clear();
     return {
       success: true,
       redirectTo: "/login",
@@ -81,33 +80,10 @@ export const authProvider: AuthProvider = {
       fetch(`${Api}/sys/log`, {
         headers: { "Access-Token": token ?? "" },
       });
-      if (!sessionStorage.getItem("sessionChecked")) {
-        sessionStorage.setItem("sessionChecked", "1");
-        // 后台检查网易云和B站登录状态，不阻塞页面渲染
-        Promise.all([
-          fetch(`${Api}/netmusic/loginStatus`, {
-            headers: { "Access-Token": token }
-          }).then(res => res.json()).then(json => {
-            if (json.code === 0 && json.data.profile !== null) {
-              localStorage.setItem(LOGIN_NETEASE_KEY, "1");
-            }
-          }),
-          fetch(`${Api}/bilibili/getSelfInfo`, {
-            headers: { "Access-Token": token }
-          }).then(res => res.json()).then(json => {
-            if (json.code === 0) {
-              localStorage.setItem(LOGIN_BILI_KEY, "1");
-            }
-          }),
-        ]).then(() => {
-          window.dispatchEvent(new Event("loginStatusChecked"));
-        });
-      }
       return {
         authenticated: true,
       };
     }
-
     return {
       authenticated: false,
       redirectTo: "/login",

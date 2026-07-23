@@ -107,8 +107,7 @@ export const SubscribeCreate = () => {
                     id: string,
                     name: string
                   }[] = [];
-                  // @ts-ignore
-                  upChannels.data.data.forEach((i) => {
+                  upChannels.data.data.forEach((i: any) => {
                     idNames.push({
                       id: i.id_,
                       name: i.meta.name,
@@ -344,8 +343,7 @@ export const SubscribeCreate = () => {
                   id: string,
                   name: string
                 }[] = [];
-                // @ts-ignore
-                favInfo.data.data.list.forEach((i) => {
+                favInfo.data.data.list.forEach((i: any) => {
                   idNames.push({
                     id: i.id,
                     name: i.title,

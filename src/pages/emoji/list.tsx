@@ -39,8 +39,7 @@ export const Emoji = () => {
         const res = await fetch(`${Api}/bilibili/allEmoji`);
         let data = await res.json();
         data = data.data.all_packages
-        // @ts-ignore
-        data = data.map(i => {
+        data = data.map((i: any) => {
           return {
             label: <div className="flex items-center space-x-2">
               <Image

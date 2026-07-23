@@ -1,7 +1,6 @@
 import { useGetIdentity } from "@refinedev/core";
 import {
   Layout as AntdLayout,
-  Avatar,
   Space,
   Switch,
   theme,
@@ -71,7 +70,6 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
         />
         <Space style={{ marginLeft: "8px" }} size="middle">
           {user?.name && <Text strong>{user.name}</Text>}
-          {user?.avatar && <Avatar src={user?.avatar} alt={user?.name} />}
         </Space>
       </Space>
     </AntdLayout.Header>

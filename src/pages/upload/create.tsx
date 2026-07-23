@@ -88,8 +88,7 @@ export const UploadCreate = () => {
                 cid: string,
                 name: string
               }[] = [];
-              // @ts-ignore
-              res.data.pages.forEach((i) => {
+              res.data.pages.forEach((i: any) => {
                 cidNames.push({
                   cid: i.cid,
                   name: i.part,

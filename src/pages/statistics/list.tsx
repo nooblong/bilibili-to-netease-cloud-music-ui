@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { Api } from "../../App";
-import { Button, Card, Input, Modal, Popconfirm, Space, Table, Tooltip } from "antd";
-import { DeleteButton, ImageField, List, useTable } from "@refinedev/antd";
-import { BaseRecord, useLogout, useNotification } from "@refinedev/core";
+import {useEffect, useState} from "react";
+import {Api} from "../../App";
+import {Button, Input, Modal, Popconfirm, Space, Table, Tooltip} from "antd";
+import {List, useTable} from "@refinedev/antd";
+import {useLogout, useNotification} from "@refinedev/core";
 
 export const Statistics = () => {
 
@@ -10,40 +10,39 @@ export const Statistics = () => {
   const [loading, setLoading] = useState(false);
   const [hasRefresh, setHasRefresh] = useState(false);
   const [login, setLogin] = useState(false);
+  const [netLogin, setNetLogin] = useState(false);
 
   const [changeUserName, setChangeUserName] = useState("")
   const [changePassword, setChangePassword] = useState("")
 
   const [allUserByNetease, setAllUserByNetease] = useState<any[]>([]);
 
-  const { open } = useNotification();
-  const { mutate: mutateLogout } = useLogout();
+  const {open} = useNotification();
+  const {mutate: mutateLogout} = useLogout();
 
-  const { tableProps, tableQueryResult } = useTable({
+  const {tableProps, tableQueryResult} = useTable({
     resource: "sys/queueInfo",
     syncWithLocation: true,
   });
 
   useEffect(() => {
     const token = localStorage.getItem("token") ?? "";
-    // if (!token) return;
-    //
-    // const cached = sessionStorage.getItem("sysInfo");
-    // if (cached) {
-    //   const data = JSON.parse(cached);
-    //   setInfo(data);
-    //   setLogin(data.login);
-    //   return;
-    // }
 
     fetch(`${Api}/sys/sysInfo`, {
-      headers: { "Access-Token": token }
+      headers: {"Access-Token": token}
     }).then((res) => res.json())
       .then(res => {
         setInfo(res.data);
         setLogin(res.data.login);
-        sessionStorage.setItem("sysInfo", JSON.stringify(res.data));
       })
+
+    fetch(`${Api}/netmusic/loginStatus`, {
+      headers: {"Access-Token": token}
+    }).then(res => res.json()).then(json => {
+      if (json.code === 0 && json.data.profile !== null) {
+        setNetLogin(true)
+      }
+    })
   }, []);
 
   const handleRecharge = (orderId: string) => {
@@ -77,13 +76,7 @@ export const Statistics = () => {
             await refresh();
             window.location.reload();
           },
-          onCancel: () => {
-            
-          },
         });
-      },
-      onCancel: () => {
-        
       },
     });
     setLoading(false);
@@ -112,7 +105,6 @@ export const Statistics = () => {
 
   const isVip = new Date(info?.expireTime.replace(" ", "T")).getTime() > now.getTime();
 
-  // @ts-ignore
   return (
     <div>
       <div className={"flex flex-col md:flex-row gap-2"}>
@@ -126,19 +118,13 @@ export const Statistics = () => {
 
           <ul className="space-y-2">
             <li>
-              <span className="font-medium">（用户里需要一个b站登录来发送请求,没有会触发风控）</span>
-            </li>
-            <li>
-              <span className="font-medium">（没有时会停止检查订阅和上传）</span>
-            </li>
-            <li>
-              <span className="font-medium">（可以自己登录一个或@群主去登录）</span>
-            </li>
-            <li>
-              <span className="font-medium">所有人里是否存在一个b站登录：</span>
+              <span className="font-medium">是否存在一个b站登录：</span>
               <span className={`ml-1 font-semibold ${info?.biliLogin ? 'text-green-600' : 'text-red-600'}`}>
                 {info?.biliLogin ? "存在" : "不存在"}
               </span>
+            </li>
+            <li>
+              <span className="font-medium">（没有时会停止检查订阅和上传,可以自己登录一个或@群主去登录）</span>
             </li>
             <li>
               <span className="font-medium">已登录网易云用户数:</span>
@@ -225,16 +211,21 @@ export const Statistics = () => {
                 {info?.login ? "已登录" : "未登录"}
               </span>
             </li>
-
             <li>
-              <span className="font-medium">是否打赏:</span>
+              <span className="font-medium">是否登录网易云:</span>
+              <span className={`ml-1 font-semibold ${netLogin ? 'text-green-600' : 'text-red-600'}`}>
+                {netLogin ? "已登录" : "未登录"}
+              </span>
+            </li>
+            <li>
+              <span className="font-medium">是否解锁:</span>
               <span className="ml-1 font-semibold">
                 {isVip ? "是" : "否"}
               </span>
             </li>
 
             <li>
-              <span className="font-medium">打赏有效时间:</span>
+              <span className="font-medium">解锁有效时间:</span>
               <span className="ml-1 font-semibold">
                 {isVip ? info?.expireTime : "-"}
               </span>
@@ -263,7 +254,7 @@ export const Statistics = () => {
                     })
                   }}
                 >
-                  去打赏 5 RMB/月
+                  5 RMB/月
                 </Button>
               </span>
               <p className="text-sm text-gray-500 mt-1">
@@ -296,7 +287,7 @@ export const Statistics = () => {
               <p className="text-gray-500">暂无发电订单</p>
             )}
           </div>
-          <hr />
+          <hr/>
           <div>
             <div><Button disabled={!login} onClick={() => {
               fetch(`${Api}/sys/listMyUser`, {
@@ -308,7 +299,7 @@ export const Statistics = () => {
                 .then(json => {
                   setAllUserByNetease(json.data)
                 })
-            }}>查看我网易云账号下所有的账号</Button> ( 不要注册多个登录相同网易云的账号！如果有请登录删除)
+            }}>查看我网易云账号下所有的账号</Button><br/>(不要注册多个登录相同网易云的账号)
             </div>
             <ul>
               {allUserByNetease.map(i => {
@@ -321,7 +312,7 @@ export const Statistics = () => {
               })}
             </ul>
           </div>
-          <hr />
+          <hr/>
           <div className={"flex flex-wrap gap-2"}>
 
 
@@ -330,35 +321,35 @@ export const Statistics = () => {
                 setChangeUserName(event.target.value);
               }} placeholder={"输入新用户名"}></Input>
               <Popconfirm title="确认修改用户名"
-                onConfirm={async () => {
-                  const resp = await fetch(`${Api}/sys/changeUsername`,
-                    {
-                      method: "POST",
-                      body: JSON.stringify({
-                        username: changeUserName
-                      }),
-                      headers: {
-                        "Access-Token": localStorage.getItem("token") ?? "",
-                        "Content-Type": "application/json"
-                      }
-                    })
-                    .then(res => res.json());
-                  if (resp.code === 0) {
-                    open?.({
-                      type: "success",
-                      message: "成功，请重新登录",
-                    })
-                    mutateLogout();
-                  } else {
-                    open?.({
-                      type: "error",
-                      message: "失败",
-                      description: resp.message,
-                    })
-                  }
-                }}
-                okText="Yes"
-                cancelText="No">
+                          onConfirm={async () => {
+                            const resp = await fetch(`${Api}/sys/changeUsername`,
+                              {
+                                method: "POST",
+                                body: JSON.stringify({
+                                  username: changeUserName
+                                }),
+                                headers: {
+                                  "Access-Token": localStorage.getItem("token") ?? "",
+                                  "Content-Type": "application/json"
+                                }
+                              })
+                              .then(res => res.json());
+                            if (resp.code === 0) {
+                              open?.({
+                                type: "success",
+                                message: "成功，请重新登录",
+                              })
+                              mutateLogout();
+                            } else {
+                              open?.({
+                                type: "error",
+                                message: "失败",
+                                description: resp.message,
+                              })
+                            }
+                          }}
+                          okText="Yes"
+                          cancelText="No">
                 <Button disabled={!login}>修改用户名</Button>
               </Popconfirm>
             </Space.Compact>
@@ -369,35 +360,35 @@ export const Statistics = () => {
                 setChangePassword(event.target.value);
               }} placeholder={"输入新密码"}></Input>
               <Popconfirm title="确认修改密码"
-                onConfirm={async () => {
-                  const resp = await fetch(`${Api}/sys/changePassword`,
-                    {
-                      method: "POST",
-                      body: JSON.stringify({
-                        password: changePassword
-                      }),
-                      headers: {
-                        "Access-Token": localStorage.getItem("token") ?? "",
-                        "Content-Type": "application/json"
-                      }
-                    })
-                    .then(res => res.json());
-                  if (resp.code === 0) {
-                    open?.({
-                      type: "success",
-                      message: "成功，请重新登录",
-                    })
-                    mutateLogout();
-                  } else {
-                    open?.({
-                      type: "error",
-                      message: "失败",
-                      description: resp.message,
-                    })
-                  }
-                }}
-                okText="Yes"
-                cancelText="No">
+                          onConfirm={async () => {
+                            const resp = await fetch(`${Api}/sys/changePassword`,
+                              {
+                                method: "POST",
+                                body: JSON.stringify({
+                                  password: changePassword
+                                }),
+                                headers: {
+                                  "Access-Token": localStorage.getItem("token") ?? "",
+                                  "Content-Type": "application/json"
+                                }
+                              })
+                              .then(res => res.json());
+                            if (resp.code === 0) {
+                              open?.({
+                                type: "success",
+                                message: "成功，请重新登录",
+                              })
+                              mutateLogout();
+                            } else {
+                              open?.({
+                                type: "error",
+                                message: "失败",
+                                description: resp.message,
+                              })
+                            }
+                          }}
+                          okText="Yes"
+                          cancelText="No">
                 <Button disabled={!login}>修改密码</Button>
               </Popconfirm>
             </Space.Compact>
@@ -434,10 +425,11 @@ export const Statistics = () => {
           </div>
         </div>
 
-        <div className="w-full animate-in fade-in zoom-in-98 duration-500 max-w-4xl mx-auto p-6 rounded-lg shadow border">
+        <div
+          className="w-full animate-in fade-in zoom-in-98 duration-500 max-w-4xl mx-auto p-6 rounded-lg shadow border">
           <List title={`上传队列: 剩余(${tableQueryResult.data?.total ?? 0})`}>
             <Table {...tableProps} rowKey="id">
-              <Table.Column title="id" dataIndex="id" />
+              <Table.Column title="id" dataIndex="id"/>
               <Table.Column
                 dataIndex="mergeTitle"
                 title="合并名称"
@@ -450,7 +442,7 @@ export const Statistics = () => {
                   );
                 }}
               />
-              <Table.Column title="优先级" dataIndex="priority" />
+              <Table.Column title="优先级" dataIndex="priority"/>
             </Table>
           </List>
         </div>

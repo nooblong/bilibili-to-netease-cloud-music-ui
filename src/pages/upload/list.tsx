@@ -58,8 +58,7 @@ export const UploadList = () => {
         })
         .then(res => res.json())
         .then(json => {
-          // @ts-ignore
-          const result = json.data.records.map(i => {
+          const result = json.data.records.map((i: any) => {
             return {
               ...i,
               text: i.voicelistName,
@@ -122,7 +121,7 @@ export const UploadList = () => {
           单曲上传
         </Button>
         <Popconfirm
-          title="删除所有<等待>的单曲，该操作用于误上传"
+          title="删除所有上传状态为<等待>的单曲，该操作用于误上传"
           onConfirm={async () => {
             const resp = await fetch(`${Api}/upload/delAllWait`,
               {
@@ -150,7 +149,7 @@ export const UploadList = () => {
           okText="Yes"
           cancelText="No"
         >
-          <Button size={"middle"}>删除所有"等待"的单曲</Button>
+          <Button size={"middle"}>删除所有上传状态为"等待"的单曲</Button>
         </Popconfirm>
       </Space>
       <br/>

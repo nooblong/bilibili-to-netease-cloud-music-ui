@@ -3,11 +3,9 @@ import {
   useRouterContext,
   useRouterType,
   useLink,
-  useRefineOptions,
 } from "@refinedev/core";
 import {Typography, theme, Space} from "antd";
 import type {RefineLayoutThemedTitleProps} from "@refinedev/antd";
-import {GithubOutlined} from "@ant-design/icons";
 
 export const ThemedTitleV2: React.FC<RefineLayoutThemedTitleProps> = ({
                                                                         collapsed,

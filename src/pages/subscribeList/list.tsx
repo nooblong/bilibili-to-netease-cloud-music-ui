@@ -62,8 +62,7 @@ export const SubscribeList = () => {
         })
         .then(res => res.json())
         .then(json => {
-          // @ts-ignore
-          const result = json.data.records.map(i => {
+          const result = json.data.records.map((i: any) => {
             return {
               ...i,
               text: i.voicelistName,
@@ -100,7 +99,7 @@ export const SubscribeList = () => {
 
   return (
     <List canCreate={false}>
-      
+
       <div style={{marginBottom: 16}}>
         <span>选择播客:</span>
         {voiceListList.length > 0 ?

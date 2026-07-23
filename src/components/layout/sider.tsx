@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import {
   useTranslate,
   useLogout,
   useTitle,
   CanAccess,
   type ITreeMenu,
-  useIsExistAuthentication,
   useRouterContext,
   useMenu,
   useRefineContext,
@@ -19,7 +18,6 @@ import {
 import { ThemedTitleV2, useThemedLayoutContext } from "@refinedev/antd";
 import {
   DashboardOutlined,
-  LogoutOutlined,
   UnorderedListOutlined,
   LeftOutlined,
   RightOutlined, GithubOutlined,
@@ -34,7 +32,6 @@ import {
   ConfigProvider,
 } from "antd";
 import type { RefineThemedLayoutV2SiderProps } from "@refinedev/antd";
-import type { CSSProperties } from "react";
 
 export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
   Title: TitleFromProps,
@@ -44,17 +41,7 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
   activeItemDisabled = false,
 }) => {
   const authStatus = useIsAuthenticated();
-  const [loginBili, setLoginBili] = useState(localStorage.getItem("loginBili"));
-  const [loginNetease, setLoginNetease] = useState(localStorage.getItem("loginNetease"));
 
-  useEffect(() => {
-    const handler = () => {
-      setLoginBili(localStorage.getItem("loginBili"));
-      setLoginNetease(localStorage.getItem("loginNetease"));
-    };
-    window.addEventListener("loginStatusChecked", handler);
-    return () => window.removeEventListener("loginStatusChecked", handler);
-  }, []);
 
   const { token } = theme.useToken();
   const {
@@ -64,7 +51,6 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
     setMobileSiderOpen,
   } = useThemedLayoutContext();
 
-  const isExistAuthentication = useIsExistAuthentication();
   const direction = useContext(ConfigProvider.ConfigContext)?.direction;
   const routerType = useRouterType();
   const NewLink = useLink();
@@ -127,21 +113,10 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
         );
       }
       const isSelected = key === selectedKey;
-      const isRoute = !(
-        pickNotDeprecated(meta?.parent, options?.parent, parentName) !==
-        undefined && children.length === 0
-      );
 
       const linkStyle: React.CSSProperties =
         activeItemDisabled && isSelected ? { pointerEvents: "none"} : {};
 
-      // 根据登录状态设置菜单项背景色
-      let itemStyle = { ...linkStyle };
-      if (name === "loginBili") {
-        itemStyle.backgroundColor = loginBili === "1" ? "#52c41a" : "#ff4d4f";
-      } else if (name === "loginNetease") {
-        itemStyle.backgroundColor = loginNetease === "1" ? "#52c41a" : "#ff4d4f";
-      }
 
       return (
         <CanAccess
@@ -154,8 +129,7 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
         >
           <Menu.Item
             key={item.key}
-            // icon={icon ?? (isRoute && <UnorderedListOutlined />)}
-            style={itemStyle}
+            style={linkStyle}
           >
             <Link to={route ?? ""} style={linkStyle}>
               {label}
