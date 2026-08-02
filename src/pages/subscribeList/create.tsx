@@ -199,8 +199,12 @@ export const SubscribeCreate = () => {
             <InputNumber disabled style={{width: "100%"}}/>
           </Form.Item>
 
-          <Form.Item name="limitSec" label="只上传多少秒以内的" initialValue={300}>
-            <Input type="number"/>
+          <Form.Item label="最小秒数" name="minSec">
+            <Input/>
+          </Form.Item>
+
+          <Form.Item label="最大秒数" name="limitSec">
+            <Input/>
           </Form.Item>
 
           <Form.Item hidden name="bitrate" label="比特率：默认320k，非音乐请设置128000" initialValue={320000}>
@@ -215,7 +219,7 @@ export const SubscribeCreate = () => {
             <Input/>
           </Form.Item>
 
-          <Form.Item name="processTime" label="上次检查时间" initialValue={formatDate(new Date())}>
+          <Form.Item name="processTime" label="上次检查时间(修改此项以上传旧视频)" initialValue={formatDate(new Date())}>
             <Input/>
           </Form.Item>
 
@@ -243,7 +247,7 @@ export const SubscribeCreate = () => {
 
           <Form.Item
             name="checkPart"
-            label="如果是多p视频上传全部分p"
+            label="如果是多p视频上传全部分p(不是多p不要选)"
             valuePropName="checked"
           >
             <Switch/>
@@ -358,7 +362,7 @@ export const SubscribeCreate = () => {
           >
             解析up
           </Button>
-          {fav.length == 0 && <div className={"text-6xl m-5"}>请打开你的收藏夹隐私设置</div>}
+          {fav.length == 0 && <div>请打开你的收藏夹隐私设置</div>}
           {
             fav &&
             fav.length > 0 && (
@@ -414,8 +418,12 @@ export const SubscribeCreate = () => {
             <InputNumber disabled style={{width: "100%"}}/>
           </Form.Item>
 
-          <Form.Item name="limitSec" label="只上传多少秒以内的" initialValue={300}>
-            <Input type="number"/>
+          <Form.Item label="最小秒数" name="minSec">
+            <Input/>
+          </Form.Item>
+
+          <Form.Item label="最大秒数" name="limitSec">
+            <Input/>
           </Form.Item>
 
           <Form.Item name="fromTime" label="开始时间" initialValue={"2010-01-01 00:00:00"}>
@@ -426,7 +434,7 @@ export const SubscribeCreate = () => {
             <Input/>
           </Form.Item>
 
-          <Form.Item name="processTime" label="上次检查时间" initialValue={formatDate(new Date())}>
+          <Form.Item name="processTime" label="上次检查时间(修改此项以上传旧视频)" initialValue={formatDate(new Date())}>
             <Input/>
           </Form.Item>
 
@@ -454,7 +462,7 @@ export const SubscribeCreate = () => {
 
           <Form.Item
             name="checkPart"
-            label="如果是多p视频上传全部分p"
+            label="如果是多p视频上传全部分p(不是多p不要选)"
             valuePropName="checked"
           >
             <Switch/>

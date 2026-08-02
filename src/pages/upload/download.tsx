@@ -1,4 +1,4 @@
-import {Button, Card, Image, Input, Space, Table, Tooltip, Typography} from "antd";
+import {Alert, Button, Card, Image, Input, Space, Table, Tooltip, Typography} from "antd";
 import {AudioOutlined, ThunderboltOutlined, VideoCameraOutlined} from "@ant-design/icons";
 import {useNotification} from "@refinedev/core";
 import {useState} from "react";
@@ -110,7 +110,21 @@ export const Download = () => {
           </Button>
         </Space.Compact>
         <Typography.Paragraph type="secondary" style={{marginTop: 8, marginBottom: 0}}>
-          支持：完整链接、b23.tv 短链、纯 BV 号
+          <Alert
+            showIcon
+            type="info"
+            message="支持以下格式"
+            description={
+              <ul className="list-disc pl-5 space-y-0.5">
+                <li>https://www.bilibili.com/video/BV1p5N6esEcM/</li>
+                <li>www.bilibili.com/video/BV1p5N6esEcM/</li>
+                <li>【《xxxx》-哔哩哔哩】https://b23.tv/xxxxxx</li>
+                <li>b23.tv/xxxxxx</li>
+                <li>BV1p5N6esEcM</li>
+              </ul>
+            }
+            className="mb-4"
+          />
         </Typography.Paragraph>
       </Card>
 

@@ -69,7 +69,7 @@ export const SubscribeEdit = () => {
           <Input/>
         </Form.Item>
 
-        <Form.Item label="上次检查时间" name="processTime">
+        <Form.Item label="上次检查时间(修改此项以上传旧视频)" name="processTime">
           <Input/>
         </Form.Item>
 
@@ -105,7 +105,7 @@ export const SubscribeEdit = () => {
           <Switch/>
         </Form.Item>
 
-        <Form.Item label="如果是多p视频上传全部分p" name="checkPart" valuePropName="checked">
+        <Form.Item label="如果是多p视频上传全部分p(不是多p不要选)" name="checkPart" valuePropName="checked">
           <Switch/>
         </Form.Item>
 

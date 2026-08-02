@@ -1,6 +1,6 @@
 import {Create, ImageField, useForm, useSelect} from "@refinedev/antd";
-import {Button, Divider, Form, Input, InputNumber, Modal, Select, Space, Switch} from "antd";
-import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
+import {Alert, Button, Card, Divider, Form, Input, InputNumber, Modal, Select, Space, Switch, Typography} from "antd";
+import {EditOutlined, LinkOutlined, MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
 import {useCustom, useNotification, useParsed} from "@refinedev/core";
 import {useState} from "react";
 import {Api, extractUrl, replaceImageUrl} from "../../App";
@@ -28,89 +28,104 @@ export const UploadCreate = () => {
     });
   };
 
+  const handleParse = async () => {
+    setIsLoading(true);
+    const bvidValue = form.getFieldValue("bvid");
+    const urlValue = extractUrl(bvidValue);
+    const res = await fetch(`${Api}/bilibili/getVideoInfo?bvid=${urlValue}`)
+      .then((res) => res.json());
+    if (res.code !== 0) {
+      open?.({
+        type: "error",
+        message: res.message,
+        description: "出错了",
+      })
+    } else {
+      const cidNames: {
+        cid: string,
+        name: string
+      }[] = [];
+      res.data.pages.forEach((i: any) => {
+        cidNames.push({
+          cid: i.cid,
+          name: i.part,
+        })
+      })
+      form.setFieldsValue({
+        ...form.getFieldsValue(),
+        bvid: urlValue,
+        cidNames: cidNames,
+        uploadName: res.data.title,
+      });
+      setVideoInfo(res.data);
+    }
+    setIsLoading(false);
+  };
+
   return (
     <Create saveButtonProps={saveButtonProps}>
-      <div className="flex items-center justify-between">
-        <p className="text-xs">
-          支持:
-          https://www.bilibili.com/video/BV1p5N6esEcM/
-          <br/>
-          支持:
-          www.bilibili.com/video/BV1p5N6esEcM/
-          <br/>
-          支持:
-          【《xxxx》-哔哩哔哩】https://b23.tv/xxxxxx
-          <br/>
-          支持: b23.tv/xxxxxx
-          <br/>
-          支持: BV1p5N6esEcM
-        </p>
-        {videoInfo && (
-          <Space style={{marginBottom: 16}}>
-            {videoInfo.title}
-          </Space>
-        )}
-        {videoInfo && videoInfo.image && (
-          <Space style={{marginBottom: 16}}>
-            <ImageField
-              width={100}
-              value={replaceImageUrl(
-                videoInfo.image
-              )}
-              alt=""
-            />
-          </Space>
-        )}
-      </div>
+      <Alert
+        showIcon
+        type="info"
+        message="支持以下格式"
+        description={
+          <ul className="list-disc pl-5 space-y-0.5">
+            <li>https://www.bilibili.com/video/BV1p5N6esEcM/</li>
+            <li>www.bilibili.com/video/BV1p5N6esEcM/</li>
+            <li>【《xxxx》-哔哩哔哩】https://b23.tv/xxxxxx</li>
+            <li>b23.tv/xxxxxx</li>
+            <li>BV1p5N6esEcM</li>
+          </ul>
+        }
+        className="mb-4"
+      />
+
+      {videoInfo && (
+        <Card size="small" className="mb-4">
+          <div className="flex items-center gap-4">
+            {videoInfo.image && (
+              <ImageField
+                width={100}
+                value={replaceImageUrl(
+                  videoInfo.image
+                )}
+                alt=""
+                className="rounded-lg shrink-0"
+              />
+            )}
+            <div className="min-w-0">
+              <Typography.Text strong>
+                {videoInfo.title}
+              </Typography.Text>
+            </div>
+          </div>
+        </Card>
+      )}
+
       <Form {...formProps} layout="vertical" onFinish={handleOnFinish}>
         <Form.Item name="bvid" label="bvid" rules={[{required: true}]} initialValue={"BV1VAkmYvEre"}>
-          <Input placeholder="输入 bvid 或含 bvid 的地址"/>
-        </Form.Item>
-        <Button
-          className="mb-10"
-          loading={isLoading}
-          onClick={async (event) => {
-            event.preventDefault();
-
-            setIsLoading(true);
-            const bvidValue = form.getFieldValue("bvid");
-            const urlValue = extractUrl(bvidValue);
-            const res = await fetch(`${Api}/bilibili/getVideoInfo?bvid=${urlValue}`)
-              .then((res) => res.json());
-            if (res.code !== 0) {
-              open?.({
-                type: "error",
-                message: res.message,
-                description: "出错了",
-              })
-            } else {
-              const cidNames: {
-                cid: string,
-                name: string
-              }[] = [];
-              res.data.pages.forEach((i: any) => {
-                cidNames.push({
-                  cid: i.cid,
-                  name: i.part,
-                })
-              })
-              form.setFieldsValue({
-                ...form.getFieldsValue(),
-                bvid: urlValue,
-                cidNames: cidNames,
-                uploadName: res.data.title,
-              });
-              setVideoInfo(res.data);
+          <Input.Search
+            placeholder="输入 bvid 或含 bvid 的地址"
+            enterButton={
+              <Button
+                type="primary"
+                icon={<LinkOutlined/>}
+                loading={isLoading}
+              >
+                解析视频
+              </Button>
             }
-            setIsLoading(false);
-          }}
-        >
-          解析视频
-        </Button>
+            onSearch={handleParse}
+          />
+        </Form.Item>
 
-        <Button className={"ml-3"} onClick={() => {
-          setIsModalOpen(true)
-        }}>编辑名字前后缀</Button>
+        <Button
+          className="mb-6"
+          icon={<EditOutlined/>}
+          onClick={() => setIsModalOpen(true)}
+        >
+          编辑名字前后缀
+        </Button>
 
         <Form.List name="cidNames">
           {(fields, {remove}) => (
@@ -121,8 +136,6 @@ export const UploadCreate = () => {
                   key={key}
                   className="flex flex-row gap-2 mb-2 items-center w-full"
                 >
-                  <span>CID</span>
-
                   <Form.Item
                     {...restField}
                     name={[name, "cid"]}
@@ -148,6 +161,8 @@ export const UploadCreate = () => {
             </div>
           )}
         </Form.List>
+
+        <br/>
 
         <Form.Item label="音量变为原来多少倍" name="offset" initialValue={0}>
           <InputNumber min={0} step={0.1} style={{width: "100%"}}/>
@@ -222,7 +237,7 @@ export const UploadCreate = () => {
               </Button>
             </div>
 
-            <Divider />
+
 
             <div>
               <p>添加名字前缀</p>
