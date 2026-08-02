@@ -92,7 +92,7 @@ export const Azi = () => {
                 size="middle"
                 loading={downloadKey === `${record.cid}:m4a`}
                 disabled={downloadKey !== null && downloadKey !== `${record.cid}:m4a`}
-                onClick={() => handleDownload(record.bvid, record.cid, "m4a", record.mergeTitle)}
+                onClick={() => handleDownload(record.id, record.bvid, record.cid, "m4a", record.mergeTitle)}
               >
                 下载音频.m4a
               </Button>
