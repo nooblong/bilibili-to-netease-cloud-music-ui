@@ -39,6 +39,7 @@ export const Azi = () => {
 
   // 与 download.tsx 相同的下载逻辑，通过 downloadAll 接口获取链接后转交下载
   const handleDownload = async (
+    id: string,
     bvid: string,
     cid: string,
     type: DownloadType,
@@ -48,7 +49,7 @@ export const Azi = () => {
     setDownloadKey(key);
 
     const res = await fetch(
-      `${Api}/bilibili/downloadAll?bvid=${bvid}&cid=${cid}&type=${type}`,
+      `${Api}/bilibili/downloadAll?bvid=${bvid}&cid=${cid}&type=${type}&id=${id}`,
       {
         headers: {
           "Access-Token": localStorage.getItem("token") ?? "",
