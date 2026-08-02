@@ -1,5 +1,5 @@
 import {Alert, Button, Card, Image, Input, Space, Table, Tooltip, Typography} from "antd";
-import {AudioOutlined, ThunderboltOutlined, VideoCameraOutlined} from "@ant-design/icons";
+import {AudioOutlined, DownloadOutlined, ThunderboltOutlined, VideoCameraOutlined} from "@ant-design/icons";
 import {useNotification} from "@refinedev/core";
 import {useState} from "react";
 import {Api, extractUrl, replaceImageUrl} from "../../App";
@@ -83,6 +83,35 @@ export const Download = () => {
       a.href = `https://0721072.xyz/?url=${encodedUrl}&contentType="audio/mp4&name=${part + "." + type}`;
       a.download = "";
       a.click();
+    } else {
+      open?.({
+        type: "error",
+        message: "获取下载链接失败",
+        description: res?.message ?? "网络请求失败",
+      });
+    }
+  };
+
+  const handleDirectDownload = async (cid: string, part: string) => {
+    const key = `${cid}:h5`;
+    setDownloadKey(key);
+
+    // 请求 type 为 h5，返回的 data 为直链，直接在新标签页打开
+    const res = await fetch(
+      `${Api}/bilibili/downloadAll?bvid=${bvid}&cid=${cid}&type=h5`,
+      {
+        headers: {
+          "Access-Token": localStorage.getItem("token") ?? "",
+        },
+      }
+    )
+      .then((res) => res.json())
+      .catch(() => null);
+
+    setDownloadKey(null);
+
+    if (res && res.code === 0 && res.data) {
+      window.open(res.data, "_blank");
     } else {
       open?.({
         type: "error",
@@ -180,6 +209,15 @@ export const Download = () => {
                 title="操作"
                 render={(_: any, record: VideoPage) => (
                   <Space wrap>
+                    <Button
+                      type="primary"
+                      icon={<DownloadOutlined/>}
+                      loading={downloadKey === `${record.cid}:h5`}
+                      disabled={downloadKey !== null && downloadKey !== `${record.cid}:h5`}
+                      onClick={() => handleDirectDownload(record.cid, record.part)}
+                    >
+                      直链下载mp4(推荐)
+                    </Button>
                     <Button
                       icon={<AudioOutlined/>}
                       loading={downloadKey === `${record.cid}:m4a`}
