@@ -35,6 +35,7 @@ import {ThemedTitleV2} from "./components/layout/title";
 import {Emoji} from "./pages/emoji";
 import {GithubOutlined} from "@ant-design/icons";
 import {Statistics} from "./pages/statistics";
+import {Download} from "./pages/upload/download";
 
 export const Api = "/api"
 
@@ -114,6 +115,14 @@ function App() {
                   },
                 },
                 {
+                  name: "download",
+                  list: "/download",
+                  meta: {
+                    label: "下载b站音/视频",
+                    canDelete: false,
+                  },
+                },
+                {
                   name: "emoji",
                   list: "/emoji",
                   meta: {
@@ -171,6 +180,9 @@ function App() {
                   </Route>
                   <Route path="/azi">
                     <Route index element={<Azi/>}/>
+                  </Route>
+                  <Route path="/download">
+                    <Route index element={<Download/>}/>
                   </Route>
                   <Route path="/subscribeList">
                     <Route index element={<SubscribeList/>}/>

@@ -3,15 +3,17 @@ import {
   useTable,
 } from "@refinedev/antd";
 import {useNotification, useParsed} from "@refinedev/core";
-import {Button, Image, Modal, Select, Table, Tooltip} from "antd";
-import {useEffect, useState} from "react";
+import {Button, Space, Table, Tooltip} from "antd";
+import {useState} from "react";
 import {Api} from "../../App";
+
+type DownloadType = "m4a" | "mp4" | "flv";
 
 export const Azi = () => {
   const parsed = useParsed();
   const voiceListIdFromUrl = parsed.params?.voiceListId;
 
-  const {tableProps, tableQueryResult, setFilters} = useTable({
+  const {tableProps} = useTable({
     resource: "upload",
     syncWithLocation: true,
     filters: {
@@ -30,62 +32,75 @@ export const Azi = () => {
     },
   });
 
-  const [filterVoiceListId, setFilterVoiceListId] = useState<string>("");
-  const [logModalOpen, setLogModalOpen] = useState(false);
-  const [logContent, setLogContent] = useState("");
-  const [voiceListList, setVoiceListList] = useState([])
-
-  // 初始化加载时自动填入输入框
-  useEffect(() => {
-    if (voiceListIdFromUrl) {
-      setFilterVoiceListId(String(voiceListIdFromUrl));
-    }
-  }, [voiceListIdFromUrl]);
+  // 当前正在下载的分P+格式，格式: `${cid}:${type}`，防止重复点击
+  const [downloadKey, setDownloadKey] = useState<string | null>(null);
 
   const {open} = useNotification();
 
+  // 与 download.tsx 相同的下载逻辑，通过 downloadAll 接口获取链接后转交下载
+  const handleDownload = async (
+    bvid: string,
+    cid: string,
+    type: DownloadType,
+    part: string
+  ) => {
+    const key = `${cid}:${type}`;
+    setDownloadKey(key);
+
+    const res = await fetch(
+      `${Api}/bilibili/downloadAll?bvid=${bvid}&cid=${cid}&type=${type}`,
+      {
+        headers: {
+          "Access-Token": localStorage.getItem("token") ?? "",
+        },
+      }
+    )
+      .then((res) => res.json())
+      .catch(() => null);
+
+    setDownloadKey(null);
+
+    if (res && res.code === 0 && res.data) {
+      const encodedUrl = encodeURIComponent(res.data);
+      open?.({
+        type: "success",
+        message: res?.message,
+        description: "音视频质量",
+      });
+      const a = document.createElement("a");
+      a.href = `https://0721072.xyz/?url=${encodedUrl}&contentType="audio/mp4&name=${part + "." + type}`;
+      a.download = "";
+      a.click();
+    } else {
+      open?.({
+        type: "error",
+        message: "获取下载链接失败",
+        description: res?.message ?? "网络请求失败",
+      });
+    }
+  };
+
   return (
-    <List canCreate={false} title="AZI">
-      <span>下载中转服务在cloudflare,备用链接需要科学上网</span>
+    <List canCreate={false} title="下载审核未通过">
       <Table {...tableProps} rowKey="id" scroll={{x: "max-content"}}>
         <Table.Column
-          title={"操作"}
-          render={(record) => {
-            return (<Button
-              size={"middle"}
-              onClick={() => {
-                fetch(`${Api}/bilibili/download?bvid=${record.bvid}&cid=${record.cid}&id=${record.id}`,
-                  {
-                    headers: {
-                      "Access-Token": localStorage.getItem("token") ?? ""
-                    }
-                  })
-                  .then(res => res.json())
-                  .then(resp => {
-                    if (resp.code === 0 && resp.data) {
-                      const encodedUrl = encodeURIComponent(resp.data);
-                      const a = document.createElement("a");
-                      a.href = `https://0721072.xyz/?url=${encodedUrl}`;
-                      a.download = "";
-                      a.click();
-                    } else {
-                      open?.({
-                        type: "error",
-                        message: "获取下载链接失败",
-                        description: resp.message,
-                      })
-                    }
-                  })
-                  .catch(() => {
-                    open?.({ type: "error", message: "网络请求失败" });
-                  });
-              }}
-            >下载m4a</Button>)
-          }}>
-        </Table.Column>
+          title="操作"
+          render={(record) => (
+            <Space wrap>
+              <Button
+                size="middle"
+                loading={downloadKey === `${record.cid}:m4a`}
+                disabled={downloadKey !== null && downloadKey !== `${record.cid}:m4a`}
+                onClick={() => handleDownload(record.bvid, record.cid, "m4a", record.mergeTitle)}
+              >
+                下载音频.m4a
+              </Button>
+            </Space>
+          )}
+        />
         <Table.Column
           dataIndex="mergeTitle"
-          title="合并名称"
+          title="名称"
           render={(value: string) => {
             const shortText = value?.length > 30 ? value.slice(0, 30) + "…" : value;
             return (
@@ -121,49 +136,14 @@ export const Azi = () => {
                   display: "inline-block",
                 }}
               >
-        {value}
-      </span>
+                {value}
+              </span>
             );
           }}
         />
         <Table.Column dataIndex="createTime" title="创建时间"/>
         <Table.Column dataIndex="bvid" title="BVID"/>
         <Table.Column dataIndex="cid" title="CID"/>
-        <Table.Column
-          title={"操作"}
-          render={(record) => {
-            return (<Button
-              size={"middle"}
-              onClick={() => {
-                fetch(`${Api}/bilibili/download?bvid=${record.bvid}&cid=${record.cid}`,
-                  {
-                    headers: {
-                      "Access-Token": localStorage.getItem("token") ?? ""
-                    }
-                  })
-                  .then(res => res.json())
-                  .then(resp => {
-                    if (resp.code === 0 && resp.data) {
-                      const encodedUrl = encodeURIComponent(resp.data);
-                      const a = document.createElement("a");
-                      a.href = `https://a.yjlyl345.workers.dev/?url=${encodedUrl}`;
-                      a.download = "";
-                      a.click();
-                    } else {
-                      open?.({
-                        type: "error",
-                        message: "获取下载链接失败",
-                        description: resp.message,
-                      })
-                    }
-                  })
-                  .catch(() => {
-                    open?.({ type: "error", message: "网络请求失败" });
-                  });
-              }}
-            >备用链接</Button>)
-          }}>
-        </Table.Column>
       </Table>
     </List>
   );
