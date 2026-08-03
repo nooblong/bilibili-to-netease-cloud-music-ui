@@ -80,7 +80,7 @@ export const Download = () => {
         description: "音视频质量",
       });
       const a = document.createElement("a");
-      a.href = `https://0721072.xyz/?url=${encodedUrl}&contentType=audio%2Fmp4"&name=${encodeURIComponent(part) + "." + type}`;
+      a.href = `https://dl.29922992.xyz/?url=${encodedUrl}&contentType=audio%2Fmp4"&name=${encodeURIComponent(part) + "." + type}`;
       console.log(a.href)
       a.download = "";
       a.click();

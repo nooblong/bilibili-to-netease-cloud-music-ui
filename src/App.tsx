@@ -1,6 +1,5 @@
 import "./index.css"
 import {Authenticated, Refine} from "@refinedev/core";
-import {DevtoolsPanel, DevtoolsProvider} from "@refinedev/devtools";
 import {RefineKbar, RefineKbarProvider} from "@refinedev/kbar";
 
 import {
@@ -10,7 +9,6 @@ import {
 import "@refinedev/antd/dist/reset.css";
 
 import routerBindings, {
-  CatchAllNavigate,
   DocumentTitleHandler,
   NavigateToResource,
   UnsavedChangesNotifier,
@@ -33,7 +31,6 @@ import {ThemedLayoutV2} from "./components/layout";
 import {ThemedSiderV2} from "./components/layout/sider";
 import {ThemedTitleV2} from "./components/layout/title";
 import {Emoji} from "./pages/emoji";
-import {GithubOutlined} from "@ant-design/icons";
 import {Statistics} from "./pages/statistics";
 import {Download} from "./pages/upload/download";
 
